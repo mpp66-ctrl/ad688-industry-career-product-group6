@@ -1,0 +1,29 @@
+---
+title: "Career Evaluation Product"
+subtitle: "Data Analyst Pathways in the Software Publishers Industry"
+---
+
+# Welcome
+
+This site documents Group 6's career evaluation product for AD688 - Big Data and Cloud Analytics for Business.
+
+## Product Vision
+
+We are building a career evaluation product for job seekers targeting **Data Analyst** roles, with a growth path toward **Data Scientist** and **Analytics Engineer** positions, within the **Software Publishers industry (NAICS 511210)**.
+
+Our product is designed to help a job seeker answer:
+
+- Which skills matter most for analytics roles in the software publishing industry?
+- How do salary, experience, and remote-work patterns vary within this space?
+- Which opportunities best match a candidate's current profile, and where should they upskill?
+
+## Project Roadmap
+
+| Step | Focus | Status |
+|------|-------|--------|
+| Step 1 | Product framing, industry scoping, project setup | In progress |
+| Step 2 | Data preparation and market baseline | Not started |
+| Step 3 | Career evaluation logic and skill-gap analysis | Not started |
+| Step 4 | Final analytics, recommendations, and report | Not started |
+
+See the [Introduction](introduction.qmd) page for our full project rationale, literature review, and industry scoping documentation.

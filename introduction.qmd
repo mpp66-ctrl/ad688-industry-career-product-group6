@@ -1,0 +1,50 @@
+---
+title: "Introduction"
+subtitle: "Project Scope, Rationale, and Literature Review"
+bibliography: references.bib
+format:
+  html:
+    toc: true
+---
+
+## Problem Statement
+
+Students preparing for analytics, data science, and business intelligence careers face a common challenge: labor market information is scattered, generic, and rarely tailored to a specific career pathway or industry. A student searching for "data analyst" roles is confronted with wildly different expectations depending on whether the employer is a bank, a hospital system, a logistics company, or a software company. Without a way to narrow that landscape, job seekers struggle to know which skills to prioritize, which employers are the strongest fit, and where they are likely to be competitive.
+
+Our team is building a **career evaluation product** that narrows this problem to one specific, well-defined slice of the labor market: **Data Analyst roles (with a growth path toward Data Scientist / Analytics Engineer) within the Software Publishers industry (NAICS 511210)**.
+
+## Product Rationale
+
+We selected the Software Publishers industry because it is one of the largest and most consistent employers of analytics and data talent. Nearly every software company relies on internal data teams to track product usage, run experiments, and support business decisions, which means data roles are core to the business rather than a peripheral support function [@naics511210]. Employment in this industry has grown substantially over the past two decades, reaching approximately 647,600 jobs as of 2024 [@fred2025softwarepublishers], giving us a large and stable base of job postings to analyze.
+
+The broader data career field also supports this choice. The U.S. Bureau of Labor Statistics projects employment of data scientists to grow 35% from 2025 to 2035, far faster than the average occupation, with roughly 24,800 openings projected per year [@bls2025datascientists]. Average data analyst salaries have also risen sharply, reaching approximately $111,000 in 2025 [@datascience2026outlook], underscoring that this is a career path with real, growing economic value for job seekers.
+
+## Literature Review
+
+A review of recent industry and labor-market sources points to a few consistent themes relevant to our product:
+
+1. **Core technical skills remain concentrated.** SQL appears in roughly 64% of data analyst job postings, and Python, Excel, Power BI, and Tableau are consistently cited as the tools that most differentiate hireable candidates [@coursera2026skills]. This supports building a skill-gap analysis component that benchmarks a student's tool proficiency against real posting requirements.
+
+2. **The market rewards judgment, not just tool proficiency.** As AI tools automate repetitive tasks like dashboard building and standard reporting, analysts who rely only on these mechanical skills may see fewer opportunities. Sources agree that critical thinking, communication, and the ability to extract actionable insight-rather than just process data-are increasingly what separates competitive candidates [@datascience2026outlook; @coursera2026skills].
+
+3. **Industry context changes what "in demand" means.** General occupational outlook data (BLS) describes national trends, but does not capture how skill requirements or compensation differ *within* a specific industry like software publishing [@bls2025datascientists]. This is precisely the gap our narrowed, industry-scoped approach is designed to fill.
+
+## What We Expect to Explore
+
+Building on this rationale, our team expects to:
+
+- Filter and clean MET Employability Career Match job postings to isolate Data Analyst / Data Scientist roles specifically within the Software Publishers industry (NAICS 511210)
+- Establish a market baseline: how many relevant postings exist, what salary ranges look like, and where roles are concentrated geographically
+- Compare in-demand skills from real job postings against a typical student's current skill profile to identify concrete upskilling priorities
+- Build a scorecard or ranking logic that helps a student evaluate which roles within this space are the best fit given their current profile
+
+## Industry and Career Pathway Documentation
+
+- **Selected career pathway:** Data Analyst, with a growth trajectory toward Data Scientist / Analytics Engineer roles
+- **Selected industry code:** NAICS 511210 - Software Publishers
+- **Industry label:** Software Publishers (part of NAICS 5112 - Software Publishers, under NAICS 511000 - Publishing Industries, except Internet)
+- **Why this industry is relevant:** Software publishers are core, high-volume employers of analytics talent, since product, usage, and business data are central to how these companies operate rather than a secondary function. The industry is large, well-documented in job posting data, and has clear, consistent tooling expectations (SQL, Python, cloud platforms), making it a coherent and data-rich slice for a career evaluation product.
+
+## MET Employability Career Match Fields We Expect to Use
+
+Based on the API documentation, we expect our analysis to rely primarily on: job title, industry/NAICS classification, required skills, salary range, years of experience required, location, and remote-work status fields.
