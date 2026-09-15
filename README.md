@@ -1,11 +1,11 @@
 # AD688 Career Evaluation Product - Group 6
 
-A career evaluation product helping analytics/data-science job seekers understand the Software Publishers industry (NAICS 511210), built for AD688 - Big Data and Cloud Analytics for Business.
+A career evaluation product helping analytics/data-science job seekers understand the Data Processing, Hosting, and Related Services industry (NAICS 5182), built for AD688 - Big Data and Cloud Analytics for Business.
 
 ## Project Scope
 
 - **Career pathway:** Data Analyst -> Data Scientist / Analytics Engineer
-- **Industry code:** NAICS 511210 - Software Publishers
+- **Industry code:** NAICS 5182 - Computing Infrastructure Providers, Data Processing, Web Hosting, and Related Services
 
 ## Site Structure
 

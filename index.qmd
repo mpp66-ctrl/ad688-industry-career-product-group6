@@ -1,6 +1,6 @@
 ---
 title: "Career Evaluation Product"
-subtitle: "Data Analyst Pathways in the Software Publishers Industry"
+subtitle: "Data Analyst Pathways in the Data Processing and Hosting Industry"
 ---
 
 # Welcome
@@ -9,17 +9,17 @@ This site documents Group 6's career evaluation product for AD688 - Big Data and
 
 ## Product Vision
 
-We are building a career evaluation product for job seekers targeting **Data Analyst** roles, with a growth path toward **Data Scientist** and **Analytics Engineer** positions, within the **Software Publishers industry (NAICS 511210)**.
+We are building a career evaluation product for job seekers targeting **Data Analyst** roles, with a growth path toward **Data Scientist** and **Analytics Engineer** positions, within the **Data Processing, Hosting, and Related Services industry (NAICS 5182)**.
 
 Our product is designed to help a job seeker answer:
 
-- Which skills matter most for analytics roles in the software publishing industry?
+- Which skills matter most for analytics roles in the data processing and cloud hosting industry?
 - How do salary, experience, and remote-work patterns vary within this space?
 - Which opportunities best match a candidate's current profile, and where should they upskill?
 
 ## Product Question
 
-**Within the Software Publishers industry (NAICS 511210), which skills and tools most strongly separate Data Analyst roles from Data Scientist / ML-oriented roles, and how should a job seeker prioritize their learning to move from one to the other?**
+**Within the Data Processing, Hosting, and Related Services industry (NAICS 5182), which skills and tools most strongly separate Data Analyst roles from Data Scientist / ML-oriented roles, and how should a job seeker prioritize their learning to move from one to the other?**
 
 This places our project in the **Analytics, Data Science, and ML Career Pathways** focus area: we are analyzing which roles appear most frequently in our selected industry, what skills most consistently separate analyst, data scientist, and ML-oriented roles, and which combinations of tools, domain skills, and experience appear most valuable.
 
