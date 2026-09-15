@@ -17,6 +17,12 @@ Our product is designed to help a job seeker answer:
 - How do salary, experience, and remote-work patterns vary within this space?
 - Which opportunities best match a candidate's current profile, and where should they upskill?
 
+## Product Question
+
+**Within the Software Publishers industry (NAICS 511210), which skills and tools most strongly separate Data Analyst roles from Data Scientist / ML-oriented roles, and how should a job seeker prioritize their learning to move from one to the other?**
+
+This places our project in the **Analytics, Data Science, and ML Career Pathways** focus area: we are analyzing which roles appear most frequently in our selected industry, what skills most consistently separate analyst, data scientist, and ML-oriented roles, and which combinations of tools, domain skills, and experience appear most valuable.
+
 ## Project Roadmap
 
 | Step | Focus | Status |
