@@ -173,11 +173,11 @@ div.csl-indent {
 <section id="problem-statement" class="level2">
 <h2 class="anchored" data-anchor-id="problem-statement">Problem Statement</h2>
 <p>Students preparing for analytics, data science, and business intelligence careers face a common challenge: labor market information is scattered, generic, and rarely tailored to a specific career pathway or industry. A student searching for “data analyst” roles is confronted with wildly different expectations depending on whether the employer is a bank, a hospital system, a logistics company, or a software company. Without a way to narrow that landscape, job seekers struggle to know which skills to prioritize, which employers are the strongest fit, and where they are likely to be competitive.</p>
-<p>Our team is building a <strong>career evaluation product</strong> that narrows this problem to one specific, well-defined slice of the labor market: <strong>Data Analyst roles (with a growth path toward Data Scientist / Analytics Engineer) within the Software Publishers industry (NAICS 511210)</strong>.</p>
+<p>Our team is building a <strong>career evaluation product</strong> that narrows this problem to one specific, well-defined slice of the labor market: <strong>Data Analyst roles (with a growth path toward Data Scientist / Analytics Engineer) within the Data Processing, Hosting, and Related Services industry (NAICS 5182)</strong>.</p>
 </section>
 <section id="product-rationale" class="level2">
 <h2 class="anchored" data-anchor-id="product-rationale">Product Rationale</h2>
-<p>We selected the Software Publishers industry because it is one of the largest and most consistent employers of analytics and data talent. Nearly every software company relies on internal data teams to track product usage, run experiments, and support business decisions, which means data roles are core to the business rather than a peripheral support function <span class="citation" data-cites="naics511210">(<a href="#ref-naics511210" role="doc-biblioref">NAICS Association 2026</a>)</span>. Employment in this industry has grown substantially over the past two decades, reaching approximately 647,600 jobs as of 2024 <span class="citation" data-cites="fred2025softwarepublishers">(<a href="#ref-fred2025softwarepublishers" role="doc-biblioref">Federal Reserve Bank of St. Louis 2025</a>)</span>, giving us a large and stable base of job postings to analyze.</p>
+<p>We selected the Data Processing, Hosting, and Related Services industry because it sits at the core of the “big data and cloud analytics” space this course is built around. This industry includes cloud computing platforms, data centers, managed hosting providers, and data processing bureaus-companies whose entire business model depends on storing, processing, and distributing large volumes of data <span class="citation" data-cites="bls2026naics518">(<a href="#ref-bls2026naics518" role="doc-biblioref">U.S. Bureau of Labor Statistics 2026</a>)</span>. As of August 2026, the industry employed approximately 453,300 people <span class="citation" data-cites="fred2025dataprocessing">(<a href="#ref-fred2025dataprocessing" role="doc-biblioref">Federal Reserve Bank of St. Louis 2025</a>)</span>, giving us a substantial and stable base of job postings to analyze.</p>
 <p>The broader data career field also supports this choice. The U.S. Bureau of Labor Statistics projects employment of data scientists to grow 35% from 2025 to 2035, far faster than the average occupation, with roughly 24,800 openings projected per year <span class="citation" data-cites="bls2025datascientists">(<a href="#ref-bls2025datascientists" role="doc-biblioref">U.S. Bureau of Labor Statistics 2025</a>)</span>. Average data analyst salaries have also risen sharply, reaching approximately $111,000 in 2025 <span class="citation" data-cites="datascience2026outlook">(<a href="#ref-datascience2026outlook" role="doc-biblioref">365 Data Science 2026</a>)</span>, underscoring that this is a career path with real, growing economic value for job seekers.</p>
 </section>
 <section id="literature-review" class="level2">
@@ -186,14 +186,14 @@ div.csl-indent {
 <ol type="1">
 <li><p><strong>Core technical skills remain concentrated.</strong> SQL appears in roughly 64% of data analyst job postings, and Python, Excel, Power BI, and Tableau are consistently cited as the tools that most differentiate hireable candidates <span class="citation" data-cites="coursera2026skills">(<a href="#ref-coursera2026skills" role="doc-biblioref">Coursera 2026</a>)</span>. This supports building a skill-gap analysis component that benchmarks a student’s tool proficiency against real posting requirements.</p></li>
 <li><p><strong>The market rewards judgment, not just tool proficiency.</strong> As AI tools automate repetitive tasks like dashboard building and standard reporting, analysts who rely only on these mechanical skills may see fewer opportunities. Sources agree that critical thinking, communication, and the ability to extract actionable insight-rather than just process data-are increasingly what separates competitive candidates <span class="citation" data-cites="datascience2026outlook coursera2026skills">(<a href="#ref-datascience2026outlook" role="doc-biblioref">365 Data Science 2026</a>; <a href="#ref-coursera2026skills" role="doc-biblioref">Coursera 2026</a>)</span>.</p></li>
-<li><p><strong>Industry context changes what “in demand” means.</strong> General occupational outlook data (BLS) describes national trends, but does not capture how skill requirements or compensation differ <em>within</em> a specific industry like software publishing <span class="citation" data-cites="bls2025datascientists">(<a href="#ref-bls2025datascientists" role="doc-biblioref">U.S. Bureau of Labor Statistics 2025</a>)</span>. This is precisely the gap our narrowed, industry-scoped approach is designed to fill.</p></li>
+<li><p><strong>Industry context changes what “in demand” means.</strong> General occupational outlook data (BLS) describes national trends, but does not capture how skill requirements or compensation differ <em>within</em> a specific industry like data processing and hosting <span class="citation" data-cites="bls2025datascientists">(<a href="#ref-bls2025datascientists" role="doc-biblioref">U.S. Bureau of Labor Statistics 2025</a>)</span>. This is precisely the gap our narrowed, industry-scoped approach is designed to fill.</p></li>
 </ol>
 </section>
 <section id="what-we-expect-to-explore" class="level2">
 <h2 class="anchored" data-anchor-id="what-we-expect-to-explore">What We Expect to Explore</h2>
 <p>Building on this rationale, our team expects to:</p>
 <ul>
-<li>Filter and clean MET Employability Career Match job postings to isolate Data Analyst / Data Scientist roles specifically within the Software Publishers industry (NAICS 511210)</li>
+<li>Filter and clean MET Employability Career Match job postings to isolate Data Analyst / Data Scientist roles specifically within the Data Processing, Hosting, and Related Services industry (NAICS 5182)</li>
 <li>Establish a market baseline: how many relevant postings exist, what salary ranges look like, and where roles are concentrated geographically</li>
 <li>Compare in-demand skills from real job postings against a typical student’s current skill profile to identify concrete upskilling priorities</li>
 <li>Build a scorecard or ranking logic that helps a student evaluate which roles within this space are the best fit given their current profile</li>
@@ -203,9 +203,9 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="industry-and-career-pathway-documentation">Industry and Career Pathway Documentation</h2>
 <ul>
 <li><strong>Selected career pathway:</strong> Data Analyst, with a growth trajectory toward Data Scientist / Analytics Engineer roles</li>
-<li><strong>Selected industry code:</strong> NAICS 511210 - Software Publishers</li>
-<li><strong>Industry label:</strong> Software Publishers (part of NAICS 5112 - Software Publishers, under NAICS 511000 - Publishing Industries, except Internet)</li>
-<li><strong>Why this industry is relevant:</strong> Software publishers are core, high-volume employers of analytics talent, since product, usage, and business data are central to how these companies operate rather than a secondary function. The industry is large, well-documented in job posting data, and has clear, consistent tooling expectations (SQL, Python, cloud platforms), making it a coherent and data-rich slice for a career evaluation product.</li>
+<li><strong>Selected industry code:</strong> NAICS 5182 - Computing Infrastructure Providers, Data Processing, Web Hosting, and Related Services</li>
+<li><strong>Industry label:</strong> Data Processing, Hosting, and Related Services (part of NAICS 518 - Data Processing, Hosting, and Related Services, under NAICS 51 - Information)</li>
+<li><strong>Why this industry is relevant:</strong> This industry’s entire business model is built around storing, processing, and delivering data at scale-cloud platforms, data centers, and managed hosting providers all fall under this code. Analytics and data roles are not a support function here; they are central to how these companies operate, monitor infrastructure, and serve customers, making it a directly relevant and data-rich slice for a career evaluation product.</li>
 </ul>
 </section>
 <section id="met-employability-career-match-fields-we-expect-to-use" class="level2">
@@ -223,14 +223,14 @@ div.csl-indent {
 <div id="ref-coursera2026skills" class="csl-entry" role="listitem">
 Coursera. 2026. <span>“7 in-Demand Data Analyst Skills to Get You Hired in 2026.”</span> <a href="https://www.coursera.org/articles/in-demand-data-analyst-skills-to-get-hired">https://www.coursera.org/articles/in-demand-data-analyst-skills-to-get-hired</a>.
 </div>
-<div id="ref-fred2025softwarepublishers" class="csl-entry" role="listitem">
-Federal Reserve Bank of St. Louis. 2025. <span>“Employment for Information: Software Publishers (NAICS 511210) in the United States.”</span> <a href="https://fred.stlouisfed.org/series/IPUJN511210W201000000">https://fred.stlouisfed.org/series/IPUJN511210W201000000</a>.
-</div>
-<div id="ref-naics511210" class="csl-entry" role="listitem">
-NAICS Association. 2026. <span>“What Is NAICS Code 511210? Full Description and Statistics.”</span> <a href="https://www.naics.com/what-is-naics-511210-full-description-and-statistics/">https://www.naics.com/what-is-naics-511210-full-description-and-statistics/</a>.
+<div id="ref-fred2025dataprocessing" class="csl-entry" role="listitem">
+Federal Reserve Bank of St. Louis. 2025. <span>“Employment for Information: Data Processing, Hosting, and Related Services (NAICS 5182) in the United States.”</span> <a href="https://fred.stlouisfed.org/series/IPUJN5182W201000000">https://fred.stlouisfed.org/series/IPUJN5182W201000000</a>.
 </div>
 <div id="ref-bls2025datascientists" class="csl-entry" role="listitem">
 U.S. Bureau of Labor Statistics. 2025. <span>“Data Scientists: Occupational Outlook Handbook.”</span> <a href="https://www.bls.gov/ooh/math/data-scientists.htm">https://www.bls.gov/ooh/math/data-scientists.htm</a>.
+</div>
+<div id="ref-bls2026naics518" class="csl-entry" role="listitem">
+U.S. Bureau of Labor Statistics. 2026. <span>“Data Processing, Hosting, and Related Services: NAICS 518.”</span> <a href="https://www.bls.gov/iag/tgs/iag518.htm">https://www.bls.gov/iag/tgs/iag518.htm</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
