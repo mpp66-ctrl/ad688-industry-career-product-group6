@@ -53,7 +53,7 @@
     "href": "index.html",
     "title": "Career Evaluation Product",
     "section": "",
-    "text": "This site documents Group 6’s career evaluation product for AD688 - Big Data and Cloud Analytics for Business.\n\n\nWe are building a career evaluation product for job seekers targeting Data Analyst roles, with a growth path toward Data Scientist and Analytics Engineer positions, within the Software Publishers industry (NAICS 511210).\nOur product is designed to help a job seeker answer:\n\nWhich skills matter most for analytics roles in the software publishing industry?\nHow do salary, experience, and remote-work patterns vary within this space?\nWhich opportunities best match a candidate’s current profile, and where should they upskill?\n\n\n\n\n\n\n\n\n\n\n\n\nStep\nFocus\nStatus\n\n\n\n\nStep 1\nProduct framing, industry scoping, project setup\nIn progress\n\n\nStep 2\nData preparation and market baseline\nNot started\n\n\nStep 3\nCareer evaluation logic and skill-gap analysis\nNot started\n\n\nStep 4\nFinal analytics, recommendations, and report\nNot started\n\n\n\nSee the Introduction page for our full project rationale, literature review, and industry scoping documentation."
+    "text": "This site documents Group 6’s career evaluation product for AD688 - Big Data and Cloud Analytics for Business.\n\n\nWe are building a career evaluation product for job seekers targeting Data Analyst roles, with a growth path toward Data Scientist and Analytics Engineer positions, within the Software Publishers industry (NAICS 511210).\nOur product is designed to help a job seeker answer:\n\nWhich skills matter most for analytics roles in the software publishing industry?\nHow do salary, experience, and remote-work patterns vary within this space?\nWhich opportunities best match a candidate’s current profile, and where should they upskill?\n\n\n\n\nWithin the Software Publishers industry (NAICS 511210), which skills and tools most strongly separate Data Analyst roles from Data Scientist / ML-oriented roles, and how should a job seeker prioritize their learning to move from one to the other?\nThis places our project in the Analytics, Data Science, and ML Career Pathways focus area: we are analyzing which roles appear most frequently in our selected industry, what skills most consistently separate analyst, data scientist, and ML-oriented roles, and which combinations of tools, domain skills, and experience appear most valuable.\n\n\n\n\n\n\n\n\n\n\n\nStep\nFocus\nStatus\n\n\n\n\nStep 1\nProduct framing, industry scoping, project setup\nIn progress\n\n\nStep 2\nData preparation and market baseline\nNot started\n\n\nStep 3\nCareer evaluation logic and skill-gap analysis\nNot started\n\n\nStep 4\nFinal analytics, recommendations, and report\nNot started\n\n\n\nSee the Introduction page for our full project rationale, literature review, and industry scoping documentation."
   },
   {
     "objectID": "index.html#product-vision",
@@ -61,6 +61,13 @@
     "title": "Career Evaluation Product",
     "section": "",
     "text": "We are building a career evaluation product for job seekers targeting Data Analyst roles, with a growth path toward Data Scientist and Analytics Engineer positions, within the Software Publishers industry (NAICS 511210).\nOur product is designed to help a job seeker answer:\n\nWhich skills matter most for analytics roles in the software publishing industry?\nHow do salary, experience, and remote-work patterns vary within this space?\nWhich opportunities best match a candidate’s current profile, and where should they upskill?"
+  },
+  {
+    "objectID": "index.html#product-question",
+    "href": "index.html#product-question",
+    "title": "Career Evaluation Product",
+    "section": "",
+    "text": "Within the Software Publishers industry (NAICS 511210), which skills and tools most strongly separate Data Analyst roles from Data Scientist / ML-oriented roles, and how should a job seeker prioritize their learning to move from one to the other?\nThis places our project in the Analytics, Data Science, and ML Career Pathways focus area: we are analyzing which roles appear most frequently in our selected industry, what skills most consistently separate analyst, data scientist, and ML-oriented roles, and which combinations of tools, domain skills, and experience appear most valuable."
   },
   {
     "objectID": "index.html#project-roadmap",
