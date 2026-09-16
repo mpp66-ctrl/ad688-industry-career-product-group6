@@ -48,3 +48,5 @@ Building on this rationale, our team expects to:
 ## MET Employability Career Match Fields We Expect to Use
 
 Based on the API documentation, we expect our analysis to rely primarily on: job title, industry/NAICS classification, required skills, salary range, years of experience required, location, and remote-work status fields.
+
+## References
