@@ -1,0 +1,141 @@
+---
+title: "Data Preparation"
+subtitle: "Building the Filtered Industry-Career Dataset"
+format:
+  html:
+    toc: true
+---
+
+## Overview
+
+This page documents how we went from the MET Employability Career Match API to
+`data/processed/career_market_panel.csv` -- the cleaned, filtered dataset that powers the
+[Market Baseline](market_baseline.qmd) page and the rest of this product. Every filtering and
+cleaning decision below is anchored to our Step 1 scope: the **Data Analyst -> Data Scientist /
+Analytics Engineer** career pathway, inside **NAICS 5182** (Computing Infrastructure Providers,
+Data Processing, Web Hosting, and Related Services).
+
+## Industry Filter: NAICS 518, not just 5182
+
+We initially queried the API with `naics=5182` and got only 10 postings back -- far too few to
+build a market baseline from. Investigating further, we found the source data tags this same
+industry under two different granularities: `518000` (4,299 postings) and `518200` (10
+postings), both labeled identically as "Computing Infrastructure Providers, Data Processing, Web
+Hosting, and Related Services." Querying the broader `naics=518` catches both, correctly
+capturing our full Step 1 industry scope: **4,309 postings**.
+
+## Geographic Filter: US-Only
+
+Our product is scoped around the US labor market (our Step 1 rationale leaned on BLS/FRED
+national statistics), so we restricted the dataset to US-based postings.
+
+The `state` field in the source data is inconsistent -- a mix of full state names, abbreviations,
+literal "United States," country names, Canadian provinces, European NUTS region codes, and even
+city names that leaked into the wrong field. We classified each posting as US or non-US using:
+
+1. A direct match against US state names/abbreviations, or the literal "United States"
+2. For blank or `"Remote"` state values, a check of the `city` field for a country/city signal
+   (many "Remote" postings actually named a specific country there, e.g. `city: "Lithuania"`)
+3. Anything matching a known country name, Canadian province, or NUTS code was excluded
+
+Postings with no resolvable US signal anywhere were **excluded**, not guessed into either
+bucket. Result: 4,309 -> **2,469 US postings**, with 1,840 excluded (1,069 confirmed non-US,
+771 unresolvable).
+
+## Role Filter: Title Keyword Matching
+
+Per the Step 2 scope rules, we filtered to the subset of postings actually on our career
+pathway, using **title-keyword matching** rather than SOC-code-based filtering. We chose
+keywords over SOC codes because SOC tags in this dataset are demonstrably unreliable -- see the
+[SOC Data Quality](#a-note-on-soc-code-reliability) note below. Title text is the most direct
+evidence of what a job actually is.
+
+Keywords used: `data analyst`, `data scientist`, `data engineer`, `business analyst`,
+`BI analyst`, `business intelligence analyst`, `analytics engineer`, `ML engineer`,
+`machine learning engineer`, `applied scientist`, `data architect` / `database architect`.
+
+This is a deliberately broader set than just "data analyst" and "data scientist" -- it
+includes the adjacent roles (Data Engineer, ML Engineer, Data Architect) that make up the
+realistic ladder between an entry-level Data Analyst role and a Data Scientist role, matching
+our Step 1 pathway framing. Result: 2,469 -> **259 role-matched postings**.
+
+## Deduplication
+
+We found 1 exact duplicate (identical title, company, and state) and removed it, leaving
+**258 final rows**.
+
+## Cleaning the Core Variables
+
+### Salary
+
+The API provides separate annual and hourly salary fields. We:
+
+- Annualized hourly rates (`hourly x 2080` hours/year)
+- Found and corrected **two rows with values swapped** between the annual and hourly fields in
+  the source data (e.g. one row had `42-78` filed as an *annual* salary -- clearly an hourly
+  rate; another had `85000-95000` filed as *hourly* -- clearly an annual salary). We corrected
+  both using a $1,000 sanity threshold.
+- Where both structured fields were blank, we searched the free-text job description for an
+  explicit dollar figure (e.g. "Salary: $97,510 - $133,100 per year") as a fallback, recovering
+  16 additional rows.
+- Final coverage: **89/258 (34%)**. The remaining 169 postings state no salary information
+  anywhere, structured or in text -- this is a real market pattern (most postings in this space
+  don't disclose pay), not a parsing gap. We manually spot-checked a sample to confirm.
+
+### Experience
+
+No structured "years of experience" field exists in this API tier (the richer `job-facts`
+endpoint that would have one is currently empty platform-wide -- a known limitation of the
+API, not our pipeline). We parsed minimum years of experience from free text using both digit
+patterns ("5+ years") and word-form patterns ("minimum of three years"). Coverage: **131/258
+(51%)**; the rest were manually spot-checked and genuinely don't state a requirement.
+
+### Education
+
+Same limitation as experience -- no structured field. We keyword-matched for Bachelor's,
+Master's, PhD, and Associate's degree mentions in the free text. Coverage: **45/258 (17%)** --
+most postings in this space simply don't state a degree requirement, consistent with a
+broader skills-based hiring trend in tech.
+
+### Location
+
+Standardized inconsistent state values (full names, abbreviations, and a handful of city names
+that leaked into the state field, e.g. "Francisco" -> California) into a clean state name +
+abbreviation. Where no reliable state could be determined, we labeled it `"Unknown"` (42/258,
+16%) rather than guess.
+
+### Company Names
+
+A number of postings came through Applicant Tracking Systems where the "company" field was
+actually a login-portal subdomain rather than the employer's real name (e.g.
+`careers.snowflake.com`, or opaque Oracle Cloud tenant codes like `ecqf.fa.em2.oraclecloud.com`).
+We recovered the real employer name where it was legible from the domain, and explicitly
+labeled the rest `"Unknown employer (ATS-hosted posting)"` rather than guess. Separately, 19
+postings had `"Jobs via Dice"` as the company name -- a job-board aggregator placeholder, not a
+real employer -- relabeled `"Unknown employer (job board aggregator listing)"`. In total,
+35/258 (14%) have no attributable real employer and are excluded from "top employers" rankings,
+though their role/salary/location data is still valid and kept in the dataset.
+
+### A Note on SOC Code Reliability
+
+The source classifier's occupation (SOC) tags are not fully reliable for this dataset. For
+example, two postings for "Senior Optical Test Setup Engineer" and "Senior Photonics Test
+Engineer" at a hardware company were tagged SOC `27-2011` -- "Actors." Because we filter by
+title text rather than SOC code, these misclassifications don't affect which postings make it
+into our dataset, but we flag 14/258 rows with implausible SOC tags via the `soc_quality_flag`
+column so this field isn't mistaken for ground truth in later analysis.
+
+## Summary
+
+| Stage | Rows | Notes |
+|---|---|---|
+| Raw NAICS 518 pull | 4,309 | All countries, all job types |
+| US-only filter | 2,469 | 1,840 excluded (non-US or unresolvable) |
+| Role-keyword filter | 259 | 2,210 excluded (not on our career pathway) |
+| Deduplication | 258 | 1 exact duplicate removed |
+
+The full column-by-column data dictionary is available in
+[`data/processed/data_dictionary.md`](data/processed/data_dictionary.md). The cleaned dataset
+itself is at [`data/processed/career_market_panel.csv`](data/processed/career_market_panel.csv).
+
+See the [Market Baseline](market_baseline.qmd) page for the resulting exploratory analysis.

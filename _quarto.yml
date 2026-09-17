@@ -9,6 +9,10 @@ website:
         text: Home
       - href: introduction.qmd
         text: Introduction
+      - href: data_preparation.qmd
+        text: Data Preparation
+      - href: market_baseline.qmd
+        text: Market Baseline
 
 format:
   html:
