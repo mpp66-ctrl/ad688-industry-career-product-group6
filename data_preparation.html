@@ -129,6 +129,7 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
   <li><a href="#industry-filter-naics-518-not-just-5182" id="toc-industry-filter-naics-518-not-just-5182" class="nav-link" data-scroll-target="#industry-filter-naics-518-not-just-5182">Industry Filter: NAICS 518, not just 5182</a></li>
+  <li><a href="#date-window" id="toc-date-window" class="nav-link" data-scroll-target="#date-window">Date Window</a></li>
   <li><a href="#geographic-filter-us-only" id="toc-geographic-filter-us-only" class="nav-link" data-scroll-target="#geographic-filter-us-only">Geographic Filter: US-Only</a></li>
   <li><a href="#role-filter-title-keyword-matching" id="toc-role-filter-title-keyword-matching" class="nav-link" data-scroll-target="#role-filter-title-keyword-matching">Role Filter: Title Keyword Matching</a></li>
   <li><a href="#deduplication" id="toc-deduplication" class="nav-link" data-scroll-target="#deduplication">Deduplication</a></li>
@@ -175,6 +176,10 @@ ul.task-list li input[type="checkbox"] {
 <section id="industry-filter-naics-518-not-just-5182" class="level2">
 <h2 class="anchored" data-anchor-id="industry-filter-naics-518-not-just-5182">Industry Filter: NAICS 518, not just 5182</h2>
 <p>We initially queried the API with <code>naics=5182</code> and got only 10 postings back – far too few to build a market baseline from. Investigating further, we found the source data tags this same industry under two different granularities: <code>518000</code> (4,299 postings) and <code>518200</code> (10 postings), both labeled identically as “Computing Infrastructure Providers, Data Processing, Web Hosting, and Related Services.” Querying the broader <code>naics=518</code> catches both, correctly capturing our full Step 1 industry scope: <strong>4,309 postings</strong>.</p>
+</section>
+<section id="date-window" class="level2">
+<h2 class="anchored" data-anchor-id="date-window">Date Window</h2>
+<p>Per our Step 1/2 scope decision, we targeted postings from the past 2.5 years. We tested this empirically against the live API rather than assuming it mattered: querying <code>naics=518</code> with <code>posted_after</code> set to 2.5 years ago returned the exact same count (4,297 postings) as querying with no date filter at all, and querying for anything posted before 2026-01-01 (roughly 8 months ago) returned <strong>zero</strong> results. This confirms the MET Employability API only serves currently-active job listings, not a historical archive – there is no older data available to have excluded. The resulting dataset’s actual posting dates span <strong>May 21, 2026 to August 6, 2026</strong>, comfortably within our 2.5-year window by construction, since that is the entire range the API currently makes available for this industry.</p>
 </section>
 <section id="geographic-filter-us-only" class="level2">
 <h2 class="anchored" data-anchor-id="geographic-filter-us-only">Geographic Filter: US-Only</h2>
