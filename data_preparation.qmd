@@ -24,6 +24,18 @@ postings), both labeled identically as "Computing Infrastructure Providers, Data
 Hosting, and Related Services." Querying the broader `naics=518` catches both, correctly
 capturing our full Step 1 industry scope: **4,309 postings**.
 
+## Date Window
+
+Per our Step 1/2 scope decision, we targeted postings from the past 2.5 years. We tested this
+empirically against the live API rather than assuming it mattered: querying `naics=518` with
+`posted_after` set to 2.5 years ago returned the exact same count (4,297 postings) as querying
+with no date filter at all, and querying for anything posted before 2026-01-01 (roughly 8
+months ago) returned **zero** results. This confirms the MET Employability API only serves
+currently-active job listings, not a historical archive -- there is no older data available to
+have excluded. The resulting dataset's actual posting dates span **May 21, 2026 to August 6,
+2026**, comfortably within our 2.5-year window by construction, since that is the entire range
+the API currently makes available for this industry.
+
 ## Geographic Filter: US-Only
 
 Our product is scoped around the US labor market (our Step 1 rationale leaned on BLS/FRED
