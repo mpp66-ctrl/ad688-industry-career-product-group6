@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Career Evaluation Product – Career Evaluation Product - Group 6</title>
+<title>Data Preparation – Career Evaluation Product - Group 6</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -96,7 +96,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="./index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
@@ -104,7 +104,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Introduction</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./data_preparation.html"> 
+    <a class="nav-link active" href="./data_preparation.html" aria-current="page"> 
 <span class="menu-text">Data Preparation</span></a>
   </li>  
   <li class="nav-item">
@@ -127,12 +127,21 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#industry-filter-naics-518-not-just-5182" id="toc-industry-filter-naics-518-not-just-5182" class="nav-link" data-scroll-target="#industry-filter-naics-518-not-just-5182">Industry Filter: NAICS 518, not just 5182</a></li>
+  <li><a href="#geographic-filter-us-only" id="toc-geographic-filter-us-only" class="nav-link" data-scroll-target="#geographic-filter-us-only">Geographic Filter: US-Only</a></li>
+  <li><a href="#role-filter-title-keyword-matching" id="toc-role-filter-title-keyword-matching" class="nav-link" data-scroll-target="#role-filter-title-keyword-matching">Role Filter: Title Keyword Matching</a></li>
+  <li><a href="#deduplication" id="toc-deduplication" class="nav-link" data-scroll-target="#deduplication">Deduplication</a></li>
+  <li><a href="#cleaning-the-core-variables" id="toc-cleaning-the-core-variables" class="nav-link" data-scroll-target="#cleaning-the-core-variables">Cleaning the Core Variables</a>
   <ul class="collapse">
-  <li><a href="#product-vision" id="toc-product-vision" class="nav-link" data-scroll-target="#product-vision">Product Vision</a></li>
-  <li><a href="#product-question" id="toc-product-question" class="nav-link" data-scroll-target="#product-question">Product Question</a></li>
-  <li><a href="#project-roadmap" id="toc-project-roadmap" class="nav-link" data-scroll-target="#project-roadmap">Project Roadmap</a></li>
+  <li><a href="#salary" id="toc-salary" class="nav-link" data-scroll-target="#salary">Salary</a></li>
+  <li><a href="#experience" id="toc-experience" class="nav-link" data-scroll-target="#experience">Experience</a></li>
+  <li><a href="#education" id="toc-education" class="nav-link" data-scroll-target="#education">Education</a></li>
+  <li><a href="#location" id="toc-location" class="nav-link" data-scroll-target="#location">Location</a></li>
+  <li><a href="#company-names" id="toc-company-names" class="nav-link" data-scroll-target="#company-names">Company Names</a></li>
+  <li><a href="#a-note-on-soc-code-reliability" id="toc-a-note-on-soc-code-reliability" class="nav-link" data-scroll-target="#a-note-on-soc-code-reliability">A Note on SOC Code Reliability</a></li>
   </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   </ul>
 </nav>
     </div>
@@ -141,8 +150,8 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Career Evaluation Product</h1>
-<p class="subtitle lead">Data Analyst Pathways in the Data Processing and Hosting Industry</p>
+<h1 class="title">Data Preparation</h1>
+<p class="subtitle lead">Building the Filtered Industry-Career Dataset</p>
 </div>
 
 
@@ -159,66 +168,110 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="welcome" class="level1">
-<h1>Welcome</h1>
-<p>This site documents Group 6’s career evaluation product for AD688 - Big Data and Cloud Analytics for Business.</p>
-<section id="product-vision" class="level2">
-<h2 class="anchored" data-anchor-id="product-vision">Product Vision</h2>
-<p>We are building a career evaluation product for job seekers targeting <strong>Data Analyst</strong> roles, with a growth path toward <strong>Data Scientist</strong> and <strong>Analytics Engineer</strong> positions, within the <strong>Data Processing, Hosting, and Related Services industry (NAICS 5182)</strong>.</p>
-<p>Our product is designed to help a job seeker answer:</p>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>This page documents how we went from the MET Employability Career Match API to <code>data/processed/career_market_panel.csv</code> – the cleaned, filtered dataset that powers the <a href="./market_baseline.html">Market Baseline</a> page and the rest of this product. Every filtering and cleaning decision below is anchored to our Step 1 scope: the <strong>Data Analyst -&gt; Data Scientist / Analytics Engineer</strong> career pathway, inside <strong>NAICS 5182</strong> (Computing Infrastructure Providers, Data Processing, Web Hosting, and Related Services).</p>
+</section>
+<section id="industry-filter-naics-518-not-just-5182" class="level2">
+<h2 class="anchored" data-anchor-id="industry-filter-naics-518-not-just-5182">Industry Filter: NAICS 518, not just 5182</h2>
+<p>We initially queried the API with <code>naics=5182</code> and got only 10 postings back – far too few to build a market baseline from. Investigating further, we found the source data tags this same industry under two different granularities: <code>518000</code> (4,299 postings) and <code>518200</code> (10 postings), both labeled identically as “Computing Infrastructure Providers, Data Processing, Web Hosting, and Related Services.” Querying the broader <code>naics=518</code> catches both, correctly capturing our full Step 1 industry scope: <strong>4,309 postings</strong>.</p>
+</section>
+<section id="geographic-filter-us-only" class="level2">
+<h2 class="anchored" data-anchor-id="geographic-filter-us-only">Geographic Filter: US-Only</h2>
+<p>Our product is scoped around the US labor market (our Step 1 rationale leaned on BLS/FRED national statistics), so we restricted the dataset to US-based postings.</p>
+<p>The <code>state</code> field in the source data is inconsistent – a mix of full state names, abbreviations, literal “United States,” country names, Canadian provinces, European NUTS region codes, and even city names that leaked into the wrong field. We classified each posting as US or non-US using:</p>
+<ol type="1">
+<li>A direct match against US state names/abbreviations, or the literal “United States”</li>
+<li>For blank or <code>"Remote"</code> state values, a check of the <code>city</code> field for a country/city signal (many “Remote” postings actually named a specific country there, e.g.&nbsp;<code>city: "Lithuania"</code>)</li>
+<li>Anything matching a known country name, Canadian province, or NUTS code was excluded</li>
+</ol>
+<p>Postings with no resolvable US signal anywhere were <strong>excluded</strong>, not guessed into either bucket. Result: 4,309 -&gt; <strong>2,469 US postings</strong>, with 1,840 excluded (1,069 confirmed non-US, 771 unresolvable).</p>
+</section>
+<section id="role-filter-title-keyword-matching" class="level2">
+<h2 class="anchored" data-anchor-id="role-filter-title-keyword-matching">Role Filter: Title Keyword Matching</h2>
+<p>Per the Step 2 scope rules, we filtered to the subset of postings actually on our career pathway, using <strong>title-keyword matching</strong> rather than SOC-code-based filtering. We chose keywords over SOC codes because SOC tags in this dataset are demonstrably unreliable – see the <a href="#a-note-on-soc-code-reliability">SOC Data Quality</a> note below. Title text is the most direct evidence of what a job actually is.</p>
+<p>Keywords used: <code>data analyst</code>, <code>data scientist</code>, <code>data engineer</code>, <code>business analyst</code>, <code>BI analyst</code>, <code>business intelligence analyst</code>, <code>analytics engineer</code>, <code>ML engineer</code>, <code>machine learning engineer</code>, <code>applied scientist</code>, <code>data architect</code> / <code>database architect</code>.</p>
+<p>This is a deliberately broader set than just “data analyst” and “data scientist” – it includes the adjacent roles (Data Engineer, ML Engineer, Data Architect) that make up the realistic ladder between an entry-level Data Analyst role and a Data Scientist role, matching our Step 1 pathway framing. Result: 2,469 -&gt; <strong>259 role-matched postings</strong>.</p>
+</section>
+<section id="deduplication" class="level2">
+<h2 class="anchored" data-anchor-id="deduplication">Deduplication</h2>
+<p>We found 1 exact duplicate (identical title, company, and state) and removed it, leaving <strong>258 final rows</strong>.</p>
+</section>
+<section id="cleaning-the-core-variables" class="level2">
+<h2 class="anchored" data-anchor-id="cleaning-the-core-variables">Cleaning the Core Variables</h2>
+<section id="salary" class="level3">
+<h3 class="anchored" data-anchor-id="salary">Salary</h3>
+<p>The API provides separate annual and hourly salary fields. We:</p>
 <ul>
-<li>Which skills matter most for analytics roles in the data processing and cloud hosting industry?</li>
-<li>How do salary, experience, and remote-work patterns vary within this space?</li>
-<li>Which opportunities best match a candidate’s current profile, and where should they upskill?</li>
+<li>Annualized hourly rates (<code>hourly x 2080</code> hours/year)</li>
+<li>Found and corrected <strong>two rows with values swapped</strong> between the annual and hourly fields in the source data (e.g.&nbsp;one row had <code>42-78</code> filed as an <em>annual</em> salary – clearly an hourly rate; another had <code>85000-95000</code> filed as <em>hourly</em> – clearly an annual salary). We corrected both using a $1,000 sanity threshold.</li>
+<li>Where both structured fields were blank, we searched the free-text job description for an explicit dollar figure (e.g.&nbsp;“Salary: $97,510 - $133,100 per year”) as a fallback, recovering 16 additional rows.</li>
+<li>Final coverage: <strong>89/258 (34%)</strong>. The remaining 169 postings state no salary information anywhere, structured or in text – this is a real market pattern (most postings in this space don’t disclose pay), not a parsing gap. We manually spot-checked a sample to confirm.</li>
 </ul>
 </section>
-<section id="product-question" class="level2">
-<h2 class="anchored" data-anchor-id="product-question">Product Question</h2>
-<p><strong>Within the Data Processing, Hosting, and Related Services industry (NAICS 5182), which skills and tools most strongly separate Data Analyst roles from Data Scientist / ML-oriented roles, and how should a job seeker prioritize their learning to move from one to the other?</strong></p>
-<p>This places our project in the <strong>Analytics, Data Science, and ML Career Pathways</strong> focus area: we are analyzing which roles appear most frequently in our selected industry, what skills most consistently separate analyst, data scientist, and ML-oriented roles, and which combinations of tools, domain skills, and experience appear most valuable.</p>
+<section id="experience" class="level3">
+<h3 class="anchored" data-anchor-id="experience">Experience</h3>
+<p>No structured “years of experience” field exists in this API tier (the richer <code>job-facts</code> endpoint that would have one is currently empty platform-wide – a known limitation of the API, not our pipeline). We parsed minimum years of experience from free text using both digit patterns (“5+ years”) and word-form patterns (“minimum of three years”). Coverage: <strong>131/258 (51%)</strong>; the rest were manually spot-checked and genuinely don’t state a requirement.</p>
 </section>
-<section id="project-roadmap" class="level2">
-<h2 class="anchored" data-anchor-id="project-roadmap">Project Roadmap</h2>
+<section id="education" class="level3">
+<h3 class="anchored" data-anchor-id="education">Education</h3>
+<p>Same limitation as experience – no structured field. We keyword-matched for Bachelor’s, Master’s, PhD, and Associate’s degree mentions in the free text. Coverage: <strong>45/258 (17%)</strong> – most postings in this space simply don’t state a degree requirement, consistent with a broader skills-based hiring trend in tech.</p>
+</section>
+<section id="location" class="level3">
+<h3 class="anchored" data-anchor-id="location">Location</h3>
+<p>Standardized inconsistent state values (full names, abbreviations, and a handful of city names that leaked into the state field, e.g.&nbsp;“Francisco” -&gt; California) into a clean state name + abbreviation. Where no reliable state could be determined, we labeled it <code>"Unknown"</code> (42/258, 16%) rather than guess.</p>
+</section>
+<section id="company-names" class="level3">
+<h3 class="anchored" data-anchor-id="company-names">Company Names</h3>
+<p>A number of postings came through Applicant Tracking Systems where the “company” field was actually a login-portal subdomain rather than the employer’s real name (e.g. <code>careers.snowflake.com</code>, or opaque Oracle Cloud tenant codes like <code>ecqf.fa.em2.oraclecloud.com</code>). We recovered the real employer name where it was legible from the domain, and explicitly labeled the rest <code>"Unknown employer (ATS-hosted posting)"</code> rather than guess. Separately, 19 postings had <code>"Jobs via Dice"</code> as the company name – a job-board aggregator placeholder, not a real employer – relabeled <code>"Unknown employer (job board aggregator listing)"</code>. In total, 35/258 (14%) have no attributable real employer and are excluded from “top employers” rankings, though their role/salary/location data is still valid and kept in the dataset.</p>
+</section>
+<section id="a-note-on-soc-code-reliability" class="level3">
+<h3 class="anchored" data-anchor-id="a-note-on-soc-code-reliability">A Note on SOC Code Reliability</h3>
+<p>The source classifier’s occupation (SOC) tags are not fully reliable for this dataset. For example, two postings for “Senior Optical Test Setup Engineer” and “Senior Photonics Test Engineer” at a hardware company were tagged SOC <code>27-2011</code> – “Actors.” Because we filter by title text rather than SOC code, these misclassifications don’t affect which postings make it into our dataset, but we flag 14/258 rows with implausible SOC tags via the <code>soc_quality_flag</code> column so this field isn’t mistaken for ground truth in later analysis.</p>
+</section>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 28%">
 <col style="width: 33%">
-<col style="width: 38%">
+<col style="width: 33%">
+<col style="width: 33%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Step</th>
-<th>Focus</th>
-<th>Status</th>
+<th>Stage</th>
+<th>Rows</th>
+<th>Notes</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Step 1</td>
-<td>Product framing, industry scoping, project setup</td>
-<td>In progress</td>
+<td>Raw NAICS 518 pull</td>
+<td>4,309</td>
+<td>All countries, all job types</td>
 </tr>
 <tr class="even">
-<td>Step 2</td>
-<td>Data preparation and market baseline</td>
-<td>Not started</td>
+<td>US-only filter</td>
+<td>2,469</td>
+<td>1,840 excluded (non-US or unresolvable)</td>
 </tr>
 <tr class="odd">
-<td>Step 3</td>
-<td>Career evaluation logic and skill-gap analysis</td>
-<td>Not started</td>
+<td>Role-keyword filter</td>
+<td>259</td>
+<td>2,210 excluded (not on our career pathway)</td>
 </tr>
 <tr class="even">
-<td>Step 4</td>
-<td>Final analytics, recommendations, and report</td>
-<td>Not started</td>
+<td>Deduplication</td>
+<td>258</td>
+<td>1 exact duplicate removed</td>
 </tr>
 </tbody>
 </table>
-<p>See the <a href="./introduction.html">Introduction</a> page for our full project rationale, literature review, and industry scoping documentation.</p>
+<p>The full column-by-column data dictionary is available in <a href="./data/processed/data_dictionary.html"><code>data/processed/data_dictionary.md</code></a>. The cleaned dataset itself is at <a href="data/processed/career_market_panel.csv"><code>data/processed/career_market_panel.csv</code></a>.</p>
+<p>See the <a href="./market_baseline.html">Market Baseline</a> page for the resulting exploratory analysis.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
