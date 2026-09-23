@@ -185,6 +185,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#top-employers" id="toc-top-employers" class="nav-link" data-scroll-target="#top-employers">Top Employers</a></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#cross-dataset-comparison" id="toc-cross-dataset-comparison" class="nav-link" data-scroll-target="#cross-dataset-comparison">Cross-Dataset Comparison</a></li>
   </ul>
 </nav>
     </div>
@@ -379,7 +380,7 @@ Name: salary_mid, dtype: float64</code></pre>
 </div>
 </div>
 </div>
-<p><strong>Interpretation:</strong> Machine Learning Engineer and Data Scientist roles command the highest average pay (~$220K and ~$209K), while Data Analyst sits lowest (~$97K) – a roughly 2.3x pay gap across this pathway. This is the clearest evidence yet of what moving from Data Analyst toward Data Scientist / ML Engineer is actually worth in this industry.</p>
+<p><strong>Interpretation:</strong> Machine Learning Engineer and Data Scientist roles command the highest average pay (~$220K and ~$209K), while Data Analyst sits lowest (~$97K) – a roughly 2.3x pay gap across this pathway. This is the clearest evidence yet of what moving from Data Analyst toward Data Scientist / ML Engineer is actually worth in this industry. This 2.3x gap is the single most concrete number for prioritizing upskilling – closing even half that gap by moving from Data Analyst toward Data Engineer/ML Engineer roles represents a larger salary jump than most single certifications or degree credentials typically produce.</p>
 </section>
 <section id="average-salary-by-onet-occupation" class="level3">
 <h3 class="anchored" data-anchor-id="average-salary-by-onet-occupation">Average Salary by ONET Occupation</h3>
@@ -490,7 +491,7 @@ Name: salary_mid, dtype: float64</code></pre>
 </div>
 </div>
 </div>
-<p><strong>Interpretation:</strong> California and New York lead by a clear margin, with Texas, Virginia, and Ohio rounding out the top tier – consistent with major tech/finance hubs and the Northern Virginia data-center corridor. 16% of postings had no resolvable US state and are excluded from this chart rather than misattributed.</p>
+<p><strong>Interpretation:</strong> California and New York lead by a clear margin, with Texas, Virginia, and Ohio rounding out the top tier – consistent with major tech/finance hubs and the Northern Virginia data-center corridor. 16% of postings had no resolvable US state and are excluded from this chart rather than misattributed. Since California and New York combined account for a large share of postings, a job seeker unwilling to relocate to either state should expect a meaningfully smaller set of opportunities in this specific industry, even though remote options exist.</p>
 </section>
 <section id="experience-requirement-distribution" class="level2">
 <h2 class="anchored" data-anchor-id="experience-requirement-distribution">Experience Requirement Distribution</h2>
@@ -515,7 +516,7 @@ Name: salary_mid, dtype: float64</code></pre>
 </div>
 </div>
 </div>
-<p><strong>Interpretation:</strong> Where stated, most postings cluster around 3-8 years of experience – this is a market that skews mid-to-senior level rather than entry-level, which is a direct, actionable signal for a Data Analyst-pathway job seeker about how much experience they may need to build before this specific industry’s roles become attainable.</p>
+<p><strong>Interpretation:</strong> Where stated, most postings cluster around 3-8 years of experience – this is a market that skews mid-to-senior level rather than entry-level, which is a direct, actionable signal for a Data Analyst-pathway job seeker about how much experience they may need to build before this specific industry’s roles become attainable. For a candidate currently below the 3-year threshold, this suggests the realistic path into this industry may run through an adjacent, less experience-gated role first, rather than applying directly to NAICS 5182 postings.</p>
 </section>
 <section id="remote-work-patterns" class="level2">
 <h2 class="anchored" data-anchor-id="remote-work-patterns">Remote Work Patterns</h2>
@@ -608,6 +609,43 @@ Name: salary_mid, dtype: float64</code></pre>
 <li><strong>Amazon</strong> and several large financial institutions are the top identifiable employers</li>
 </ul>
 <p>These findings set up our Step 3 skill-gap analysis: since this market rewards experience and skews toward more advanced, higher-paying roles, the next step is comparing the specific skills these postings require against a student’s current profile to identify concrete upskilling priorities for closing that ~2.3x pay gap.</p>
+</section>
+<section id="cross-dataset-comparison" class="level2">
+<h2 class="anchored" data-anchor-id="cross-dataset-comparison">Cross-Dataset Comparison</h2>
+<p>As a sanity check, we compared our primary dataset (258 postings, live MET Employability API, 2026) against a second, independently-sourced dataset: a static 2024 Lightcast bulk export, filtered using the identical industry, geographic, and career-pathway rules (209 postings after filtering; see <code>build_lightcast_dataset.py</code>).</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>MET API (2026, primary)</th>
+<th>Lightcast (2024, comparison)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Postings after filtering</td>
+<td>258</td>
+<td>209</td>
+</tr>
+<tr class="even">
+<td>Salary disclosure rate</td>
+<td>34%</td>
+<td>43%</td>
+</tr>
+<tr class="odd">
+<td>Top state</td>
+<td>California</td>
+<td>California (53), then New York (19)</td>
+</tr>
+<tr class="even">
+<td>Salary range (disclosed)</td>
+<td>$120K-$210K cluster</td>
+<td>Median ~$119,625</td>
+</tr>
+</tbody>
+</table>
+<p><strong>What agrees:</strong> California and New York lead location share in both independent datasets, two years apart – a strong signal this is a genuinely stable pattern in the industry, not an artifact of one data source or one point in time.</p>
+<p><strong>What differs:</strong> the top employers are almost entirely different between the two datasets (Amazon and large financial institutions in the 2026 API data vs.&nbsp;Concentrix, TikTok, Peraton, and Snowflake in the 2024 snapshot) – likely reflecting real turnover in which companies are actively hiring for this pathway at any given moment, rather than a data quality issue.</p>
 
 
 </section>
