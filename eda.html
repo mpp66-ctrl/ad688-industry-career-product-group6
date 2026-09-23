@@ -80,7 +80,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-55617497126496852ff9f5a59253c640.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-3e9b1289f5f353c49b617ce48ad2bc38.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -217,13 +217,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>This page answers our Step 2 question: <strong>what does the market currently look like for our selected career pathway inside our selected industry?</strong> All charts below are generated live from <code>data/processed/career_market_panel.csv</code> – see <a href="./data_preparation.html">Data Preparation</a> for how this dataset was built and cleaned.</p>
+<p><strong>A note on Step 4 (visual theming):</strong> the assignment instructions ask for a consistent theme across Plotly charts specifically. All charts on this page use Seaborn/Matplotlib instead of Plotly, so we standardized on one consistent color palette across every chart below instead – a single primary color for all single-series bar/histogram charts, and one coordinated palette for the two multi-category charts (the role-share donut and the remote-status bars). The Skill Gap Analysis heatmap keeps its diverging red-blue colormap, since that encodes a low-to-high scale meaningfully and is not part of this page categorical color scheme.</p>
 <div id="load-data" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"data/processed/career_market_panel.csv"</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>TOTAL <span class="op">=</span> <span class="bu">len</span>(df)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total postings in baseline: </span><span class="sc">{</span>TOTAL<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Consistent color theme used across every chart on this page (Step 4)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>PALETTE <span class="op">=</span> [<span class="st">"#457b9d"</span>, <span class="st">"#2a9d8f"</span>, <span class="st">"#e9c46a"</span>, <span class="st">"#e76f51"</span>, <span class="st">"#6d597a"</span>, <span class="st">"#f4a261"</span>]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"data/processed/career_market_panel.csv"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>TOTAL <span class="op">=</span> <span class="bu">len</span>(df)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total postings in baseline: </span><span class="sc">{</span>TOTAL<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Total postings in baseline: 258</code></pre>
 </div>
@@ -236,7 +240,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>vol <span class="op">=</span> df[<span class="st">"role_bucket"</span>].value_counts()</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>vol.sort_values().plot(kind<span class="op">=</span><span class="st">"barh"</span>, ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">"#457b9d"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>vol.sort_values().plot(kind<span class="op">=</span><span class="st">"barh"</span>, ax<span class="op">=</span>ax, color<span class="op">=</span>PALETTE[<span class="dv">0</span>])</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Number of postings"</span>)</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Job Volume by Role Type"</span>)</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>ax.text(<span class="fl">0.99</span>, <span class="fl">0.02</span>, <span class="ss">f"Total postings analyzed: </span><span class="sc">{</span>TOTAL<span class="sc">}</span><span class="ss">"</span>, transform<span class="op">=</span>ax.transAxes,</span>
@@ -262,7 +266,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>pcts <span class="op">=</span> [s <span class="op">/</span> TOTAL <span class="op">*</span> <span class="dv">100</span> <span class="cf">for</span> s <span class="kw">in</span> sizes]</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">7</span>))</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> plt.cm.tab20.colors</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> PALETTE</span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>wedges, _ <span class="op">=</span> ax.pie(</span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    sizes, startangle<span class="op">=</span><span class="dv">90</span>,</span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    wedgeprops<span class="op">=</span><span class="bu">dict</span>(width<span class="op">=</span><span class="fl">0.4</span>, edgecolor<span class="op">=</span><span class="st">"white"</span>),</span>
@@ -300,7 +304,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>onet_counts <span class="op">=</span> df[<span class="st">"onet_name"</span>].fillna(<span class="st">"Not specified"</span>).value_counts()</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">5</span>))</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>onet_counts.sort_values().plot(kind<span class="op">=</span><span class="st">"barh"</span>, ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">"#457b9d"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>onet_counts.sort_values().plot(kind<span class="op">=</span><span class="st">"barh"</span>, ax<span class="op">=</span>ax, color<span class="op">=</span>PALETTE[<span class="dv">0</span>])</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Number of postings"</span>)</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Job Count by ONET Occupation"</span>)</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>ax.text(<span class="fl">0.99</span>, <span class="fl">0.02</span>, <span class="ss">f"Total postings analyzed: </span><span class="sc">{</span>TOTAL<span class="sc">}</span><span class="ss">"</span>, transform<span class="op">=</span>ax.transAxes,</span>
@@ -328,7 +332,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sal_df <span class="op">=</span> df.dropna(subset<span class="op">=</span>[<span class="st">"salary_mid"</span>])</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>ax.hist(sal_df[<span class="st">"salary_mid"</span>], bins<span class="op">=</span><span class="dv">20</span>, color<span class="op">=</span><span class="st">"#e63946"</span>, edgecolor<span class="op">=</span><span class="st">"white"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>ax.hist(sal_df[<span class="st">"salary_mid"</span>], bins<span class="op">=</span><span class="dv">20</span>, color<span class="op">=</span>PALETTE[<span class="dv">0</span>], edgecolor<span class="op">=</span><span class="st">"white"</span>)</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Estimated annual salary (USD)"</span>)</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Number of postings"</span>)</span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Salary Distribution"</span>)</span>
@@ -366,7 +370,7 @@ Name: salary_mid, dtype: float64</code></pre>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>role_sal <span class="op">=</span> role_sal[role_sal[<span class="st">"count"</span>] <span class="op">&gt;=</span> <span class="dv">2</span>].sort_values(<span class="st">"mean"</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>bars <span class="op">=</span> ax.barh(role_sal.index, role_sal[<span class="st">"mean"</span>], color<span class="op">=</span><span class="st">"#e63946"</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>bars <span class="op">=</span> ax.barh(role_sal.index, role_sal[<span class="st">"mean"</span>], color<span class="op">=</span>PALETTE[<span class="dv">0</span>])</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Average estimated annual salary (USD)"</span>)</span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Average Salary by Role Type"</span>)</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> bar, v <span class="kw">in</span> <span class="bu">zip</span>(bars, role_sal[<span class="st">"mean"</span>]):</span>
@@ -395,7 +399,7 @@ Name: salary_mid, dtype: float64</code></pre>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>onet_sal <span class="op">=</span> onet_sal[onet_sal[<span class="st">"count"</span>] <span class="op">&gt;=</span> <span class="dv">2</span>].sort_values(<span class="st">"mean"</span>)</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">5</span>))</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>bars <span class="op">=</span> ax.barh(onet_sal.index, onet_sal[<span class="st">"mean"</span>], color<span class="op">=</span><span class="st">"#e63946"</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>bars <span class="op">=</span> ax.barh(onet_sal.index, onet_sal[<span class="st">"mean"</span>], color<span class="op">=</span>PALETTE[<span class="dv">0</span>])</span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Average estimated annual salary (USD)"</span>)</span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Average Salary by ONET Occupation"</span>)</span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> bar, v <span class="kw">in</span> <span class="bu">zip</span>(bars, onet_sal[<span class="st">"mean"</span>]):</span>
@@ -425,7 +429,7 @@ Name: salary_mid, dtype: float64</code></pre>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>state_sal <span class="op">=</span> state_sal[state_sal[<span class="st">"count"</span>] <span class="op">&gt;=</span> <span class="dv">2</span>].sort_values(<span class="st">"mean"</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">10</span>)</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>bars <span class="op">=</span> ax.barh(state_sal.index[::<span class="op">-</span><span class="dv">1</span>], state_sal[<span class="st">"mean"</span>][::<span class="op">-</span><span class="dv">1</span>], color<span class="op">=</span><span class="st">"#f4a261"</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>bars <span class="op">=</span> ax.barh(state_sal.index[::<span class="op">-</span><span class="dv">1</span>], state_sal[<span class="st">"mean"</span>][::<span class="op">-</span><span class="dv">1</span>], color<span class="op">=</span>PALETTE[<span class="dv">0</span>])</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Average estimated annual salary (USD)"</span>)</span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Top 10 Highest-Paying States"</span>)</span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> bar, v <span class="kw">in</span> <span class="bu">zip</span>(bars, state_sal[<span class="st">"mean"</span>][::<span class="op">-</span><span class="dv">1</span>]):</span>
@@ -453,7 +457,7 @@ Name: salary_mid, dtype: float64</code></pre>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>co_sal <span class="op">=</span> co_sal.sort_values(<span class="st">"mean"</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">10</span>)</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>bars <span class="op">=</span> ax.barh(co_sal.index[::<span class="op">-</span><span class="dv">1</span>], co_sal[<span class="st">"mean"</span>][::<span class="op">-</span><span class="dv">1</span>], color<span class="op">=</span><span class="st">"#6d597a"</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>bars <span class="op">=</span> ax.barh(co_sal.index[::<span class="op">-</span><span class="dv">1</span>], co_sal[<span class="st">"mean"</span>][::<span class="op">-</span><span class="dv">1</span>], color<span class="op">=</span>PALETTE[<span class="dv">0</span>])</span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Average estimated annual salary (USD)"</span>)</span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Top 10 Companies by Average Salary"</span>)</span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> bar, v <span class="kw">in</span> <span class="bu">zip</span>(bars, co_sal[<span class="st">"mean"</span>][::<span class="op">-</span><span class="dv">1</span>]):</span>
@@ -480,7 +484,7 @@ Name: salary_mid, dtype: float64</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>loc <span class="op">=</span> df[df[<span class="st">"state_clean"</span>] <span class="op">!=</span> <span class="st">"Unknown"</span>][<span class="st">"state_clean"</span>].value_counts().head(<span class="dv">10</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>loc.sort_values().plot(kind<span class="op">=</span><span class="st">"barh"</span>, ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">"#2a9d8f"</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>loc.sort_values().plot(kind<span class="op">=</span><span class="st">"barh"</span>, ax<span class="op">=</span>ax, color<span class="op">=</span>PALETTE[<span class="dv">0</span>])</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Number of postings"</span>)</span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Top 10 States by Job Volume"</span>)</span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>ax.text(<span class="fl">0.99</span>, <span class="fl">0.02</span>, <span class="ss">f"Total postings analyzed: </span><span class="sc">{</span>TOTAL<span class="sc">}</span><span class="ss">"</span>, transform<span class="op">=</span>ax.transAxes,</span>
@@ -503,7 +507,7 @@ Name: salary_mid, dtype: float64</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>exp_df <span class="op">=</span> df.dropna(subset<span class="op">=</span>[<span class="st">"experience_min_years"</span>])</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>ax.hist(exp_df[<span class="st">"experience_min_years"</span>], bins<span class="op">=</span><span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">17</span>), color<span class="op">=</span><span class="st">"#f4a261"</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>ax.hist(exp_df[<span class="st">"experience_min_years"</span>], bins<span class="op">=</span><span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">17</span>), color<span class="op">=</span>PALETTE[<span class="dv">0</span>],</span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        edgecolor<span class="op">=</span><span class="st">"white"</span>, align<span class="op">=</span><span class="st">"left"</span>)</span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Minimum years of experience required"</span>)</span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Number of postings"</span>)</span>
@@ -531,7 +535,7 @@ Name: salary_mid, dtype: float64</code></pre>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>remote_counts <span class="op">=</span> df[<span class="st">"remote_status"</span>].value_counts().reindex(order, fill_value<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">"#2a9d8f"</span>, <span class="st">"#e9c46a"</span>, <span class="st">"#e76f51"</span>, <span class="st">"#a8a8a8"</span>]</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> PALETTE[:<span class="dv">4</span>]</span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>ax.bar(remote_counts.index, remote_counts.values, color<span class="op">=</span>colors)</span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Number of postings"</span>)</span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Remote vs Onsite vs Hybrid vs Unstated"</span>)</span>
@@ -559,7 +563,7 @@ Name: salary_mid, dtype: float64</code></pre>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>total_hybrid <span class="op">=</span> (df[<span class="st">"remote_status"</span>] <span class="op">==</span> <span class="st">"hybrid"</span>).<span class="bu">sum</span>()</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>hybrid_states.sort_values().plot(kind<span class="op">=</span><span class="st">"barh"</span>, ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">"#e9c46a"</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>hybrid_states.sort_values().plot(kind<span class="op">=</span><span class="st">"barh"</span>, ax<span class="op">=</span>ax, color<span class="op">=</span>PALETTE[<span class="dv">0</span>])</span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Number of hybrid postings"</span>)</span>
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Top 10 States by Hybrid Role Volume"</span>)</span>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>ax.text(<span class="fl">0.99</span>, <span class="fl">0.02</span>, <span class="ss">f"Total hybrid postings: </span><span class="sc">{</span>total_hybrid<span class="sc">}</span><span class="ss">"</span>, transform<span class="op">=</span>ax.transAxes,</span>
@@ -584,7 +588,7 @@ Name: salary_mid, dtype: float64</code></pre>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>top_emp <span class="op">=</span> emp_df[<span class="st">"company_name_clean"</span>].value_counts().head(<span class="dv">10</span>)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>top_emp.sort_values().plot(kind<span class="op">=</span><span class="st">"barh"</span>, ax<span class="op">=</span>ax, color<span class="op">=</span><span class="st">"#6d597a"</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>top_emp.sort_values().plot(kind<span class="op">=</span><span class="st">"barh"</span>, ax<span class="op">=</span>ax, color<span class="op">=</span>PALETTE[<span class="dv">0</span>])</span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Number of postings"</span>)</span>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Top 10 Employers"</span>)</span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>ax.text(<span class="fl">0.99</span>, <span class="fl">0.02</span>, <span class="st">"Excludes unattributable ATS/aggregator listings"</span>, transform<span class="op">=</span>ax.transAxes,</span>
