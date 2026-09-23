@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Career Evaluation Product – Career Evaluation Product - Group 6</title>
+<title>Skill Gap Analysis – Career Evaluation Product - Group 6</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,10 +26,45 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -73,6 +108,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 <link rel="stylesheet" href="styles.css">
@@ -96,7 +134,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="./index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
@@ -112,7 +150,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Exploratory Analysis</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./skill_gap_analysis.html"> 
+    <a class="nav-link active" href="./skill_gap_analysis.html" aria-current="page"> 
 <span class="menu-text">Skill Gap Analysis</span></a>
   </li>  
 </ul>
@@ -131,12 +169,10 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a>
-  <ul class="collapse">
-  <li><a href="#product-vision" id="toc-product-vision" class="nav-link" data-scroll-target="#product-vision">Product Vision</a></li>
-  <li><a href="#product-question" id="toc-product-question" class="nav-link" data-scroll-target="#product-question">Product Question</a></li>
-  <li><a href="#project-roadmap" id="toc-project-roadmap" class="nav-link" data-scroll-target="#project-roadmap">Project Roadmap</a></li>
-  </ul></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#team-skill-levels" id="toc-team-skill-levels" class="nav-link" data-scroll-target="#team-skill-levels">Team Skill Levels</a></li>
+  <li><a href="#comparing-team-skills-to-industry-requirements" id="toc-comparing-team-skills-to-industry-requirements" class="nav-link" data-scroll-target="#comparing-team-skills-to-industry-requirements">Comparing Team Skills to Industry Requirements</a></li>
+  <li><a href="#improvement-plan" id="toc-improvement-plan" class="nav-link" data-scroll-target="#improvement-plan">Improvement Plan</a></li>
   </ul>
 </nav>
     </div>
@@ -145,8 +181,8 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Career Evaluation Product</h1>
-<p class="subtitle lead">Data Analyst Pathways in the Data Processing and Hosting Industry</p>
+<h1 class="title">Skill Gap Analysis</h1>
+<p class="subtitle lead">Team Skills vs.&nbsp;Data Analyst -&gt; Data Scientist Market Requirements</p>
 </div>
 
 
@@ -163,66 +199,207 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="welcome" class="level1">
-<h1>Welcome</h1>
-<p>This site documents Group 6’s career evaluation product for AD688 - Big Data and Cloud Analytics for Business.</p>
-<section id="product-vision" class="level2">
-<h2 class="anchored" data-anchor-id="product-vision">Product Vision</h2>
-<p>We are building a career evaluation product for job seekers targeting <strong>Data Analyst</strong> roles, with a growth path toward <strong>Data Scientist</strong> and <strong>Analytics Engineer</strong> positions, within the <strong>Data Processing, Hosting, and Related Services industry (NAICS 5182)</strong>.</p>
-<p>Our product is designed to help a job seeker answer:</p>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>This page compares our team’s current skill levels against the core skills expected for the Data Analyst -&gt; Data Scientist / Analytics Engineer pathway inside NAICS 5182, and proposes a concrete improvement plan for closing the gaps.</p>
+</section>
+<section id="team-skill-levels" class="level2">
+<h2 class="anchored" data-anchor-id="team-skill-levels">Team Skill Levels</h2>
+<p>Each team member self-rated their current proficiency on a 1-5 scale:</p>
 <ul>
-<li>Which skills matter most for analytics roles in the data processing and cloud hosting industry?</li>
-<li>How do salary, experience, and remote-work patterns vary within this space?</li>
-<li>Which opportunities best match a candidate’s current profile, and where should they upskill?</li>
+<li>1 = Beginner</li>
+<li>2 = Basic knowledge</li>
+<li>3 = Intermediate</li>
+<li>4 = Advanced</li>
+<li>5 = Expert</li>
 </ul>
-</section>
-<section id="product-question" class="level2">
-<h2 class="anchored" data-anchor-id="product-question">Product Question</h2>
-<p><strong>Within the Data Processing, Hosting, and Related Services industry (NAICS 5182), which skills and tools most strongly separate Data Analyst roles from Data Scientist / ML-oriented roles, and how should a job seeker prioritize their learning to move from one to the other?</strong></p>
-<p>This places our project in the <strong>Analytics, Data Science, and ML Career Pathways</strong> focus area: we are analyzing which roles appear most frequently in our selected industry, what skills most consistently separate analyst, data scientist, and ML-oriented roles, and which combinations of tools, domain skills, and experience appear most valuable.</p>
-</section>
-<section id="project-roadmap" class="level2">
-<h2 class="anchored" data-anchor-id="project-roadmap">Project Roadmap</h2>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 28%">
-<col style="width: 33%">
-<col style="width: 38%">
-</colgroup>
+<div id="cell-team-skills" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>skills_data <span class="op">=</span> {</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Name"</span>: [<span class="st">"Manan Patel"</span>, <span class="st">"Richard Park"</span>, <span class="st">"Michael Phillips"</span>],</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Python"</span>: [<span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">4</span>],</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SQL"</span>: [<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">3</span>],</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Machine Learning"</span>: [<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">5</span>],</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Cloud/AWS"</span>: [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">3</span>],</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Data Visualization"</span>: [<span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">5</span>],</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Statistics"</span>: [<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">3</span>],</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>df_skills <span class="op">=</span> pd.DataFrame(skills_data)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>df_skills.set_index(<span class="st">"Name"</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>df_skills</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="team-skills" class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <thead>
 <tr class="header">
-<th>Step</th>
-<th>Focus</th>
-<th>Status</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Python</th>
+<th data-quarto-table-cell-role="th">SQL</th>
+<th data-quarto-table-cell-role="th">Machine Learning</th>
+<th data-quarto-table-cell-role="th">Cloud/AWS</th>
+<th data-quarto-table-cell-role="th">Data Visualization</th>
+<th data-quarto-table-cell-role="th">Statistics</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Name</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Step 1</td>
-<td>Product framing, industry scoping, project setup</td>
-<td>In progress</td>
+<th data-quarto-table-cell-role="th">Manan Patel</th>
+<td>5</td>
+<td>5</td>
+<td>3</td>
+<td>4</td>
+<td>4</td>
+<td>2</td>
 </tr>
 <tr class="even">
-<td>Step 2</td>
-<td>Data preparation and market baseline</td>
-<td>Not started</td>
+<th data-quarto-table-cell-role="th">Richard Park</th>
+<td>3</td>
+<td>4</td>
+<td>3</td>
+<td>5</td>
+<td>3</td>
+<td>4</td>
 </tr>
 <tr class="odd">
-<td>Step 3</td>
-<td>Career evaluation logic and skill-gap analysis</td>
-<td>Not started</td>
-</tr>
-<tr class="even">
-<td>Step 4</td>
-<td>Final analytics, recommendations, and report</td>
-<td>Not started</td>
+<th data-quarto-table-cell-role="th">Michael Phillips</th>
+<td>4</td>
+<td>3</td>
+<td>5</td>
+<td>3</td>
+<td>5</td>
+<td>3</td>
 </tr>
 </tbody>
 </table>
-<p>See the <a href="./introduction.html">Introduction</a> page for our full project rationale, literature review, and industry scoping documentation.</p>
 
-
+</div>
+</div>
+</div>
+<div id="cell-skill-heatmap" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">4</span>))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>sns.heatmap(df_skills, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">"coolwarm"</span>, linewidths<span class="op">=</span><span class="fl">0.5</span>, vmin<span class="op">=</span><span class="dv">1</span>, vmax<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Team Skill Levels Heatmap"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="skill_gap_analysis_files/figure-html/skill-heatmap-output-1.png" id="skill-heatmap" width="763" height="380" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Reading the heatmap:</strong> no single team member is strongest across every skill – Manan leads in Python/SQL, Michael leads in Machine Learning/Data Visualization, and Richard leads in Cloud/AWS. Statistics is the team’s weakest area overall (2-4 range, no one above intermediate), making it the clearest shared priority.</p>
 </section>
+<section id="comparing-team-skills-to-industry-requirements" class="level2">
+<h2 class="anchored" data-anchor-id="comparing-team-skills-to-industry-requirements">Comparing Team Skills to Industry Requirements</h2>
+<p>The core skills most associated with the Data Analyst -&gt; Data Scientist pathway are Python, SQL, Machine Learning, Cloud Computing (AWS), Data Visualization, and Statistics – consistent with the role types (Data Analyst, Data Engineer, Data Scientist, ML Engineer) already identified in our <a href="./eda.html">EDA</a> page.</p>
+<p>Note: we did not derive this list by counting the <code>skills</code> field in our processed dataset – that field is truncated to only the first few skills alphabetically for each posting (every one of the top 20 most-frequent values in that field started with “A” or “B”, which is a data artifact, not a real signal), so a raw frequency count from it would be misleading.</p>
+<div id="cell-skill-gap-table" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>top_skills <span class="op">=</span> [<span class="st">"Python"</span>, <span class="st">"SQL"</span>, <span class="st">"Machine Learning"</span>, <span class="st">"Cloud/AWS"</span>, <span class="st">"Data Visualization"</span>, <span class="st">"Statistics"</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>team_avg <span class="op">=</span> df_skills[top_skills].mean().<span class="bu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>team_min <span class="op">=</span> df_skills[top_skills].<span class="bu">min</span>()</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>gap_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Team Average"</span>: team_avg,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Team Minimum"</span>: team_min,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Target (Advanced)"</span>: <span class="dv">4</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>gap_df[<span class="st">"Gap to Target (avg)"</span>] <span class="op">=</span> (gap_df[<span class="st">"Target (Advanced)"</span>] <span class="op">-</span> gap_df[<span class="st">"Team Average"</span>]).<span class="bu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>gap_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="skill-gap-table" class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Team Average</th>
+<th data-quarto-table-cell-role="th">Team Minimum</th>
+<th data-quarto-table-cell-role="th">Target (Advanced)</th>
+<th data-quarto-table-cell-role="th">Gap to Target (avg)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Python</th>
+<td>4.00</td>
+<td>3</td>
+<td>4</td>
+<td>0.00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">SQL</th>
+<td>4.00</td>
+<td>3</td>
+<td>4</td>
+<td>0.00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Machine Learning</th>
+<td>3.67</td>
+<td>3</td>
+<td>4</td>
+<td>0.33</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Cloud/AWS</th>
+<td>4.00</td>
+<td>3</td>
+<td>4</td>
+<td>0.00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Data Visualization</th>
+<td>4.00</td>
+<td>3</td>
+<td>4</td>
+<td>0.00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Statistics</th>
+<td>3.00</td>
+<td>2</td>
+<td>4</td>
+<td>1.00</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> as a team, we’re already at or above an “Advanced” (4) average in Python and SQL. The clearest gap is Statistics, where the team average (3.0) sits a full point below target and no individual member rates above a 4. Machine Learning and Data Visualization sit close to target on average, but with real variance between members.</p>
+</section>
+<section id="improvement-plan" class="level2">
+<h2 class="anchored" data-anchor-id="improvement-plan">Improvement Plan</h2>
+<p>Based on the gaps above, each member’s priority differs:</p>
+<ul>
+<li><strong>Manan Patel</strong> – priority: Statistics (currently 2). Strong in Python/SQL already, so the highest-leverage next step is building statistical foundations (hypothesis testing, regression) rather than more programming practice.</li>
+<li><strong>Richard Park</strong> – priority: Python and Data Visualization (both at 3). Already strong in Cloud/AWS and Statistics, so pairing with Manan or Michael on Python-heavy analysis tasks would close this gap fastest.</li>
+<li><strong>Michael Phillips</strong> – priority: Cloud/AWS (currently 3), despite being the team’s strongest in ML and visualization. Cloud skills are directly tied to the “Data Processing, Web Hosting” industry scope of this whole project, making this a high-relevance gap to close.</li>
+</ul>
+<p><strong>Team-wide priority:</strong> Statistics is the one area where every member is below “Advanced,” making it the single highest-leverage shared investment – a short structured course (e.g.&nbsp;a statistics-for-data-science module) benefits all three members at once, versus the other skills where pairing/mentoring between members who are already strong is more efficient than external coursework.</p>
+
+
 </section>
 
 </main> <!-- /main -->
