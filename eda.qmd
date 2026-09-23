@@ -330,8 +330,8 @@ ax.set_ylabel("Number of postings")
 ax.set_title("Remote vs Onsite vs Hybrid vs Unstated")
 for i, v in enumerate(remote_counts.values):
     ax.text(i, v + 2, str(v), ha="center")
-ax.text(0.99, 0.95, f"Total postings analyzed: {TOTAL}", transform=ax.transAxes,
-        ha="right", va="top", fontsize=9, color="gray")
+ax.text(0.99, 0.02, f"Total postings analyzed: {TOTAL}", transform=ax.transAxes,
+        ha="right", va="bottom", fontsize=9, color="gray")
 plt.tight_layout()
 plt.show()
 ```
