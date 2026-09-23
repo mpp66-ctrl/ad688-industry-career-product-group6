@@ -14,10 +14,21 @@ selected career pathway inside our selected industry?** All charts below are gen
 from `data/processed/career_market_panel.csv` -- see [Data Preparation](data_preparation.qmd)
 for how this dataset was built and cleaned.
 
+**A note on Step 4 (visual theming):** the assignment instructions ask for a consistent theme
+across Plotly charts specifically. All charts on this page use Seaborn/Matplotlib instead of
+Plotly, so we standardized on one consistent color palette across every chart below instead --
+a single primary color for all single-series bar/histogram charts, and one coordinated palette
+for the two multi-category charts (the role-share donut and the remote-status bars). The
+Skill Gap Analysis heatmap keeps its diverging red-blue colormap, since that encodes a
+low-to-high scale meaningfully and is not part of this page categorical color scheme.
+
 ```{python}
 #| label: load-data
 import pandas as pd
 import matplotlib.pyplot as plt
+
+# Consistent color theme used across every chart on this page (Step 4)
+PALETTE = ["#457b9d", "#2a9d8f", "#e9c46a", "#e76f51", "#6d597a", "#f4a261"]
 
 df = pd.read_csv("data/processed/career_market_panel.csv")
 TOTAL = len(df)
@@ -59,7 +70,7 @@ df["salary_mid"] = df.apply(salary_mid, axis=1)
 vol = df["role_bucket"].value_counts()
 
 fig, ax = plt.subplots(figsize=(8, 5))
-vol.sort_values().plot(kind="barh", ax=ax, color="#457b9d")
+vol.sort_values().plot(kind="barh", ax=ax, color=PALETTE[0])
 ax.set_xlabel("Number of postings")
 ax.set_title("Job Volume by Role Type")
 ax.text(0.99, 0.02, f"Total postings analyzed: {TOTAL}", transform=ax.transAxes,
@@ -83,7 +94,7 @@ sizes = vol_sorted.values.tolist()
 pcts = [s / TOTAL * 100 for s in sizes]
 
 fig, ax = plt.subplots(figsize=(9, 7))
-colors = plt.cm.tab20.colors
+colors = PALETTE
 wedges, _ = ax.pie(
     sizes, startangle=90,
     wedgeprops=dict(width=0.4, edgecolor="white"),
@@ -115,7 +126,7 @@ plt.show()
 onet_counts = df["onet_name"].fillna("Not specified").value_counts()
 
 fig, ax = plt.subplots(figsize=(9, 5))
-onet_counts.sort_values().plot(kind="barh", ax=ax, color="#457b9d")
+onet_counts.sort_values().plot(kind="barh", ax=ax, color=PALETTE[0])
 ax.set_xlabel("Number of postings")
 ax.set_title("Job Count by ONET Occupation")
 ax.text(0.99, 0.02, f"Total postings analyzed: {TOTAL}", transform=ax.transAxes,
@@ -140,7 +151,7 @@ plt.show()
 sal_df = df.dropna(subset=["salary_mid"])
 
 fig, ax = plt.subplots(figsize=(8, 5))
-ax.hist(sal_df["salary_mid"], bins=20, color="#e63946", edgecolor="white")
+ax.hist(sal_df["salary_mid"], bins=20, color=PALETTE[0], edgecolor="white")
 ax.set_xlabel("Estimated annual salary (USD)")
 ax.set_ylabel("Number of postings")
 ax.set_title("Salary Distribution")
@@ -166,7 +177,7 @@ role_sal = sal_df.groupby("role_bucket")["salary_mid"].agg(["mean", "count"])
 role_sal = role_sal[role_sal["count"] >= 2].sort_values("mean")
 
 fig, ax = plt.subplots(figsize=(8, 5))
-bars = ax.barh(role_sal.index, role_sal["mean"], color="#e63946")
+bars = ax.barh(role_sal.index, role_sal["mean"], color=PALETTE[0])
 ax.set_xlabel("Average estimated annual salary (USD)")
 ax.set_title("Average Salary by Role Type")
 for bar, v in zip(bars, role_sal["mean"]):
@@ -193,7 +204,7 @@ onet_sal = onet_sal_df.groupby("onet_name")["salary_mid"].agg(["mean", "count"])
 onet_sal = onet_sal[onet_sal["count"] >= 2].sort_values("mean")
 
 fig, ax = plt.subplots(figsize=(9, 5))
-bars = ax.barh(onet_sal.index, onet_sal["mean"], color="#e63946")
+bars = ax.barh(onet_sal.index, onet_sal["mean"], color=PALETTE[0])
 ax.set_xlabel("Average estimated annual salary (USD)")
 ax.set_title("Average Salary by ONET Occupation")
 for bar, v in zip(bars, onet_sal["mean"]):
@@ -217,7 +228,7 @@ state_sal = state_sal_df.groupby("state_clean")["salary_mid"].agg(["mean", "coun
 state_sal = state_sal[state_sal["count"] >= 2].sort_values("mean", ascending=False).head(10)
 
 fig, ax = plt.subplots(figsize=(8, 5))
-bars = ax.barh(state_sal.index[::-1], state_sal["mean"][::-1], color="#f4a261")
+bars = ax.barh(state_sal.index[::-1], state_sal["mean"][::-1], color=PALETTE[0])
 ax.set_xlabel("Average estimated annual salary (USD)")
 ax.set_title("Top 10 Highest-Paying States")
 for bar, v in zip(bars, state_sal["mean"][::-1]):
@@ -242,7 +253,7 @@ co_sal = co_sal_df.groupby("company_name_clean")["salary_mid"].agg(["mean", "cou
 co_sal = co_sal.sort_values("mean", ascending=False).head(10)
 
 fig, ax = plt.subplots(figsize=(8, 5))
-bars = ax.barh(co_sal.index[::-1], co_sal["mean"][::-1], color="#6d597a")
+bars = ax.barh(co_sal.index[::-1], co_sal["mean"][::-1], color=PALETTE[0])
 ax.set_xlabel("Average estimated annual salary (USD)")
 ax.set_title("Top 10 Companies by Average Salary")
 for bar, v in zip(bars, co_sal["mean"][::-1]):
@@ -266,7 +277,7 @@ confident ranking.
 loc = df[df["state_clean"] != "Unknown"]["state_clean"].value_counts().head(10)
 
 fig, ax = plt.subplots(figsize=(8, 5))
-loc.sort_values().plot(kind="barh", ax=ax, color="#2a9d8f")
+loc.sort_values().plot(kind="barh", ax=ax, color=PALETTE[0])
 ax.set_xlabel("Number of postings")
 ax.set_title("Top 10 States by Job Volume")
 ax.text(0.99, 0.02, f"Total postings analyzed: {TOTAL}", transform=ax.transAxes,
@@ -287,7 +298,7 @@ excluded from this chart rather than misattributed. Since California and New Yor
 exp_df = df.dropna(subset=["experience_min_years"])
 
 fig, ax = plt.subplots(figsize=(8, 5))
-ax.hist(exp_df["experience_min_years"], bins=range(0, 17), color="#f4a261",
+ax.hist(exp_df["experience_min_years"], bins=range(0, 17), color=PALETTE[0],
         edgecolor="white", align="left")
 ax.set_xlabel("Minimum years of experience required")
 ax.set_ylabel("Number of postings")
@@ -313,7 +324,7 @@ order = ["remote", "hybrid", "onsite", "unknown"]
 remote_counts = df["remote_status"].value_counts().reindex(order, fill_value=0)
 
 fig, ax = plt.subplots(figsize=(6, 5))
-colors = ["#2a9d8f", "#e9c46a", "#e76f51", "#a8a8a8"]
+colors = PALETTE[:4]
 ax.bar(remote_counts.index, remote_counts.values, color=colors)
 ax.set_ylabel("Number of postings")
 ax.set_title("Remote vs Onsite vs Hybrid vs Unstated")
@@ -338,7 +349,7 @@ hybrid_states = hybrid_df["state_clean"].value_counts().head(10)
 total_hybrid = (df["remote_status"] == "hybrid").sum()
 
 fig, ax = plt.subplots(figsize=(8, 5))
-hybrid_states.sort_values().plot(kind="barh", ax=ax, color="#e9c46a")
+hybrid_states.sort_values().plot(kind="barh", ax=ax, color=PALETTE[0])
 ax.set_xlabel("Number of hybrid postings")
 ax.set_title("Top 10 States by Hybrid Role Volume")
 ax.text(0.99, 0.02, f"Total hybrid postings: {total_hybrid}", transform=ax.transAxes,
@@ -358,7 +369,7 @@ emp_df = df[~df["company_name_clean"].str.startswith("Unknown")]
 top_emp = emp_df["company_name_clean"].value_counts().head(10)
 
 fig, ax = plt.subplots(figsize=(8, 5))
-top_emp.sort_values().plot(kind="barh", ax=ax, color="#6d597a")
+top_emp.sort_values().plot(kind="barh", ax=ax, color=PALETTE[0])
 ax.set_xlabel("Number of postings")
 ax.set_title("Top 10 Employers")
 ax.text(0.99, 0.02, "Excludes unattributable ATS/aggregator listings", transform=ax.transAxes,
