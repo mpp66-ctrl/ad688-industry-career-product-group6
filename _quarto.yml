@@ -8,11 +8,11 @@ website:
       - href: index.qmd
         text: Home
       - href: introduction.qmd
-        text: Introduction
+        text: Project Overview
       - href: data_preparation.qmd
         text: Data Preparation
-      - href: market_baseline.qmd
-        text: Market Baseline
+      - href: eda.qmd
+        text: Exploratory Analysis
 
 format:
   html:

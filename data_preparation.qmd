@@ -10,7 +10,7 @@ format:
 
 This page documents how we went from the MET Employability Career Match API to
 `data/processed/career_market_panel.csv` -- the cleaned, filtered dataset that powers the
-[Market Baseline](market_baseline.qmd) page and the rest of this product. Every filtering and
+[Exploratory Data Analysis](eda.qmd) page and the rest of this product. Every filtering and
 cleaning decision below is anchored to our Step 1 scope: the **Data Analyst -> Data Scientist /
 Analytics Engineer** career pathway, inside **NAICS 5182** (Computing Infrastructure Providers,
 Data Processing, Web Hosting, and Related Services).
@@ -150,4 +150,4 @@ The full column-by-column data dictionary is available in
 [`data/processed/data_dictionary.md`](data/processed/data_dictionary.md). The cleaned dataset
 itself is at [`data/processed/career_market_panel.csv`](data/processed/career_market_panel.csv).
 
-See the [Market Baseline](market_baseline.qmd) page for the resulting exploratory analysis.
+See the [Exploratory Data Analysis](eda.qmd) page for the resulting exploratory analysis.
