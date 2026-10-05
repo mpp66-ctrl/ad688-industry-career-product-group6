@@ -58,15 +58,22 @@ plt.show()
 
 **Reading the heatmap:** no single team member is strongest across every skill -- Manan leads
 in Python/SQL, Michael leads in Machine Learning/Data Visualization, and Richard leads in
-Cloud/AWS. Statistics is the team's weakest area overall (2-4 range, no one above
-intermediate), making it the clearest shared priority.
+Cloud/AWS. Statistics has the lowest team average (3.0), with ratings ranging from 2 to 4.
+Richard meets the Advanced level; Manan and Michael fall below it.
 
-## Comparing Team Skills to Industry Requirements
+## Comparing Team Skills to a Planning Benchmark
 
-The core skills most associated with the Data Analyst -> Data Scientist pathway are Python,
-SQL, Machine Learning, Cloud Computing (AWS), Data Visualization, and Statistics -- consistent
-with the role types (Data Analyst, Data Engineer, Data Scientist, ML Engineer) already
-identified in our [EDA](eda.qmd) page.
+For this preliminary scorecard, the team selected Python, SQL, Machine Learning,
+Cloud/AWS, Data Visualization, and Statistics as relevant skill areas for the pathway.
+These are working categories, not a ranking of observed employer demand. Before the final
+submission, we will support the selection with cited occupational sources or complete
+posting-level evidence and distinguish requirements across the three target roles.
+
+The target of **4 (Advanced)** is a team-selected development goal for comparison, not an
+employer-validated threshold or a measure of hiring readiness. Self-ratings are subjective;
+each member should confirm their ratings and support them with a project or work example.
+The averages summarize this small team's responses and should not be interpreted as an
+individual candidate's proficiency.
 
 Note: we did not derive this list by counting the `skills` field in our processed dataset --
 that field is truncated to only the first few skills alphabetically for each posting (every one
@@ -83,33 +90,39 @@ team_min = df_skills[top_skills].min()
 gap_df = pd.DataFrame({
     "Team Average": team_avg,
     "Team Minimum": team_min,
-    "Target (Advanced)": 4,
+    "Planning Target (Advanced)": 4,
 })
-gap_df["Gap to Target (avg)"] = (gap_df["Target (Advanced)"] - gap_df["Team Average"]).round(2)
+gap_df["Gap to Target (avg)"] = (gap_df["Planning Target (Advanced)"] - gap_df["Team Average"]).round(2)
 gap_df
 ```
 
-**Interpretation:** as a team, we're already at or above an "Advanced" (4) average in Python and
-SQL. The clearest gap is Statistics, where the team average (3.0) sits a full point below
-target and no individual member rates above a 4. Machine Learning and Data Visualization sit
-close to target on average, but with real variance between members.
+**Interpretation:** Python, SQL, Cloud/AWS, and Data Visualization each average 4.0, meeting the
+planning target. Machine Learning averages 3.67, leaving a gap of 0.33. Statistics averages 3.0, leaving the largest gap (1.0).
+Richard meets the Statistics target at 4; Manan and Michael rate themselves below it.
+A negative gap indicates an average above the target, not a skill deficit. Individual
+ratings remain important: a team average at or above 4 can still hide a member's gap.
 
 ## Improvement Plan
 
-Based on the gaps above, each member's priority differs:
+These proposed milestones should be confirmed by the team. Timeframes begin when the plan
+is adopted; they describe future work, not completed contributions.
 
-- **Manan Patel** -- priority: Statistics (currently 2). Strong in Python/SQL already, so the
-  highest-leverage next step is building statistical foundations (hypothesis testing,
-  regression) rather than more programming practice.
-- **Richard Park** -- priority: Python and Data Visualization (both at 3). Already strong in
-  Cloud/AWS and Statistics, so pairing with Manan or Michael on Python-heavy analysis tasks
-  would close this gap fastest.
-- **Michael Phillips** -- priority: Cloud/AWS (currently 3), despite being the team's strongest
-  in ML and visualization. Cloud skills are directly tied to the "Data Processing, Web Hosting"
-  industry scope of this whole project, making this a high-relevance gap to close.
+| Member | Priority based on self-ratings | Proposed action | Timeframe and evidence |
+|---|---|---|---|
+| Manan Patel | Statistics (2) | Practice hypothesis testing and regression with Richard's review. | Within two weeks: one reproducible notebook explaining assumptions, results, and limitations. |
+| Richard Park | Python and Data Visualization (both 3); ML also 3 | Pair with Manan on Python and Michael on visualization; revisit ML after these tasks. | Within two weeks: one Python analysis with two labeled charts and written interpretations. |
+| Michael Phillips | SQL, Cloud/AWS, and Statistics (all 3) | Start with Cloud/AWS because of the industry scope; practice SQL aggregation and statistical interpretation next. | Within two weeks: run a small analysis on AWS and document setup, outputs, and resource cleanup; within four weeks: add a SQL query and statistical interpretation. |
 
-**Team-wide priority:** Statistics is the one area where every member is below "Advanced,"
-making it the single highest-leverage shared investment -- a short structured course (e.g. a
-statistics-for-data-science module) benefits all three members at once, versus the other skills
-where pairing/mentoring between members who are already strong is more efficient than external
-coursework.
+**Shared priority:** Statistics has the largest average gap. Richard can help Manan and
+Michael practice while reinforcing his own understanding. Within two weeks, the team
+should complete one worked statistical example and peer-review its interpretation.
+
+## Limitations and Next Steps
+
+- Confirm every member's self-ratings, particularly ratings of 5 (Expert), using concrete evidence.
+- Validate the skill categories using cited occupational sources or complete posting text;
+  the truncated skills field cannot support a market-demand ranking.
+- Separate skill expectations for Data Analyst, Data Scientist, and Analytics Engineer
+  rather than assuming one Advanced threshold fits all roles.
+- Review the proposed milestones together and reassess individual gaps after the deliverables
+  are completed.
