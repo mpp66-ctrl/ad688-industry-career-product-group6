@@ -80,7 +80,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-3e9b1289f5f353c49b617ce48ad2bc38.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-55617497126496852ff9f5a59253c640.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -171,8 +171,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
   <li><a href="#team-skill-levels" id="toc-team-skill-levels" class="nav-link" data-scroll-target="#team-skill-levels">Team Skill Levels</a></li>
-  <li><a href="#comparing-team-skills-to-industry-requirements" id="toc-comparing-team-skills-to-industry-requirements" class="nav-link" data-scroll-target="#comparing-team-skills-to-industry-requirements">Comparing Team Skills to Industry Requirements</a></li>
+  <li><a href="#comparing-team-skills-to-a-planning-benchmark" id="toc-comparing-team-skills-to-a-planning-benchmark" class="nav-link" data-scroll-target="#comparing-team-skills-to-a-planning-benchmark">Comparing Team Skills to a Planning Benchmark</a></li>
   <li><a href="#improvement-plan" id="toc-improvement-plan" class="nav-link" data-scroll-target="#improvement-plan">Improvement Plan</a></li>
+  <li><a href="#limitations-and-next-steps" id="toc-limitations-and-next-steps" class="nav-link" data-scroll-target="#limitations-and-next-steps">Limitations and Next Steps</a></li>
   </ul>
 </nav>
     </div>
@@ -305,11 +306,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p><strong>Reading the heatmap:</strong> no single team member is strongest across every skill – Manan leads in Python/SQL, Michael leads in Machine Learning/Data Visualization, and Richard leads in Cloud/AWS. Statistics is the team’s weakest area overall (2-4 range, no one above intermediate), making it the clearest shared priority.</p>
+<p><strong>Reading the heatmap:</strong> no single team member is strongest across every skill – Manan leads in Python/SQL, Michael leads in Machine Learning/Data Visualization, and Richard leads in Cloud/AWS. Statistics has the lowest team average (3.0), with ratings ranging from 2 to 4. Richard meets the Advanced level; Manan and Michael fall below it.</p>
 </section>
-<section id="comparing-team-skills-to-industry-requirements" class="level2">
-<h2 class="anchored" data-anchor-id="comparing-team-skills-to-industry-requirements">Comparing Team Skills to Industry Requirements</h2>
-<p>The core skills most associated with the Data Analyst -&gt; Data Scientist pathway are Python, SQL, Machine Learning, Cloud Computing (AWS), Data Visualization, and Statistics – consistent with the role types (Data Analyst, Data Engineer, Data Scientist, ML Engineer) already identified in our <a href="./eda.html">EDA</a> page.</p>
+<section id="comparing-team-skills-to-a-planning-benchmark" class="level2">
+<h2 class="anchored" data-anchor-id="comparing-team-skills-to-a-planning-benchmark">Comparing Team Skills to a Planning Benchmark</h2>
+<p>For this preliminary scorecard, the team selected Python, SQL, Machine Learning, Cloud/AWS, Data Visualization, and Statistics as relevant skill areas for the pathway. These are working categories, not a ranking of observed employer demand. Before the final submission, we will support the selection with cited occupational sources or complete posting-level evidence and distinguish requirements across the three target roles.</p>
+<p>The target of <strong>4 (Advanced)</strong> is a team-selected development goal for comparison, not an employer-validated threshold or a measure of hiring readiness. Self-ratings are subjective; each member should confirm their ratings and support them with a project or work example. The averages summarize this small team’s responses and should not be interpreted as an individual candidate’s proficiency.</p>
 <p>Note: we did not derive this list by counting the <code>skills</code> field in our processed dataset – that field is truncated to only the first few skills alphabetically for each posting (every one of the top 20 most-frequent values in that field started with “A” or “B”, which is a data artifact, not a real signal), so a raw frequency count from it would be misleading.</p>
 <div id="cell-skill-gap-table" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>top_skills <span class="op">=</span> [<span class="st">"Python"</span>, <span class="st">"SQL"</span>, <span class="st">"Machine Learning"</span>, <span class="st">"Cloud/AWS"</span>, <span class="st">"Data Visualization"</span>, <span class="st">"Statistics"</span>]</span>
@@ -320,9 +322,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>gap_df <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Team Average"</span>: team_avg,</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Team Minimum"</span>: team_min,</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Target (Advanced)"</span>: <span class="dv">4</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Planning Target (Advanced)"</span>: <span class="dv">4</span>,</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>gap_df[<span class="st">"Gap to Target (avg)"</span>] <span class="op">=</span> (gap_df[<span class="st">"Target (Advanced)"</span>] <span class="op">-</span> gap_df[<span class="st">"Team Average"</span>]).<span class="bu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>gap_df[<span class="st">"Gap to Target (avg)"</span>] <span class="op">=</span> (gap_df[<span class="st">"Planning Target (Advanced)"</span>] <span class="op">-</span> gap_df[<span class="st">"Team Average"</span>]).<span class="bu">round</span>(<span class="dv">2</span>)</span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>gap_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div id="skill-gap-table" class="cell-output cell-output-display" data-execution_count="3">
 <div>
@@ -334,7 +336,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th">Team Average</th>
 <th data-quarto-table-cell-role="th">Team Minimum</th>
-<th data-quarto-table-cell-role="th">Target (Advanced)</th>
+<th data-quarto-table-cell-role="th">Planning Target (Advanced)</th>
 <th data-quarto-table-cell-role="th">Gap to Target (avg)</th>
 </tr>
 </thead>
@@ -387,17 +389,57 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p><strong>Interpretation:</strong> as a team, we’re already at or above an “Advanced” (4) average in Python and SQL. The clearest gap is Statistics, where the team average (3.0) sits a full point below target and no individual member rates above a 4. Machine Learning and Data Visualization sit close to target on average, but with real variance between members.</p>
+<p><strong>Interpretation:</strong> Python, SQL, Cloud/AWS, and Data Visualization each average 4.0, meeting the planning target. Machine Learning averages 3.67, leaving a gap of 0.33. Statistics averages 3.0, leaving the largest gap (1.0). Richard meets the Statistics target at 4; Manan and Michael rate themselves below it. A negative gap indicates an average above the target, not a skill deficit. Individual ratings remain important: a team average at or above 4 can still hide a member’s gap.</p>
 </section>
 <section id="improvement-plan" class="level2">
 <h2 class="anchored" data-anchor-id="improvement-plan">Improvement Plan</h2>
-<p>Based on the gaps above, each member’s priority differs:</p>
+<p>These proposed milestones should be confirmed by the team. Timeframes begin when the plan is adopted; they describe future work, not completed contributions.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Member</th>
+<th>Priority based on self-ratings</th>
+<th>Proposed action</th>
+<th>Timeframe and evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Manan Patel</td>
+<td>Statistics (2)</td>
+<td>Practice hypothesis testing and regression with Richard’s review.</td>
+<td>Within two weeks: one reproducible notebook explaining assumptions, results, and limitations.</td>
+</tr>
+<tr class="even">
+<td>Richard Park</td>
+<td>Python and Data Visualization (both 3); ML also 3</td>
+<td>Pair with Manan on Python and Michael on visualization; revisit ML after these tasks.</td>
+<td>Within two weeks: one Python analysis with two labeled charts and written interpretations.</td>
+</tr>
+<tr class="odd">
+<td>Michael Phillips</td>
+<td>SQL, Cloud/AWS, and Statistics (all 3)</td>
+<td>Start with Cloud/AWS because of the industry scope; practice SQL aggregation and statistical interpretation next.</td>
+<td>Within two weeks: run a small analysis on AWS and document setup, outputs, and resource cleanup; within four weeks: add a SQL query and statistical interpretation.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Shared priority:</strong> Statistics has the largest average gap. Richard can help Manan and Michael practice while reinforcing his own understanding. Within two weeks, the team should complete one worked statistical example and peer-review its interpretation.</p>
+</section>
+<section id="limitations-and-next-steps" class="level2">
+<h2 class="anchored" data-anchor-id="limitations-and-next-steps">Limitations and Next Steps</h2>
 <ul>
-<li><strong>Manan Patel</strong> – priority: Statistics (currently 2). Strong in Python/SQL already, so the highest-leverage next step is building statistical foundations (hypothesis testing, regression) rather than more programming practice.</li>
-<li><strong>Richard Park</strong> – priority: Python and Data Visualization (both at 3). Already strong in Cloud/AWS and Statistics, so pairing with Manan or Michael on Python-heavy analysis tasks would close this gap fastest.</li>
-<li><strong>Michael Phillips</strong> – priority: Cloud/AWS (currently 3), despite being the team’s strongest in ML and visualization. Cloud skills are directly tied to the “Data Processing, Web Hosting” industry scope of this whole project, making this a high-relevance gap to close.</li>
+<li>Confirm every member’s self-ratings, particularly ratings of 5 (Expert), using concrete evidence.</li>
+<li>Validate the skill categories using cited occupational sources or complete posting text; the truncated skills field cannot support a market-demand ranking.</li>
+<li>Separate skill expectations for Data Analyst, Data Scientist, and Analytics Engineer rather than assuming one Advanced threshold fits all roles.</li>
+<li>Review the proposed milestones together and reassess individual gaps after the deliverables are completed.</li>
 </ul>
-<p><strong>Team-wide priority:</strong> Statistics is the one area where every member is below “Advanced,” making it the single highest-leverage shared investment – a short structured course (e.g.&nbsp;a statistics-for-data-science module) benefits all three members at once, versus the other skills where pairing/mentoring between members who are already strong is more efficient than external coursework.</p>
 
 
 </section>
