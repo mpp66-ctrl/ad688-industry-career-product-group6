@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.18">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -77,7 +77,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-55617497126496852ff9f5a59253c640.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -171,8 +171,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
   <li><a href="#team-skill-levels" id="toc-team-skill-levels" class="nav-link" data-scroll-target="#team-skill-levels">Team Skill Levels</a></li>
-  <li><a href="#comparing-team-skills-to-a-planning-benchmark" id="toc-comparing-team-skills-to-a-planning-benchmark" class="nav-link" data-scroll-target="#comparing-team-skills-to-a-planning-benchmark">Comparing Team Skills to a Planning Benchmark</a></li>
+  <li><a href="#what-the-market-asks-for" id="toc-what-the-market-asks-for" class="nav-link" data-scroll-target="#what-the-market-asks-for">What the Market Asks For</a></li>
+  <li><a href="#comparing-team-skills-to-market-demand" id="toc-comparing-team-skills-to-market-demand" class="nav-link" data-scroll-target="#comparing-team-skills-to-market-demand">Comparing Team Skills to Market Demand</a></li>
   <li><a href="#improvement-plan" id="toc-improvement-plan" class="nav-link" data-scroll-target="#improvement-plan">Improvement Plan</a></li>
+  <li><a href="#draft-recommendations" id="toc-draft-recommendations" class="nav-link" data-scroll-target="#draft-recommendations">Draft Recommendations</a></li>
   <li><a href="#limitations-and-next-steps" id="toc-limitations-and-next-steps" class="nav-link" data-scroll-target="#limitations-and-next-steps">Limitations and Next Steps</a></li>
   </ul>
 </nav>
@@ -183,7 +185,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Skill Gap Analysis</h1>
-<p class="subtitle lead">Team Skills vs.&nbsp;Data Analyst -&gt; Data Scientist Market Requirements</p>
+<p class="subtitle lead">Team Skills vs.&nbsp;Data Analyst Market Demand</p>
 </div>
 
 
@@ -202,7 +204,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p>This page compares our team’s current skill levels against the core skills expected for the Data Analyst -&gt; Data Scientist / Analytics Engineer pathway inside NAICS 5182, and proposes a concrete improvement plan for closing the gaps.</p>
+<p>This page compares our team’s current skill levels against how often each skill appears in real Data Analyst job postings inside NAICS 5182, then proposes an improvement plan and a draft set of recommendations for job seekers.</p>
 </section>
 <section id="team-skill-levels" class="level2">
 <h2 class="anchored" data-anchor-id="team-skill-levels">Team Skill Levels</h2>
@@ -308,25 +310,61 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p><strong>Reading the heatmap:</strong> no single team member is strongest across every skill – Manan leads in Python/SQL, Michael leads in Machine Learning/Data Visualization, and Richard leads in Cloud/AWS. Statistics has the lowest team average (3.0), with ratings ranging from 2 to 4. Richard meets the Advanced level; Manan and Michael fall below it.</p>
 </section>
-<section id="comparing-team-skills-to-a-planning-benchmark" class="level2">
-<h2 class="anchored" data-anchor-id="comparing-team-skills-to-a-planning-benchmark">Comparing Team Skills to a Planning Benchmark</h2>
-<p>For this preliminary scorecard, the team selected Python, SQL, Machine Learning, Cloud/AWS, Data Visualization, and Statistics as relevant skill areas for the pathway. These are working categories, not a ranking of observed employer demand. Before the final submission, we will support the selection with cited occupational sources or complete posting-level evidence and distinguish requirements across the three target roles.</p>
-<p>The target of <strong>4 (Advanced)</strong> is a team-selected development goal for comparison, not an employer-validated threshold or a measure of hiring readiness. Self-ratings are subjective; each member should confirm their ratings and support them with a project or work example. The averages summarize this small team’s responses and should not be interpreted as an individual candidate’s proficiency.</p>
-<p>Note: we did not derive this list by counting the <code>skills</code> field in our processed dataset – that field is truncated to only the first few skills alphabetically for each posting (every one of the top 20 most-frequent values in that field started with “A” or “B”, which is a data artifact, not a real signal), so a raw frequency count from it would be misleading.</p>
-<div id="cell-skill-gap-table" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>top_skills <span class="op">=</span> [<span class="st">"Python"</span>, <span class="st">"SQL"</span>, <span class="st">"Machine Learning"</span>, <span class="st">"Cloud/AWS"</span>, <span class="st">"Data Visualization"</span>, <span class="st">"Statistics"</span>]</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>team_avg <span class="op">=</span> df_skills[top_skills].mean().<span class="bu">round</span>(<span class="dv">2</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>team_min <span class="op">=</span> df_skills[top_skills].<span class="bu">min</span>()</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>gap_df <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Team Average"</span>: team_avg,</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Team Minimum"</span>: team_min,</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Planning Target (Advanced)"</span>: <span class="dv">4</span>,</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>gap_df[<span class="st">"Gap to Target (avg)"</span>] <span class="op">=</span> (gap_df[<span class="st">"Planning Target (Advanced)"</span>] <span class="op">-</span> gap_df[<span class="st">"Team Average"</span>]).<span class="bu">round</span>(<span class="dv">2</span>)</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>gap_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div id="skill-gap-table" class="cell-output cell-output-display" data-execution_count="3">
+<section id="what-the-market-asks-for" class="level2">
+<h2 class="anchored" data-anchor-id="what-the-market-asks-for">What the Market Asks For</h2>
+<p>To ground the comparison in real postings, we used our second dataset, the 2024 Lightcast export (209 postings, filtered with the same industry, location, and career-pathway rules; see <a href="./data_preparation.html">Data Preparation</a>). Unlike the MET API extract, whose <code>skills</code> field is truncated to the first few skills alphabetically for each posting (every one of its top 20 most-frequent values started with “A” or “B”, so we did not use it), the Lightcast <code>skills</code> field is complete: each posting lists its full set of skills, about 24 on average.</p>
+<p>We classified each posting into a role family from its title, then counted how many postings in each role list each of our six skill areas. A skill area counts as listed when any of a posting’s skills matches the area’s name patterns (for example, <code>Python (Programming Language)</code> counts for Python, and Tableau or Power BI count for Data Visualization). The patterns are in the code below.</p>
+<div id="cell-market-demand" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>lc <span class="op">=</span> pd.read_csv(<span class="st">"data/processed/lightcast_market_panel.csv"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>lc[<span class="st">"skill_list"</span>] <span class="op">=</span> lc[<span class="st">"skills"</span>].<span class="bu">apply</span>(json.loads)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> classify_role(title):</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> <span class="bu">str</span>(title).lower()</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> re.search(<span class="vs">r"machine learning engineer</span><span class="cf">|</span><span class="vs">ml engineer"</span>, t):</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"ML Engineer"</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> re.search(<span class="vs">r"data scientist</span><span class="cf">|</span><span class="vs">applied scientist"</span>, t):</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Data Scientist"</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> re.search(<span class="vs">r"data engineer</span><span class="cf">|</span><span class="vs">analytics engineer</span><span class="cf">|</span><span class="vs">data architect</span><span class="cf">|</span><span class="vs">database architect"</span>, t):</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Data / Analytics Engineer"</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> re.search(<span class="vs">r"data analyst</span><span class="cf">|</span><span class="vs">business analyst</span><span class="cf">|</span><span class="vs">bi analyst</span><span class="cf">|</span><span class="vs">business intelligence analyst"</span>, t):</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Data Analyst"</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"Other"</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>lc[<span class="st">"role"</span>] <span class="op">=</span> lc[<span class="st">"title"</span>].<span class="bu">apply</span>(classify_role)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>skill_patterns <span class="op">=</span> {</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Python"</span>: <span class="vs">r"</span><span class="dv">^</span><span class="vs">Python"</span>,</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SQL"</span>: <span class="vs">r"</span><span class="dv">^</span><span class="vs">SQL</span><span class="cf">|</span><span class="vs">Structured Query"</span>,</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Machine Learning"</span>: <span class="vs">r"</span><span class="dv">^</span><span class="vs">Machine Learning"</span>,</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Cloud/AWS"</span>: <span class="vs">r"Amazon Web Services</span><span class="cf">|</span><span class="kw">(</span><span class="dv">^</span><span class="cf">|</span><span class="pp">[^A-Za-z]</span><span class="kw">)</span><span class="vs">AWS</span><span class="kw">(</span><span class="pp">[^A-Za-z]</span><span class="cf">|</span><span class="dv">$</span><span class="kw">)</span><span class="cf">|</span><span class="vs">Cloud Computing</span><span class="cf">|</span><span class="vs">Azure</span><span class="cf">|</span><span class="vs">Google Cloud</span><span class="cf">|</span><span class="vs">Cloud Platform"</span>,</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Data Visualization"</span>: <span class="vs">r"Data Visuali</span><span class="cf">|</span><span class="vs">Tableau</span><span class="cf">|</span><span class="vs">Power BI</span><span class="cf">|</span><span class="vs">Looker</span><span class="cf">|</span><span class="vs">Qlik"</span>,</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Statistics"</span>: <span class="vs">r"Statistic"</span>,</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> share_with_skill(frame, pattern):</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(frame) <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">float</span>(<span class="st">"nan"</span>)</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    listed <span class="op">=</span> frame[<span class="st">"skill_list"</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> skills: <span class="bu">any</span>(re.search(pattern, s, re.I) <span class="cf">for</span> s <span class="kw">in</span> skills))</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> listed.mean()</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>roles <span class="op">=</span> [<span class="st">"Data Analyst"</span>, <span class="st">"Data / Analytics Engineer"</span>, <span class="st">"Data Scientist"</span>, <span class="st">"ML Engineer"</span>]</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>role_counts <span class="op">=</span> lc[<span class="st">"role"</span>].value_counts()</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>demand_by_role <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"</span><span class="sc">{</span>r<span class="sc">}</span><span class="ss"> (n=</span><span class="sc">{</span><span class="bu">int</span>(role_counts.get(r, <span class="dv">0</span>))<span class="sc">}</span><span class="ss">)"</span>: {</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>        skill: share_with_skill(lc[lc[<span class="st">"role"</span>] <span class="op">==</span> r], pat) <span class="cf">for</span> skill, pat <span class="kw">in</span> skill_patterns.items()</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> r <span class="kw">in</span> roles</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>demand_by_role.index.name <span class="op">=</span> <span class="st">"Skill"</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>demand_by_role.<span class="bu">map</span>(<span class="kw">lambda</span> v: <span class="st">"no postings"</span> <span class="cf">if</span> pd.isna(v) <span class="cf">else</span> <span class="ss">f"</span><span class="sc">{</span>v<span class="sc">:.0%}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="market-demand" class="cell-output cell-output-display" data-execution_count="3">
 <div>
 
 
@@ -334,54 +372,61 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Team Average</th>
-<th data-quarto-table-cell-role="th">Team Minimum</th>
-<th data-quarto-table-cell-role="th">Planning Target (Advanced)</th>
-<th data-quarto-table-cell-role="th">Gap to Target (avg)</th>
+<th data-quarto-table-cell-role="th">Data Analyst (n=195)</th>
+<th data-quarto-table-cell-role="th">Data / Analytics Engineer (n=14)</th>
+<th data-quarto-table-cell-role="th">Data Scientist (n=0)</th>
+<th data-quarto-table-cell-role="th">ML Engineer (n=0)</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Skill</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">Python</th>
-<td>4.00</td>
-<td>3</td>
-<td>4</td>
-<td>0.00</td>
+<td>46%</td>
+<td>79%</td>
+<td>no postings</td>
+<td>no postings</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">SQL</th>
-<td>4.00</td>
-<td>3</td>
-<td>4</td>
-<td>0.00</td>
+<td>57%</td>
+<td>93%</td>
+<td>no postings</td>
+<td>no postings</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">Machine Learning</th>
-<td>3.67</td>
-<td>3</td>
-<td>4</td>
-<td>0.33</td>
+<td>17%</td>
+<td>7%</td>
+<td>no postings</td>
+<td>no postings</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">Cloud/AWS</th>
-<td>4.00</td>
-<td>3</td>
-<td>4</td>
-<td>0.00</td>
+<td>10%</td>
+<td>21%</td>
+<td>no postings</td>
+<td>no postings</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">Data Visualization</th>
-<td>4.00</td>
-<td>3</td>
-<td>4</td>
-<td>0.00</td>
+<td>69%</td>
+<td>21%</td>
+<td>no postings</td>
+<td>no postings</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">Statistics</th>
-<td>3.00</td>
-<td>2</td>
-<td>4</td>
-<td>1.00</td>
+<td>32%</td>
+<td>14%</td>
+<td>no postings</td>
+<td>no postings</td>
 </tr>
 </tbody>
 </table>
@@ -389,55 +434,179 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p><strong>Interpretation:</strong> Python, SQL, Cloud/AWS, and Data Visualization each average 4.0, meeting the planning target. Machine Learning averages 3.67, leaving a gap of 0.33. Statistics averages 3.0, leaving the largest gap (1.0). Richard meets the Statistics target at 4; Manan and Michael rate themselves below it. A negative gap indicates an average above the target, not a skill deficit. Individual ratings remain important: a team average at or above 4 can still hide a member’s gap.</p>
+<p><strong>What this dataset can and cannot tell us:</strong> the Lightcast sample is almost entirely Data Analyst postings, with a small group of Data / Analytics Engineer postings and no Data Scientist or ML Engineer postings. The market demand below therefore describes the <strong>Data Analyst</strong> role. It cannot yet show what separates Data Analyst roles from Data Scientist roles, and the Data / Analytics Engineer figures rest on very few postings, so treat them as directional only.</p>
+</section>
+<section id="comparing-team-skills-to-market-demand" class="level2">
+<h2 class="anchored" data-anchor-id="comparing-team-skills-to-market-demand">Comparing Team Skills to Market Demand</h2>
+<p>The scorecard lists the six skills from most to least often listed in Data Analyst postings. We group demand into tiers (High is 50% or more of postings, Moderate is 25-49%, Low is under 25%) and use <strong>Advanced (4)</strong> as the level a team member should reach in a high-demand skill. The tiers and the target level are team-chosen reading aids; the demand percentages come from the postings.</p>
+<div id="cell-skill-gap-scorecard" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>analyst <span class="op">=</span> lc[lc[<span class="st">"role"</span>] <span class="op">==</span> <span class="st">"Data Analyst"</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>analyst_demand <span class="op">=</span> pd.Series({skill: share_with_skill(analyst, pat) <span class="cf">for</span> skill, pat <span class="kw">in</span> skill_patterns.items()})</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> demand_tier(share):</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> share <span class="op">&gt;=</span> <span class="fl">0.5</span>:</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"High (50%+)"</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> share <span class="op">&gt;=</span> <span class="fl">0.25</span>:</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Moderate (25-49%)"</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"Low (under 25%)"</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>skills_in_order <span class="op">=</span> analyst_demand.sort_values(ascending<span class="op">=</span><span class="va">False</span>).index.tolist()</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>scorecard <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Share of Data Analyst postings"</span>: [<span class="ss">f"</span><span class="sc">{</span>analyst_demand[s]<span class="sc">:.0%}</span><span class="ss">"</span> <span class="cf">for</span> s <span class="kw">in</span> skills_in_order],</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Demand tier"</span>: [demand_tier(analyst_demand[s]) <span class="cf">for</span> s <span class="kw">in</span> skills_in_order],</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Team Average"</span>: [<span class="bu">round</span>(df_skills[s].mean(), <span class="dv">2</span>) <span class="cf">for</span> s <span class="kw">in</span> skills_in_order],</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Team Minimum"</span>: [<span class="bu">int</span>(df_skills[s].<span class="bu">min</span>()) <span class="cf">for</span> s <span class="kw">in</span> skills_in_order],</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Members below Advanced (4)"</span>: [<span class="st">", "</span>.join(df_skills.index[df_skills[s] <span class="op">&lt;</span> <span class="dv">4</span>]) <span class="kw">or</span> <span class="st">"none"</span> <span class="cf">for</span> s <span class="kw">in</span> skills_in_order],</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>}, index<span class="op">=</span>pd.Index(skills_in_order, name<span class="op">=</span><span class="st">"Skill"</span>))</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>scorecard</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="skill-gap-scorecard" class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Share of Data Analyst postings</th>
+<th data-quarto-table-cell-role="th">Demand tier</th>
+<th data-quarto-table-cell-role="th">Team Average</th>
+<th data-quarto-table-cell-role="th">Team Minimum</th>
+<th data-quarto-table-cell-role="th">Members below Advanced (4)</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Skill</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Data Visualization</th>
+<td>69%</td>
+<td>High (50%+)</td>
+<td>4.00</td>
+<td>3</td>
+<td>Richard Park</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">SQL</th>
+<td>57%</td>
+<td>High (50%+)</td>
+<td>4.00</td>
+<td>3</td>
+<td>Michael Phillips</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Python</th>
+<td>46%</td>
+<td>Moderate (25-49%)</td>
+<td>4.00</td>
+<td>3</td>
+<td>Richard Park</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Statistics</th>
+<td>32%</td>
+<td>Moderate (25-49%)</td>
+<td>3.00</td>
+<td>2</td>
+<td>Manan Patel, Michael Phillips</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Machine Learning</th>
+<td>17%</td>
+<td>Low (under 25%)</td>
+<td>3.67</td>
+<td>3</td>
+<td>Manan Patel, Richard Park</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Cloud/AWS</th>
+<td>10%</td>
+<td>Low (under 25%)</td>
+<td>4.00</td>
+<td>3</td>
+<td>Michael Phillips</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> Data Visualization (69% of Data Analyst postings) and SQL (57%) are the two most frequently listed skills, and both are in the high-demand tier. The team averages 4.0 in each, but Richard rates Data Visualization at 3 and Michael rates SQL at 3, so each high-demand skill still has one member below Advanced. Python (46%) sits just under the high-demand line; the team averages 4.0, with Richard at 3. Statistics (32%) is in the moderate tier and is the team’s weakest area (average 3.0, with Manan at 2 and Michael at 3). Machine Learning (17%) and Cloud/AWS (10%) appear in few Data Analyst postings, so they matter less at the analyst entry point. Cloud/AWS is still relevant to our industry context (NAICS 5182 is cloud computing and hosting), and it is a skill where Michael rates 3.</p>
+<p>The small Data / Analytics Engineer group (see the first table) leans much more on SQL and Python than on visualization, which suggests that a move toward engineering roles raises the importance of those two skills. With only 14 postings, this is directional only.</p>
 </section>
 <section id="improvement-plan" class="level2">
 <h2 class="anchored" data-anchor-id="improvement-plan">Improvement Plan</h2>
-<p>These proposed milestones should be confirmed by the team. Timeframes begin when the plan is adopted; they describe future work, not completed contributions.</p>
+<p>These proposed milestones should be confirmed by the team, and each suggested resource should be checked for current availability. Timeframes begin when the plan is adopted; they describe future work, not completed contributions.</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Member</th>
-<th>Priority based on self-ratings</th>
+<th>Priority (self-rating; share of Data Analyst postings)</th>
 <th>Proposed action</th>
+<th>Suggested resource</th>
 <th>Timeframe and evidence</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>Manan Patel</td>
-<td>Statistics (2)</td>
+<td>Statistics (2; 32%)</td>
 <td>Practice hypothesis testing and regression with Richard’s review.</td>
+<td>Khan Academy, “Statistics and Probability” (free)</td>
 <td>Within two weeks: one reproducible notebook explaining assumptions, results, and limitations.</td>
 </tr>
 <tr class="even">
 <td>Richard Park</td>
-<td>Python and Data Visualization (both 3); ML also 3</td>
-<td>Pair with Manan on Python and Michael on visualization; revisit ML after these tasks.</td>
+<td>Data Visualization (3; 69%), then Python (3; 46%)</td>
+<td>Pair with Michael on visualization and with Manan on Python.</td>
+<td>Tableau Public free training videos; “Python for Everybody” (Coursera, University of Michigan)</td>
 <td>Within two weeks: one Python analysis with two labeled charts and written interpretations.</td>
 </tr>
 <tr class="odd">
 <td>Michael Phillips</td>
-<td>SQL, Cloud/AWS, and Statistics (all 3)</td>
-<td>Start with Cloud/AWS because of the industry scope; practice SQL aggregation and statistical interpretation next.</td>
-<td>Within two weeks: run a small analysis on AWS and document setup, outputs, and resource cleanup; within four weeks: add a SQL query and statistical interpretation.</td>
+<td>SQL (3; 57%), then Statistics (3; 32%) and Cloud/AWS (3; 10%)</td>
+<td>Start with SQL aggregation practice, then statistical interpretation; follow with a small AWS analysis because of the industry scope.</td>
+<td>Mode, “SQL Tutorial” (free); “AWS Cloud Practitioner Essentials” (AWS Skill Builder)</td>
+<td>Within two weeks: SQL aggregation queries with written results; within four weeks: a small analysis run on AWS, documenting setup, outputs, and resource cleanup.</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Shared priority:</strong> Statistics has the largest average gap. Richard can help Manan and Michael practice while reinforcing his own understanding. Within two weeks, the team should complete one worked statistical example and peer-review its interpretation.</p>
+<p><strong>Shared priority:</strong> the two highest-demand skills are Data Visualization and SQL. Richard and Michael can each teach the other’s weaker skill (Richard rates SQL at 4 and Michael rates Data Visualization at 5), so they should pair on those first. Statistics remains the team’s lowest average, so within two weeks the team should also complete one worked statistical example and peer-review its interpretation.</p>
+</section>
+<section id="draft-recommendations" class="level2">
+<h2 class="anchored" data-anchor-id="draft-recommendations">Draft Recommendations</h2>
+<p>These draft recommendations for job seekers come from the Exploratory Analysis page and the scorecard above. They describe the Data Analyst pathway in NAICS 5182 and should be revisited with the final analytics in Module 5.</p>
+<ol type="1">
+<li><strong>Lead with SQL and data visualization.</strong> They are the two most frequently listed skills, in 57% and 69% of Data Analyst postings. Build portfolio dashboards in Tableau or Power BI backed by SQL queries.</li>
+<li><strong>Add Python and statistics next.</strong> Python appears in 46% of Data Analyst postings and statistics in 32%. Statistics is also the team’s lowest-rated skill.</li>
+<li><strong>Expect a mid-level market and build experience early.</strong> Where experience is stated, requirements mostly fall in the 3-8 year range, so projects, internships, and certifications can help offset limited work history.</li>
+<li><strong>Look at California and New York for volume, and Texas for pay.</strong> California and New York have the most postings in both datasets, and Texas leads on average disclosed pay in the 2026 data.</li>
+<li><strong>Ask about the work arrangement.</strong> Most postings do not state a remote or onsite policy, and hybrid is the most common stated arrangement.</li>
+<li><strong>Plan the move toward Data Scientist / ML roles if pay growth is the goal.</strong> The average disclosed pay for ML Engineer and Data Scientist postings is about 2.3 times that of Data Analyst postings. The skills that separate those roles still need to be validated in Module 5.</li>
+</ol>
 </section>
 <section id="limitations-and-next-steps" class="level2">
 <h2 class="anchored" data-anchor-id="limitations-and-next-steps">Limitations and Next Steps</h2>
 <ul>
-<li>Confirm every member’s self-ratings, particularly ratings of 5 (Expert), using concrete evidence.</li>
-<li>Validate the skill categories using cited occupational sources or complete posting text; the truncated skills field cannot support a market-demand ranking.</li>
-<li>Separate skill expectations for Data Analyst, Data Scientist, and Analytics Engineer rather than assuming one Advanced threshold fits all roles.</li>
+<li>The Lightcast sample is a 2024 snapshot of 209 postings, almost all Data Analyst roles. Market demand here applies to the Data Analyst role only; there are no Data Scientist or ML Engineer postings in it.</li>
+<li>The MET API <code>skills</code> field is truncated, so it cannot be used to rank skills. Skill requirements for Data Scientist, ML Engineer, and Analytics Engineer roles still need posting-level data or cited occupational sources, and answering how those roles differ from Data Analyst roles is planned for Module 5.</li>
+<li>Skills are matched by name patterns (listed in the code above), so postings that name a skill in another way would be missed.</li>
+<li>Self-ratings are subjective. Each member should confirm their ratings, particularly any 5 (Expert), with a project or work example.</li>
 <li>Review the proposed milestones together and reassess individual gaps after the deliverables are completed.</li>
 </ul>
 

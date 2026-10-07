@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.18">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Market Baseline – Career Evaluation Product - Group 6</title>
+<title>Exploratory Analysis – Career Evaluation Product - Group 6</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -77,7 +77,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-55617497126496852ff9f5a59253c640.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -198,8 +198,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Market Baseline</h1>
-<p class="subtitle lead">What Does the Data Analyst -&gt; Data Scientist Market Look Like in NAICS 5182?</p>
+<h1 class="title">Exploratory Analysis</h1>
+<p class="subtitle lead">Market Baseline: What Does the Data Analyst -&gt; Data Scientist Market Look Like in NAICS 5182?</p>
 </div>
 
 
@@ -217,12 +217,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>This page answers our Step 2 question: <strong>what does the market currently look like for our selected career pathway inside our selected industry?</strong> All charts below are generated live from <code>data/processed/career_market_panel.csv</code> – see <a href="./data_preparation.html">Data Preparation</a> for how this dataset was built and cleaned.</p>
-<p><strong>A note on Step 4 (visual theming):</strong> the assignment instructions ask for a consistent theme across Plotly charts specifically. All charts on this page use Seaborn/Matplotlib instead of Plotly, so we standardized on one consistent color palette across every chart below instead – a single primary color for all single-series bar/histogram charts, and one coordinated palette for the two multi-category charts (the role-share donut and the remote-status bars). The Skill Gap Analysis heatmap keeps its diverging red-blue colormap, since that encodes a low-to-high scale meaningfully and is not part of this page categorical color scheme.</p>
+<p><strong>Chart theme:</strong> every chart on this page uses Seaborn/Matplotlib with one shared color palette, so the visuals look consistent from top to bottom.</p>
 <div id="load-data" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Consistent color theme used across every chart on this page (Step 4)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Consistent color theme used across every chart on this page</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>PALETTE <span class="op">=</span> [<span class="st">"#457b9d"</span>, <span class="st">"#2a9d8f"</span>, <span class="st">"#e9c46a"</span>, <span class="st">"#e76f51"</span>, <span class="st">"#6d597a"</span>, <span class="st">"#f4a261"</span>]</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"data/processed/career_market_panel.csv"</span>)</span>
@@ -541,8 +541,8 @@ Name: salary_mid, dtype: float64</code></pre>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Remote vs Onsite vs Hybrid vs Unstated"</span>)</span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, v <span class="kw">in</span> <span class="bu">enumerate</span>(remote_counts.values):</span>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    ax.text(i, v <span class="op">+</span> <span class="dv">2</span>, <span class="bu">str</span>(v), ha<span class="op">=</span><span class="st">"center"</span>)</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>ax.text(<span class="fl">0.99</span>, <span class="fl">0.02</span>, <span class="ss">f"Total postings analyzed: </span><span class="sc">{</span>TOTAL<span class="sc">}</span><span class="ss">"</span>, transform<span class="op">=</span>ax.transAxes,</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        ha<span class="op">=</span><span class="st">"right"</span>, va<span class="op">=</span><span class="st">"bottom"</span>, fontsize<span class="op">=</span><span class="dv">9</span>, color<span class="op">=</span><span class="st">"gray"</span>)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>ax.text(<span class="fl">0.01</span>, <span class="fl">0.98</span>, <span class="ss">f"Total postings analyzed: </span><span class="sc">{</span>TOTAL<span class="sc">}</span><span class="ss">"</span>, transform<span class="op">=</span>ax.transAxes,</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        ha<span class="op">=</span><span class="st">"left"</span>, va<span class="op">=</span><span class="st">"top"</span>, fontsize<span class="op">=</span><span class="dv">9</span>, color<span class="op">=</span><span class="st">"gray"</span>)</span>
 <span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
 <span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
@@ -616,7 +616,7 @@ Name: salary_mid, dtype: float64</code></pre>
 <li>Most postings <strong>don’t disclose remote/onsite policy</strong>; hybrid is the most common stated arrangement</li>
 <li><strong>Amazon</strong> and several large financial institutions are the top identifiable employers</li>
 </ul>
-<p>These findings set up our Step 3 skill-gap analysis: since this market rewards experience and skews toward more advanced, higher-paying roles, the next step is comparing the specific skills these postings require against a student’s current profile to identify concrete upskilling priorities for closing that ~2.3x pay gap.</p>
+<p>These findings feed our Step 3 <a href="./skill_gap_analysis.html">Skill Gap Analysis</a> page, which compares team skill levels with how often each skill appears in the Lightcast Data Analyst postings and sets upskilling priorities. The ~2.3x pay gap between roles is the reason to also plan a move toward Data Scientist / ML roles; the posting-level skill requirements for those roles still need to be validated in Module 5.</p>
 </section>
 <section id="cross-dataset-comparison" class="level2">
 <h2 class="anchored" data-anchor-id="cross-dataset-comparison">Cross-Dataset Comparison</h2>
