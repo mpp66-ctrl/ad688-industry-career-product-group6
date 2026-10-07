@@ -1,6 +1,6 @@
 ---
-title: "Market Baseline"
-subtitle: "What Does the Data Analyst -> Data Scientist Market Look Like in NAICS 5182?"
+title: "Exploratory Analysis"
+subtitle: "Market Baseline: What Does the Data Analyst -> Data Scientist Market Look Like in NAICS 5182?"
 format:
   html:
     toc: true
@@ -14,20 +14,14 @@ selected career pathway inside our selected industry?** All charts below are gen
 from `data/processed/career_market_panel.csv` -- see [Data Preparation](data_preparation.qmd)
 for how this dataset was built and cleaned.
 
-**A note on Step 4 (visual theming):** the assignment instructions ask for a consistent theme
-across Plotly charts specifically. All charts on this page use Seaborn/Matplotlib instead of
-Plotly, so we standardized on one consistent color palette across every chart below instead --
-a single primary color for all single-series bar/histogram charts, and one coordinated palette
-for the two multi-category charts (the role-share donut and the remote-status bars). The
-Skill Gap Analysis heatmap keeps its diverging red-blue colormap, since that encodes a
-low-to-high scale meaningfully and is not part of this page categorical color scheme.
+**Chart theme:** every chart on this page uses Seaborn/Matplotlib with one shared color palette, so the visuals look consistent from top to bottom.
 
 ```{python}
 #| label: load-data
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Consistent color theme used across every chart on this page (Step 4)
+# Consistent color theme used across every chart on this page
 PALETTE = ["#457b9d", "#2a9d8f", "#e9c46a", "#e76f51", "#6d597a", "#f4a261"]
 
 df = pd.read_csv("data/processed/career_market_panel.csv")
@@ -330,8 +324,8 @@ ax.set_ylabel("Number of postings")
 ax.set_title("Remote vs Onsite vs Hybrid vs Unstated")
 for i, v in enumerate(remote_counts.values):
     ax.text(i, v + 2, str(v), ha="center")
-ax.text(0.99, 0.02, f"Total postings analyzed: {TOTAL}", transform=ax.transAxes,
-        ha="right", va="bottom", fontsize=9, color="gray")
+ax.text(0.01, 0.98, f"Total postings analyzed: {TOTAL}", transform=ax.transAxes,
+        ha="left", va="top", fontsize=9, color="gray")
 plt.tight_layout()
 plt.show()
 ```
@@ -395,10 +389,7 @@ aggregator listings) and are excluded from this ranking.
 - Most postings **don't disclose remote/onsite policy**; hybrid is the most common stated arrangement
 - **Amazon** and several large financial institutions are the top identifiable employers
 
-These findings set up our Step 3 skill-gap analysis: since this market rewards experience and
-skews toward more advanced, higher-paying roles, the next step is comparing the specific
-skills these postings require against a student's current profile to identify concrete
-upskilling priorities for closing that ~2.3x pay gap.
+These findings feed our Step 3 [Skill Gap Analysis](skill_gap_analysis.qmd) page, which compares team skill levels with how often each skill appears in the Lightcast Data Analyst postings and sets upskilling priorities. The ~2.3x pay gap between roles is the reason to also plan a move toward Data Scientist / ML roles; the posting-level skill requirements for those roles still need to be validated in Module 5.
 
 ## Cross-Dataset Comparison
 
