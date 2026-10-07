@@ -27,9 +27,9 @@ This places our project in the **Analytics, Data Science, and ML Career Pathways
 
 | Step | Focus | Status |
 |------|-------|--------|
-| Step 1 | Product framing, industry scoping, project setup | In progress |
-| Step 2 | Data preparation and market baseline | Not started |
-| Step 3 | Career evaluation logic and skill-gap analysis | Not started |
-| Step 4 | Final analytics, recommendations, and report | Not started |
+| Step 1 | Product framing, industry scoping, project setup | Complete |
+| Step 2 | Data preparation and market baseline | Complete |
+| Step 3 | Career evaluation logic and skill-gap analysis | Complete |
+| Step 4 | Final analytics, recommendations, and report | Next (Module 5) |
 
 See the [Introduction](introduction.qmd) page for our full project rationale, literature review, and industry scoping documentation.
