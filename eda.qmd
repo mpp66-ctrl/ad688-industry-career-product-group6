@@ -27,6 +27,14 @@ PALETTE = ["#457b9d", "#2a9d8f", "#e9c46a", "#e76f51", "#6d597a", "#f4a261"]
 df = pd.read_csv("data/processed/career_market_panel.csv")
 TOTAL = len(df)
 print(f"Total postings in baseline: {TOTAL}")
+
+SCOPE = "Data Analyst -> Data Scientist pathway postings, NAICS 5182, US"
+
+
+def titled(ax, title, subtitle):
+    # chart name, then a gray line saying which postings the chart covers and how many
+    ax.set_title(title, pad=24)
+    ax.text(0.5, 1.02, subtitle, transform=ax.transAxes, ha="center", va="bottom", fontsize=9, color="gray")
 ```
 
 ```{python}
@@ -66,7 +74,7 @@ vol = df["role_bucket"].value_counts()
 fig, ax = plt.subplots(figsize=(8, 5))
 vol.sort_values().plot(kind="barh", ax=ax, color=PALETTE[0])
 ax.set_xlabel("Number of postings")
-ax.set_title("Job Volume by Role Type")
+titled(ax, "Job Volume by Role Type", f"{SCOPE} | {TOTAL} postings")
 ax.text(0.99, 0.02, f"Total postings analyzed: {TOTAL}", transform=ax.transAxes,
         ha="right", va="bottom", fontsize=9, color="gray")
 plt.tight_layout()
@@ -78,63 +86,7 @@ Machine Learning Engineer roles. Pure "Data Analyst" titles are a smaller slice 
 suggests that within NAICS 5182, the market skews toward more senior/technical data roles
 than entry-level analyst positions.
 
-### Share of Postings by Role Type
-
-```{python}
-#| label: role-donut
-vol_sorted = vol.sort_values(ascending=False)
-labels = vol_sorted.index.tolist()
-sizes = vol_sorted.values.tolist()
-pcts = [s / TOTAL * 100 for s in sizes]
-
-fig, ax = plt.subplots(figsize=(9, 7))
-colors = PALETTE
-wedges, _ = ax.pie(
-    sizes, startangle=90,
-    wedgeprops=dict(width=0.4, edgecolor="white"),
-    colors=colors,
-)
-import math
-for w, pct in zip(wedges, pcts):
-    if pct >= 5:
-        ang = (w.theta2 + w.theta1) / 2
-        x = 0.78 * math.cos(math.radians(ang))
-        y = 0.78 * math.sin(math.radians(ang))
-        ax.text(x, y, f"{pct:.0f}%", ha="center", va="center", fontsize=9,
-                color="white", fontweight="bold")
-
-ax.set_title("Share of Postings by Role Type")
-ax.text(0, 0, f"Total postings\nanalyzed: {TOTAL}", ha="center", va="center",
-        fontsize=11, fontweight="bold")
-legend_labels = [f"{l} ({s}, {p:.0f}%)" for l, s, p in zip(labels, sizes, pcts)]
-ax.legend(wedges, legend_labels, loc="center left", bbox_to_anchor=(1.02, 0.5),
-          fontsize=9, frameon=False)
-plt.tight_layout()
-plt.show()
-```
-
-### Job Count by ONET Occupation
-
-```{python}
-#| label: onet-count
-onet_counts = df["onet_name"].fillna("Not specified").value_counts()
-
-fig, ax = plt.subplots(figsize=(9, 5))
-onet_counts.sort_values().plot(kind="barh", ax=ax, color=PALETTE[0])
-ax.set_xlabel("Number of postings")
-ax.set_title("Job Count by ONET Occupation")
-ax.text(0.99, 0.02, f"Total postings analyzed: {TOTAL}", transform=ax.transAxes,
-        ha="right", va="bottom", fontsize=9, color="gray")
-plt.tight_layout()
-plt.show()
-```
-
-> **Data quality note:** the source classifier's ONET/SOC tags are not fully reliable for this
-> dataset -- categories like "Models," "Actors," and "Riggers" above are classifier errors on
-> postings whose titles matched our career-pathway keywords (see
-> [Data Preparation](data_preparation.qmd#a-note-on-soc-code-reliability) for a specific
-> example). They are kept here for transparency rather than silently removed, but should not be
-> read as literal acting/modeling jobs.
+**A note on ONET occupation tags.** We also examined the ONET occupation tags in the source data but did not chart them, because they are unreliable for this dataset: 81% of postings fall under just two tags, the tags label 113 postings "Data Scientists" although only 47 have that title, and rows tagged "Models," "Actors," or "Riggers" are classifier errors. We use title-based role types instead (see [Data Preparation](data_preparation.qmd)).
 
 ## Salary
 
@@ -148,7 +100,7 @@ fig, ax = plt.subplots(figsize=(8, 5))
 ax.hist(sal_df["salary_mid"], bins=20, color=PALETTE[0], edgecolor="white")
 ax.set_xlabel("Estimated annual salary (USD)")
 ax.set_ylabel("Number of postings")
-ax.set_title("Salary Distribution")
+titled(ax, "Salary Distribution", f"{SCOPE} | {len(sal_df)} postings with salary disclosed")
 ax.text(0.99, 0.95, f"Total postings analyzed: {TOTAL}\nWith salary disclosed: {len(sal_df)}",
         transform=ax.transAxes, ha="right", va="top", fontsize=9, color="gray")
 plt.tight_layout()
@@ -173,7 +125,7 @@ role_sal = role_sal[role_sal["count"] >= 2].sort_values("mean")
 fig, ax = plt.subplots(figsize=(8, 5))
 bars = ax.barh(role_sal.index, role_sal["mean"], color=PALETTE[0])
 ax.set_xlabel("Average estimated annual salary (USD)")
-ax.set_title("Average Salary by Role Type")
+titled(ax, "Average Salary by Role Type", f"{SCOPE} | salary-disclosed postings only")
 for bar, v in zip(bars, role_sal["mean"]):
     ax.text(bar.get_width() + 2000, bar.get_y() + bar.get_height()/2, f"${v:,.0f}",
             va="center", fontsize=8)
@@ -188,31 +140,6 @@ average pay (~$220K and ~$209K), while Data Analyst sits lowest (~$97K) -- a rou
 2.3x pay gap across this pathway. This is the clearest evidence yet of what moving from
 Data Analyst toward Data Scientist / ML Engineer is actually worth in this industry. This 2.3x gap is the single most concrete number for prioritizing upskilling -- closing even half that gap by moving from Data Analyst toward Data Engineer/ML Engineer roles represents a larger salary jump than most single certifications or degree credentials typically produce.
 
-### Average Salary by ONET Occupation
-
-```{python}
-#| label: onet-salary
-onet_sal_df = sal_df.copy()
-onet_sal_df["onet_name"] = onet_sal_df["onet_name"].fillna("Not specified")
-onet_sal = onet_sal_df.groupby("onet_name")["salary_mid"].agg(["mean", "count"])
-onet_sal = onet_sal[onet_sal["count"] >= 2].sort_values("mean")
-
-fig, ax = plt.subplots(figsize=(9, 5))
-bars = ax.barh(onet_sal.index, onet_sal["mean"], color=PALETTE[0])
-ax.set_xlabel("Average estimated annual salary (USD)")
-ax.set_title("Average Salary by ONET Occupation")
-for bar, v in zip(bars, onet_sal["mean"]):
-    ax.text(bar.get_width() + 2000, bar.get_y() + bar.get_height()/2, f"${v:,.0f}",
-            va="center", fontsize=8)
-ax.text(0.99, 0.02, f"Occupations with 2+ salary-disclosed postings shown; total salary-disclosed: {len(sal_df)}",
-        transform=ax.transAxes, ha="right", va="bottom", fontsize=8, color="gray")
-plt.tight_layout()
-plt.show()
-```
-
-> Same ONET data-quality caveat applies here -- treat "Models" as noise, not a real high-paying
-> occupation in this market.
-
 ### Top 10 Highest-Paying States
 
 ```{python}
@@ -224,7 +151,7 @@ state_sal = state_sal[state_sal["count"] >= 2].sort_values("mean", ascending=Fal
 fig, ax = plt.subplots(figsize=(8, 5))
 bars = ax.barh(state_sal.index[::-1], state_sal["mean"][::-1], color=PALETTE[0])
 ax.set_xlabel("Average estimated annual salary (USD)")
-ax.set_title("Top 10 Highest-Paying States")
+titled(ax, "Top 10 Highest-Paying States", f"Pathway roles pooled | {len(state_sal_df)} salary-disclosed postings with a state")
 for bar, v in zip(bars, state_sal["mean"][::-1]):
     ax.text(bar.get_width() + 2000, bar.get_y() + bar.get_height()/2, f"${v:,.0f}",
             va="center", fontsize=8)
@@ -236,7 +163,7 @@ plt.show()
 
 **Interpretation:** Texas, Washington, and California lead on average disclosed pay --
 notably, Texas edges out California here, likely reflecting a small number of high-paying
-postings rather than a broad state-wide premium (small sample size caveat applies).
+postings rather than a broad state-wide premium (small sample size caveat applies). Because these averages pool all pathway roles, a state's average also reflects its mix of higher- and lower-paying roles.
 
 ### Top 10 Companies by Average Salary
 
@@ -249,7 +176,7 @@ co_sal = co_sal.sort_values("mean", ascending=False).head(10)
 fig, ax = plt.subplots(figsize=(8, 5))
 bars = ax.barh(co_sal.index[::-1], co_sal["mean"][::-1], color=PALETTE[0])
 ax.set_xlabel("Average estimated annual salary (USD)")
-ax.set_title("Top 10 Companies by Average Salary")
+titled(ax, "Top 10 Companies by Average Salary", f"Pathway roles pooled | {len(co_sal_df)} salary-disclosed postings with a named company")
 for bar, v in zip(bars, co_sal["mean"][::-1]):
     ax.text(bar.get_width() + 2000, bar.get_y() + bar.get_height()/2, f"${v:,.0f}",
             va="center", fontsize=8)
@@ -262,7 +189,7 @@ plt.show()
 **Interpretation:** most companies here have only 1-2 salary-disclosed postings, so this is
 a small-sample view, not a robust employer-level benchmark -- useful as a directional signal
 (e.g. General Motors, Roku, and several AI-native startups paying at the top) rather than a
-confident ranking.
+confident ranking. The averages also pool different roles at each company.
 
 ## Location Patterns
 
@@ -273,7 +200,7 @@ loc = df[df["state_clean"] != "Unknown"]["state_clean"].value_counts().head(10)
 fig, ax = plt.subplots(figsize=(8, 5))
 loc.sort_values().plot(kind="barh", ax=ax, color=PALETTE[0])
 ax.set_xlabel("Number of postings")
-ax.set_title("Top 10 States by Job Volume")
+titled(ax, "Top 10 States by Job Volume", f"{SCOPE} | postings with a resolved US state")
 ax.text(0.99, 0.02, f"Total postings analyzed: {TOTAL}", transform=ax.transAxes,
         ha="right", va="bottom", fontsize=9, color="gray")
 plt.tight_layout()
@@ -296,7 +223,7 @@ ax.hist(exp_df["experience_min_years"], bins=range(0, 17), color=PALETTE[0],
         edgecolor="white", align="left")
 ax.set_xlabel("Minimum years of experience required")
 ax.set_ylabel("Number of postings")
-ax.set_title("Experience Requirement Distribution")
+titled(ax, "Experience Requirement Distribution", f"{SCOPE} | {len(exp_df)} of {TOTAL} postings state experience")
 ax.text(0.99, 0.95, f"Total postings analyzed: {TOTAL}\nWith experience stated: {len(exp_df)}",
         transform=ax.transAxes, ha="right", va="top", fontsize=9, color="gray")
 plt.tight_layout()
@@ -321,7 +248,7 @@ fig, ax = plt.subplots(figsize=(6, 5))
 colors = PALETTE[:4]
 ax.bar(remote_counts.index, remote_counts.values, color=colors)
 ax.set_ylabel("Number of postings")
-ax.set_title("Remote vs Onsite vs Hybrid vs Unstated")
+titled(ax, "Remote vs Onsite vs Hybrid vs Unstated", f"{SCOPE} | {TOTAL} postings")
 for i, v in enumerate(remote_counts.values):
     ax.text(i, v + 2, str(v), ha="center")
 ax.text(0.01, 0.98, f"Total postings analyzed: {TOTAL}", transform=ax.transAxes,
@@ -345,7 +272,7 @@ total_hybrid = (df["remote_status"] == "hybrid").sum()
 fig, ax = plt.subplots(figsize=(8, 5))
 hybrid_states.sort_values().plot(kind="barh", ax=ax, color=PALETTE[0])
 ax.set_xlabel("Number of hybrid postings")
-ax.set_title("Top 10 States by Hybrid Role Volume")
+titled(ax, "Top 10 States by Hybrid Role Volume", f"Hybrid postings only ({total_hybrid}) | pathway postings, NAICS 5182, US")
 ax.text(0.99, 0.02, f"Total hybrid postings: {total_hybrid}", transform=ax.transAxes,
         ha="right", va="bottom", fontsize=9, color="gray")
 plt.tight_layout()
@@ -365,7 +292,7 @@ top_emp = emp_df["company_name_clean"].value_counts().head(10)
 fig, ax = plt.subplots(figsize=(8, 5))
 top_emp.sort_values().plot(kind="barh", ax=ax, color=PALETTE[0])
 ax.set_xlabel("Number of postings")
-ax.set_title("Top 10 Employers")
+titled(ax, "Top 10 Employers", f"{SCOPE} | {TOTAL} postings")
 ax.text(0.99, 0.02, "Excludes unattributable ATS/aggregator listings", transform=ax.transAxes,
         ha="right", va="bottom", fontsize=8, color="gray")
 plt.tight_layout()
