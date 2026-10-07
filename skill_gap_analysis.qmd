@@ -1,6 +1,6 @@
 ---
 title: "Skill Gap Analysis"
-subtitle: "Team Skills vs. Data Analyst -> Data Scientist Market Requirements"
+subtitle: "Team Skills vs. Data Analyst Market Demand"
 format:
   html:
     toc: true
@@ -11,9 +11,9 @@ execute:
 
 ## Overview
 
-This page compares our team's current skill levels against the core skills expected for the
-Data Analyst -> Data Scientist / Analytics Engineer pathway inside NAICS 5182, and proposes a
-concrete improvement plan for closing the gaps.
+This page compares our team's current skill levels against how often each skill appears in real
+Data Analyst job postings inside NAICS 5182, then proposes an improvement plan and a draft set of
+recommendations for job seekers.
 
 ## Team Skill Levels
 
@@ -61,68 +61,172 @@ in Python/SQL, Michael leads in Machine Learning/Data Visualization, and Richard
 Cloud/AWS. Statistics has the lowest team average (3.0), with ratings ranging from 2 to 4.
 Richard meets the Advanced level; Manan and Michael fall below it.
 
-## Comparing Team Skills to a Planning Benchmark
+## What the Market Asks For
 
-For this preliminary scorecard, the team selected Python, SQL, Machine Learning,
-Cloud/AWS, Data Visualization, and Statistics as relevant skill areas for the pathway.
-These are working categories, not a ranking of observed employer demand. Before the final
-submission, we will support the selection with cited occupational sources or complete
-posting-level evidence and distinguish requirements across the three target roles.
+To ground the comparison in real postings, we used our second dataset, the 2024 Lightcast export
+(209 postings, filtered with the same industry, location, and career-pathway rules; see
+[Data Preparation](data_preparation.qmd)). Unlike the MET API extract, whose `skills` field is
+truncated to the first few skills alphabetically for each posting (every one of its top 20
+most-frequent values started with "A" or "B", so we did not use it), the Lightcast `skills` field
+is complete: each posting lists its full set of skills, about 24 on average.
 
-The target of **4 (Advanced)** is a team-selected development goal for comparison, not an
-employer-validated threshold or a measure of hiring readiness. Self-ratings are subjective;
-each member should confirm their ratings and support them with a project or work example.
-The averages summarize this small team's responses and should not be interpreted as an
-individual candidate's proficiency.
-
-Note: we did not derive this list by counting the `skills` field in our processed dataset --
-that field is truncated to only the first few skills alphabetically for each posting (every one
-of the top 20 most-frequent values in that field started with "A" or "B", which is a data
-artifact, not a real signal), so a raw frequency count from it would be misleading.
+We classified each posting into a role family from its title, then counted how many postings in
+each role list each of our six skill areas. A skill area counts as listed when any of a posting's
+skills matches the area's name patterns (for example, `Python (Programming Language)` counts for
+Python, and Tableau or Power BI count for Data Visualization). The patterns are in the code below.
 
 ```{python}
-#| label: skill-gap-table
-top_skills = ["Python", "SQL", "Machine Learning", "Cloud/AWS", "Data Visualization", "Statistics"]
+#| label: market-demand
+import json
+import re
 
-team_avg = df_skills[top_skills].mean().round(2)
-team_min = df_skills[top_skills].min()
+lc = pd.read_csv("data/processed/lightcast_market_panel.csv")
+lc["skill_list"] = lc["skills"].apply(json.loads)
 
-gap_df = pd.DataFrame({
-    "Team Average": team_avg,
-    "Team Minimum": team_min,
-    "Planning Target (Advanced)": 4,
+
+def classify_role(title):
+    t = str(title).lower()
+    if re.search(r"machine learning engineer|ml engineer", t):
+        return "ML Engineer"
+    if re.search(r"data scientist|applied scientist", t):
+        return "Data Scientist"
+    if re.search(r"data engineer|analytics engineer|data architect|database architect", t):
+        return "Data / Analytics Engineer"
+    if re.search(r"data analyst|business analyst|bi analyst|business intelligence analyst", t):
+        return "Data Analyst"
+    return "Other"
+
+
+lc["role"] = lc["title"].apply(classify_role)
+
+skill_patterns = {
+    "Python": r"^Python",
+    "SQL": r"^SQL|Structured Query",
+    "Machine Learning": r"^Machine Learning",
+    "Cloud/AWS": r"Amazon Web Services|(^|[^A-Za-z])AWS([^A-Za-z]|$)|Cloud Computing|Azure|Google Cloud|Cloud Platform",
+    "Data Visualization": r"Data Visuali|Tableau|Power BI|Looker|Qlik",
+    "Statistics": r"Statistic",
+}
+
+
+def share_with_skill(frame, pattern):
+    if len(frame) == 0:
+        return float("nan")
+    listed = frame["skill_list"].apply(lambda skills: any(re.search(pattern, s, re.I) for s in skills))
+    return listed.mean()
+
+
+roles = ["Data Analyst", "Data / Analytics Engineer", "Data Scientist", "ML Engineer"]
+role_counts = lc["role"].value_counts()
+demand_by_role = pd.DataFrame({
+    f"{r} (n={int(role_counts.get(r, 0))})": {
+        skill: share_with_skill(lc[lc["role"] == r], pat) for skill, pat in skill_patterns.items()
+    }
+    for r in roles
 })
-gap_df["Gap to Target (avg)"] = (gap_df["Planning Target (Advanced)"] - gap_df["Team Average"]).round(2)
-gap_df
+demand_by_role.index.name = "Skill"
+demand_by_role.map(lambda v: "no postings" if pd.isna(v) else f"{v:.0%}")
 ```
 
-**Interpretation:** Python, SQL, Cloud/AWS, and Data Visualization each average 4.0, meeting the
-planning target. Machine Learning averages 3.67, leaving a gap of 0.33. Statistics averages 3.0, leaving the largest gap (1.0).
-Richard meets the Statistics target at 4; Manan and Michael rate themselves below it.
-A negative gap indicates an average above the target, not a skill deficit. Individual
-ratings remain important: a team average at or above 4 can still hide a member's gap.
+**What this dataset can and cannot tell us:** the Lightcast sample is almost entirely Data Analyst
+postings, with a small group of Data / Analytics Engineer postings and no Data Scientist or ML
+Engineer postings. The market demand below therefore describes the **Data Analyst** role. It cannot
+yet show what separates Data Analyst roles from Data Scientist roles, and the Data / Analytics
+Engineer figures rest on very few postings, so treat them as directional only.
+
+## Comparing Team Skills to Market Demand
+
+The scorecard lists the six skills from most to least often listed in Data Analyst postings. We
+group demand into tiers (High is 50% or more of postings, Moderate is 25-49%, Low is under 25%) and
+use **Advanced (4)** as the level a team member should reach in a high-demand skill. The tiers and
+the target level are team-chosen reading aids; the demand percentages come from the postings.
+
+```{python}
+#| label: skill-gap-scorecard
+analyst = lc[lc["role"] == "Data Analyst"]
+analyst_demand = pd.Series({skill: share_with_skill(analyst, pat) for skill, pat in skill_patterns.items()})
+
+
+def demand_tier(share):
+    if share >= 0.5:
+        return "High (50%+)"
+    if share >= 0.25:
+        return "Moderate (25-49%)"
+    return "Low (under 25%)"
+
+
+skills_in_order = analyst_demand.sort_values(ascending=False).index.tolist()
+scorecard = pd.DataFrame({
+    "Share of Data Analyst postings": [f"{analyst_demand[s]:.0%}" for s in skills_in_order],
+    "Demand tier": [demand_tier(analyst_demand[s]) for s in skills_in_order],
+    "Team Average": [round(df_skills[s].mean(), 2) for s in skills_in_order],
+    "Team Minimum": [int(df_skills[s].min()) for s in skills_in_order],
+    "Members below Advanced (4)": [", ".join(df_skills.index[df_skills[s] < 4]) or "none" for s in skills_in_order],
+}, index=pd.Index(skills_in_order, name="Skill"))
+scorecard
+```
+
+**Interpretation:** Data Visualization (69% of Data Analyst postings) and SQL (57%) are the two most
+frequently listed skills, and both are in the high-demand tier. The team averages 4.0 in each, but
+Richard rates Data Visualization at 3 and Michael rates SQL at 3, so each high-demand skill still has
+one member below Advanced. Python (46%) sits just under the high-demand line; the team averages 4.0,
+with Richard at 3. Statistics (32%) is in the moderate tier and is the team's weakest area (average
+3.0, with Manan at 2 and Michael at 3). Machine Learning (17%) and Cloud/AWS (10%) appear in few Data
+Analyst postings, so they matter less at the analyst entry point. Cloud/AWS is still relevant to our
+industry context (NAICS 5182 is cloud computing and hosting), and it is a skill where Michael rates 3.
+
+The small Data / Analytics Engineer group (see the first table) leans much more on SQL and Python than
+on visualization, which suggests that a move toward engineering roles raises the importance of those
+two skills. With only 14 postings, this is directional only.
 
 ## Improvement Plan
 
-These proposed milestones should be confirmed by the team. Timeframes begin when the plan
-is adopted; they describe future work, not completed contributions.
+These proposed milestones should be confirmed by the team, and each suggested resource should be
+checked for current availability. Timeframes begin when the plan is adopted; they describe future
+work, not completed contributions.
 
-| Member | Priority based on self-ratings | Proposed action | Timeframe and evidence |
-|---|---|---|---|
-| Manan Patel | Statistics (2) | Practice hypothesis testing and regression with Richard's review. | Within two weeks: one reproducible notebook explaining assumptions, results, and limitations. |
-| Richard Park | Python and Data Visualization (both 3); ML also 3 | Pair with Manan on Python and Michael on visualization; revisit ML after these tasks. | Within two weeks: one Python analysis with two labeled charts and written interpretations. |
-| Michael Phillips | SQL, Cloud/AWS, and Statistics (all 3) | Start with Cloud/AWS because of the industry scope; practice SQL aggregation and statistical interpretation next. | Within two weeks: run a small analysis on AWS and document setup, outputs, and resource cleanup; within four weeks: add a SQL query and statistical interpretation. |
+| Member | Priority (self-rating; share of Data Analyst postings) | Proposed action | Suggested resource | Timeframe and evidence |
+|---|---|---|---|---|
+| Manan Patel | Statistics (2; 32%) | Practice hypothesis testing and regression with Richard's review. | Khan Academy, "Statistics and Probability" (free) | Within two weeks: one reproducible notebook explaining assumptions, results, and limitations. |
+| Richard Park | Data Visualization (3; 69%), then Python (3; 46%) | Pair with Michael on visualization and with Manan on Python. | Tableau Public free training videos; "Python for Everybody" (Coursera, University of Michigan) | Within two weeks: one Python analysis with two labeled charts and written interpretations. |
+| Michael Phillips | SQL (3; 57%), then Statistics (3; 32%) and Cloud/AWS (3; 10%) | Start with SQL aggregation practice, then statistical interpretation; follow with a small AWS analysis because of the industry scope. | Mode, "SQL Tutorial" (free); "AWS Cloud Practitioner Essentials" (AWS Skill Builder) | Within two weeks: SQL aggregation queries with written results; within four weeks: a small analysis run on AWS, documenting setup, outputs, and resource cleanup. |
 
-**Shared priority:** Statistics has the largest average gap. Richard can help Manan and
-Michael practice while reinforcing his own understanding. Within two weeks, the team
-should complete one worked statistical example and peer-review its interpretation.
+**Shared priority:** the two highest-demand skills are Data Visualization and SQL. Richard and Michael
+can each teach the other's weaker skill (Richard rates SQL at 4 and Michael rates Data Visualization at
+5), so they should pair on those first. Statistics remains the team's lowest average, so within two
+weeks the team should also complete one worked statistical example and peer-review its interpretation.
+
+## Draft Recommendations
+
+These draft recommendations for job seekers come from the Exploratory Analysis page and the scorecard
+above. They describe the Data Analyst pathway in NAICS 5182 and should be revisited with the final
+analytics in Module 5.
+
+1. **Lead with SQL and data visualization.** They are the two most frequently listed skills, in 57% and
+   69% of Data Analyst postings. Build portfolio dashboards in Tableau or Power BI backed by SQL queries.
+2. **Add Python and statistics next.** Python appears in 46% of Data Analyst postings and statistics in
+   32%. Statistics is also the team's lowest-rated skill.
+3. **Expect a mid-level market and build experience early.** Where experience is stated, requirements
+   mostly fall in the 3-8 year range, so projects, internships, and certifications can help offset
+   limited work history.
+4. **Look at California and New York for volume, and Texas for pay.** California and New York have the
+   most postings in both datasets, and Texas leads on average disclosed pay in the 2026 data.
+5. **Ask about the work arrangement.** Most postings do not state a remote or onsite policy, and hybrid
+   is the most common stated arrangement.
+6. **Plan the move toward Data Scientist / ML roles if pay growth is the goal.** The average disclosed
+   pay for ML Engineer and Data Scientist postings is about 2.3 times that of Data Analyst postings.
+   The skills that separate those roles still need to be validated in Module 5.
 
 ## Limitations and Next Steps
 
-- Confirm every member's self-ratings, particularly ratings of 5 (Expert), using concrete evidence.
-- Validate the skill categories using cited occupational sources or complete posting text;
-  the truncated skills field cannot support a market-demand ranking.
-- Separate skill expectations for Data Analyst, Data Scientist, and Analytics Engineer
-  rather than assuming one Advanced threshold fits all roles.
-- Review the proposed milestones together and reassess individual gaps after the deliverables
-  are completed.
+- The Lightcast sample is a 2024 snapshot of 209 postings, almost all Data Analyst roles. Market demand
+  here applies to the Data Analyst role only; there are no Data Scientist or ML Engineer postings in it.
+- The MET API `skills` field is truncated, so it cannot be used to rank skills. Skill requirements for
+  Data Scientist, ML Engineer, and Analytics Engineer roles still need posting-level data or cited
+  occupational sources, and answering how those roles differ from Data Analyst roles is planned for Module 5.
+- Skills are matched by name patterns (listed in the code above), so postings that name a skill in
+  another way would be missed.
+- Self-ratings are subjective. Each member should confirm their ratings, particularly any 5 (Expert),
+  with a project or work example.
+- Review the proposed milestones together and reassess individual gaps after the deliverables are
+  completed.
