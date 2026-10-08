@@ -1,0 +1,351 @@
+job_id,title,role,company_name,state,remote_status,employment_type,salary_min_annual,salary_max_annual,posted_at,has_text,skill_Python,skill_SQL,skill_Machine Learning,skill_Cloud/AWS,skill_Data Visualization,skill_Statistics,skill_Tableau,skill_Power BI,skill_Excel,skill_Spark,skill_Snowflake,skill_ETL,skill_Communication,skill_Dashboards,skill_Java,skill_Data Modeling,skill_Deep Learning,degree_Associate,degree_Bachelor,degree_Master,degree_PhD
+747372,Staff Data Engineer,Data / Analytics Engineer,Databricks,California,Unknown,,,,2026-01-02,False,,,,,,,,,,,,,,,,,,,,,
+458873,"Data Engineer, OIS/CXI Analytics",Data / Analytics Engineer,Amazon,Texas,Unknown,"Full Time, Temporary",,,2026-04-07,True,False,False,True,False,False,False,False,False,False,False,False,True,False,True,False,True,False,none,none,none,none
+445412,"Machine Learning Engineer , Data & Machine Learning",ML Engineer,Amazon,Virginia,Unknown,Full Time,,,2026-04-23,True,False,False,True,True,False,False,False,False,False,False,False,False,False,False,False,False,True,none,none,none,none
+443851,"Senior Applied Scientist, AWS GameTech Cortex",Data Scientist,Amazon,Washington,Unknown,Full Time,,,2026-04-29,True,False,False,True,True,False,False,False,False,False,False,False,False,True,False,False,False,False,none,none,none,none
+454197,"Data Engineer II , UTR Data Engineering",Data / Analytics Engineer,Amazon,Washington,Unknown,Full Time,,,2026-05-01,True,True,True,False,True,False,False,False,False,False,False,False,True,False,False,False,True,False,none,none,none,none
+450733,"Data Scientist, Fleet Planning , Global Fleet Products",Data Scientist,Amazon,Washington,Unknown,Full Time,,,2026-05-12,True,False,False,True,False,False,True,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+3608,AWS Data Architect,Data / Analytics Engineer,EXL Service,,Unknown,Full Time,,,2026-05-15,True,True,True,False,True,False,False,False,False,False,True,False,True,True,False,False,True,False,none,mentioned,none,none
+3784,Senior Data Engineer,Data / Analytics Engineer,Komodo Health,,Unknown,Full Time,153000.0,210000.0,2026-05-17,True,True,False,False,True,False,False,False,False,False,False,True,True,True,False,False,False,True,none,none,none,none
+3701,Data Engineer,Data / Analytics Engineer,SharkNinja,,Unknown,,115000.0,130000.0,2026-05-18,True,True,True,False,True,True,False,True,True,False,False,False,True,True,True,False,True,False,none,preferred,none,none
+440361,"Data Engineer II, AAE",Data / Analytics Engineer,Amazon,Washington,Unknown,Full Time,,,2026-05-18,True,True,False,True,True,False,False,False,False,False,True,False,True,False,True,False,True,False,none,none,none,none
+73798,SOFTWARE DEVELOPER/DATA SCIENTIST - DIRECT HIRE AUTHORITY,Data Scientist,"Air Force Elements, U.S. Strategic Command",Virginia,Unknown,,,,2026-05-26,True,False,False,False,False,True,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+181488,Senior Machine Learning Engineer,ML Engineer,SandboxAQ,,Remote,Full Time,131200.0,246000.0,2026-05-29,True,True,False,True,True,False,False,False,False,False,False,False,True,False,False,False,False,False,none,mentioned,mentioned,mentioned
+435613,"Data Engineer, AWS Support S&O - ESSO - Strategy, Planning & Inspection",Data / Analytics Engineer,Amazon,Pennsylvania,Unknown,Full Time,,,2026-05-29,True,False,True,False,True,False,False,False,False,False,False,False,False,False,True,False,True,False,none,none,none,none
+435719,"Data Scientist, AWS Security",Data Scientist,Amazon,Maryland,Unknown,Full Time,,,2026-05-29,True,True,False,True,True,False,True,False,False,False,False,False,True,False,False,False,False,True,none,none,none,none
+434255,Principal Analytics Engineer,Data / Analytics Engineer,Angi,Remote,Remote,Full Time,,,2026-05-29,True,True,True,False,False,False,False,False,False,False,False,True,False,True,True,False,False,True,none,none,none,none
+44422,"Senior Data Engineer ‎- Atlanta, GA",Data / Analytics Engineer,"Cargill, Inc.",,Unknown,,,,2026-05-31,True,True,True,False,True,False,False,False,False,False,True,False,True,False,False,True,True,False,none,none,none,none
+26332,Machine Learning Engineer - Platform/Infrastructure,ML Engineer,CT19,New York,Unknown,Full Time,,,2026-06-01,True,False,False,True,False,False,False,False,False,False,False,False,True,False,False,False,False,False,none,none,none,none
+47710,Senior Data Engineer,Data / Analytics Engineer,Life360,Canada,Remote,,,,2026-06-01,True,True,True,False,True,False,False,False,False,False,True,False,True,True,False,True,True,True,none,mentioned,none,none
+427819,"Sr Delivery Consultant - Data Architect, AWS Professional Services",Data / Analytics Engineer,Amazon,Massachusetts,Unknown,Contract,,,2026-06-01,True,False,False,False,True,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+430058,Senior Data Scientist,Data Scientist,Careers.mastercard.com,Utah,Unknown,,,,2026-06-01,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+430717,Senior Data Scientist - Marketing & Customer Analytics,Data Scientist,Careers.pnc.com,Pennsylvania,Unknown,,,,2026-06-01,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+430720,Data Scientist - Corporate & Institutional Banking,Data Scientist,Careers.pnc.com,Pennsylvania,Unknown,,,,2026-06-01,True,True,False,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+441984,"Sr Delivery Consultant - Data Architect, AWS Professional Services",Data / Analytics Engineer,Amazon,California,Unknown,Contract,,,2026-06-01,True,False,False,False,True,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+426668,Satellite Communication Analytics Engineer - Senior,Data / Analytics Engineer,Lmi,Colorado,Unknown,,,,2026-06-01,True,False,False,False,False,False,False,False,False,False,False,False,False,True,False,False,False,False,none,none,none,none
+425587,Senior Data Engineer,Data / Analytics Engineer,Life360,Canada,Remote,,,,2026-06-01,True,True,True,False,True,False,False,False,False,False,True,False,True,True,False,True,True,True,none,mentioned,none,none
+42998,Full Stack Data Engineer,Data / Analytics Engineer,SOSi,United States,Unknown,Contract,,,2026-06-02,True,False,False,False,True,True,False,False,False,False,False,False,True,False,True,False,False,False,none,mentioned,none,none
+47874,Data Engineer,Data / Analytics Engineer,Nuvitek,,Unknown,Full Time,115000.0,125000.0,2026-06-02,True,True,False,True,False,False,False,False,False,False,False,False,True,True,False,False,False,True,none,none,none,none
+421644,"Data Engineer II, Prime Video Advertising",Data / Analytics Engineer,Amazon,District of Columbia,Unknown,Full Time,,,2026-06-02,True,True,False,False,True,False,False,False,False,False,True,False,True,False,True,False,True,False,none,none,none,none
+422723,Risk Management - Data Scientist Lead - Vice President,Data Scientist,Jpmc.fa.oraclecloud.com,Texas,Unknown,,,,2026-06-02,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+425214,Senior Data Engineer,Data / Analytics Engineer,Qodeworld,Ohio,Remote,Full Time,,,2026-06-02,True,True,False,True,True,False,False,False,False,False,True,False,True,True,False,False,True,False,none,mentioned,mentioned,none
+419402,Full Stack Data Engineer,Data / Analytics Engineer,Sosi1,Florida,Unknown,Contract,,,2026-06-02,True,False,False,False,True,True,False,False,False,False,False,False,True,False,True,False,False,False,none,mentioned,none,none
+44651,Principal AI/ML Engineer,ML Engineer,Zeta Global,United States,Unknown,Full Time,300000.0,400000.0,2026-06-03,True,True,True,True,True,False,False,False,False,False,True,False,True,True,False,True,False,True,none,none,none,none
+44975,Principal AI/Machine Learning Engineer,ML Engineer,Zeta Global,United States,Unknown,Full Time,300000.0,400000.0,2026-06-03,True,True,True,True,True,False,False,False,False,False,True,False,True,True,False,True,False,True,none,none,none,none
+46539,Sr. Data Engineer,Data / Analytics Engineer,BioSpace,CA,Hybrid,Full Time,,,2026-06-03,True,False,True,False,False,False,False,False,False,False,True,False,True,False,False,False,True,False,none,none,required,none
+415280,"Data Engineer, Amazon Ads",Data / Analytics Engineer,Amazon,New York,Unknown,Full Time,,,2026-06-03,True,True,True,False,False,False,False,False,False,False,False,False,True,False,True,False,True,False,none,none,none,none
+414999,Data Scientist,Data Scientist,Parafin,Francisco,Unknown,Full Time,200000.0,330000.0,2026-06-03,True,False,False,True,False,False,True,False,False,False,False,False,True,False,False,False,False,False,none,mentioned,none,none
+414942,Staff Machine Learning Engineer,ML Engineer,Snap Inc.,Alto,Unknown,Full Time,229000.0,343000.0,2026-06-03,True,True,False,True,False,False,True,False,False,False,True,False,False,True,False,True,False,True,none,mentioned,mentioned,mentioned
+414927,Data Engineer,Data / Analytics Engineer,Talkiatry,,Unknown,Full Time,130000.0,145000.0,2026-06-03,True,True,True,False,True,False,False,False,False,False,False,True,True,False,False,False,False,False,none,preferred,none,none
+215547,Data Engineer,Data / Analytics Engineer,J5 Consulting,United States,On-site,Full Time,,,2026-06-04,True,True,True,True,True,True,False,False,False,False,True,False,True,True,True,True,False,False,none,none,none,none
+217403,Senior Data Engineer,Data / Analytics Engineer,Zenox Global,,Remote,Contract,135200.0,145600.0,2026-06-04,True,True,True,False,True,False,False,False,False,False,True,False,True,False,False,False,False,False,none,none,none,none
+217425,Staff Data Engineer,Data / Analytics Engineer,JobNimbus,United States,Unknown,Full Time,,,2026-06-04,True,False,True,False,True,False,False,False,False,False,True,True,False,False,True,False,False,False,none,none,none,none
+410938,Business Data Analyst I,Data Analyst,Careers.dhl.com,Pennsylvania,Unknown,,,,2026-06-04,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+80314,Business Analyst,Data Analyst,Vigorcare Pediatric Services,United States,Unknown,Full Time,,,2026-06-04,True,False,False,False,False,False,False,False,False,False,False,False,False,True,True,False,False,False,none,mentioned,none,none
+167555,AI / ML Engineer,ML Engineer,Jobgether,,Remote,Full Time,115000.0,145000.0,2026-06-05,True,True,False,True,True,False,False,False,False,False,False,False,True,True,False,False,False,True,none,none,preferred,preferred
+173959,Sr. Staff Machine Learning Engineer,ML Engineer,Jobgether,,Remote,Full Time,,,2026-06-05,True,True,False,True,True,False,False,False,False,False,True,False,True,False,False,False,False,False,none,none,required,required
+183616,Senior Machine Learning Engineer,ML Engineer,Plaid,,Remote,Full Time,229000.0,315400.0,2026-06-05,True,True,False,True,False,False,False,False,False,False,False,False,False,True,False,False,False,False,none,none,mentioned,preferred
+215725,Data Scientist Associate - Corporate & Investment Banking,Data Scientist,JPMC Candidate Experience page,United States,Unknown,Full Time,,,2026-06-05,True,True,True,True,True,True,False,True,False,False,False,True,True,False,True,False,True,False,none,mentioned,mentioned,none
+215803,Senior Data Analyst,Data Analyst,"MIG Real Estate Services, LLC",,Unknown,,,,2026-06-05,True,False,True,True,True,True,False,False,True,True,False,False,True,True,True,False,False,False,none,mentioned,none,none
+216082,Senior Data Engineer –,Data / Analytics Engineer,Vytwo,,Remote,Temporary,114400.0,124800.0,2026-06-05,True,True,True,True,True,False,False,False,False,False,True,True,True,False,False,False,True,False,none,none,none,none
+216122,Lead Data Engineer,Data / Analytics Engineer,AIR Communities,United States,On-site,Full Time,135000.0,135000.0,2026-06-05,True,True,True,True,False,False,False,False,False,False,False,False,True,True,False,False,True,False,none,mentioned,none,none
+216153,Data Engineer,Data / Analytics Engineer,Magnite,United States of America,Unknown,Full Time,120000.0,135000.0,2026-06-05,True,True,True,False,True,False,False,False,False,False,True,False,True,False,False,True,False,False,none,none,none,none
+403147,Lead Data Scientist,Data Scientist,Egud.fa.us2.oraclecloud.com,Tennessee,Unknown,,,,2026-06-05,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+402656,Senior Data Analyst,Data Analyst,CertiK,New York,Unknown,Full Time,110000.0,125000.0,2026-06-05,True,True,True,False,True,True,False,True,False,False,False,False,True,False,True,False,True,False,none,none,none,none
+153880,"Data Engineer, Proprietary Research",Data / Analytics Engineer,Point72,United States,Unknown,Full Time,160000.0,220000.0,2026-06-05,True,True,False,False,False,False,False,False,False,False,True,False,True,False,False,False,False,False,none,none,none,preferred
+102895,Principal Machine Learning Engineer,ML Engineer,Armis,United States,Remote,Full Time,184000.0,250000.0,2026-06-05,True,True,False,True,True,False,False,False,False,False,False,False,False,False,False,False,False,False,none,mentioned,mentioned,none
+98493,Data Analyst,Data Analyst,"SkyePoint Decisions, Inc.",United States,Hybrid,Contract,100000.0,124000.0,2026-06-05,True,True,True,True,False,True,True,True,True,False,True,False,False,True,True,False,False,False,none,required,mentioned,mentioned
+400233,Data Scientist - Production Engineering,Data Scientist,Cordial81,Remote (),Remote,,,,2026-06-05,True,True,False,True,True,False,True,False,False,False,False,True,True,True,False,False,False,True,none,mentioned,none,none
+85183,"Data Analyst, Payer Intelligence",Data Analyst,Aspirion,United States,Unknown,Full Time,85000.0,95000.0,2026-06-05,True,False,False,False,False,False,False,False,False,True,False,False,False,False,False,False,False,False,none,required,none,none
+399284,Principal Data Engineer - AI,Data / Analytics Engineer,Anaplan,Pennsylvania Remote,Hybrid,,,,2026-06-06,True,True,True,True,True,False,False,False,False,False,True,True,True,True,False,False,True,False,none,none,none,none
+399283,Senior Data Engineer - AI,Data / Analytics Engineer,Anaplan,Pennsylvania Remote,Hybrid,,,,2026-06-06,True,True,True,True,True,False,False,False,False,False,True,True,True,True,False,True,True,False,none,none,none,none
+396240,Cloud Data Engineer,Data / Analytics Engineer,Careers.hpe.com,California,Unknown,,,,2026-06-08,True,False,False,False,False,False,False,False,False,False,False,False,True,False,False,False,False,False,none,none,none,none
+396382,Data Scientist Sr Lead,Data Scientist,Careers.fisglobal.com,Georgia,Unknown,,,,2026-06-08,True,False,False,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+396770,Senior Staff Data Engineer,Data / Analytics Engineer,Careers.wbd.com,Georgia,Unknown,,,,2026-06-08,True,False,False,False,False,False,False,False,False,False,False,False,True,False,False,False,False,False,none,none,none,none
+396771,Senior Staff Data Engineer,Data / Analytics Engineer,Careers.wbd.com,New York,Unknown,,,,2026-06-08,True,False,False,False,False,False,False,False,False,False,False,False,True,False,False,False,False,False,none,none,none,none
+397588,Fraud Data Scientist,Data Scientist,Careers.pnc.com,Alabama,Unknown,,,,2026-06-08,True,True,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+392917,Senior AI/ML Engineer,ML Engineer,Chime,New York,Hybrid,Full Time,,,2026-06-08,True,True,True,True,True,False,False,False,False,False,True,True,False,True,False,False,False,True,none,none,none,none
+392884,"Machine Learning Engineer III, Search Relevance",ML Engineer,Boxinc,California,Hybrid,,,,2026-06-08,True,True,False,True,True,False,False,False,False,False,False,False,True,False,False,True,False,True,none,mentioned,none,none
+391839,Senior Data Engineer,Data / Analytics Engineer,Videoamp,,Unknown,,,,2026-06-08,True,True,True,False,False,False,False,False,False,False,True,True,True,False,False,False,False,False,none,required,none,none
+391726,Senior Data Engineer,Data / Analytics Engineer,Themotleyfool,Remote,Remote,,,,2026-06-08,True,True,True,True,True,True,False,True,False,False,False,True,True,False,True,False,True,True,none,none,none,none
+388212,Data Scientist Lead - Payments,Data Scientist,Jpmc.fa.oraclecloud.com,New York,Unknown,,,,2026-06-09,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+388585,"Architect, Applied Scientist",Data Scientist,Eeho.fa.us2.oraclecloud.com,,Unknown,,,,2026-06-09,True,False,False,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+390731,Fraud Sr. Data Scientist,Data Scientist,Careers.wexinc.com,Maine,Remote,,,,2026-06-09,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+390739,Data Engineer Senior - Data Products Organization,Data / Analytics Engineer,Careers.pnc.com,Texas,Unknown,,,,2026-06-09,True,False,False,False,False,False,False,False,False,False,True,False,False,False,False,False,False,False,none,none,none,none
+390747,"Sr. Business Analyst, Valuation & Forecasting",Data Analyst,Careers.wexinc.com,Maine,Remote,,,,2026-06-09,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+391186,Data Scientist,Data Scientist,Nuvei,,Remote,,,,2026-06-09,True,True,True,True,False,False,False,False,False,False,False,False,False,True,False,False,False,False,none,none,none,none
+380178,Data Scientist Multiple Positions Available,Data Scientist,Jpmc.fa.oraclecloud.com,New Jersey,Unknown,,,,2026-06-10,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+381660,"Manager, Platform Engineering - Big Data Engineering",Data / Analytics Engineer,Careers.mastercard.com,Missouri,Unknown,,,,2026-06-10,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+381667,Senior Data Engineer,Data / Analytics Engineer,Careers.mastercard.com,Virginia,Hybrid,,,,2026-06-10,True,False,False,False,False,False,False,False,False,False,False,False,True,False,False,False,False,False,none,none,none,none
+381805,Data Scientist II,Data Scientist,Careers.truist.com,Georgia,Unknown,,,,2026-06-10,True,False,False,True,False,False,False,False,False,False,False,False,False,False,False,False,False,True,none,none,none,none
+382779,Senior Data Engineer,Data / Analytics Engineer,Medical-Guardian,Pennsylvania,Hybrid,Full Time,,,2026-06-10,True,False,True,True,True,False,False,False,False,False,True,False,True,False,False,False,False,False,none,mentioned,mentioned,none
+382908,Data Engineer,Data / Analytics Engineer,Pavago,,Remote,Full Time,,,2026-06-10,True,True,True,False,True,True,False,True,True,False,False,True,True,True,True,False,True,False,none,none,none,none
+377688,Data Engineer - Databricks,Data / Analytics Engineer,Steampunk,Virginia,Unknown,,,,2026-06-10,True,False,False,False,False,False,False,False,False,False,False,False,False,True,False,False,False,False,none,none,none,none
+377234,Enterprise Infrastructure Software Data Engineer,Data / Analytics Engineer,Peraton,Maryland,Unknown,Full Time,,,2026-06-10,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+376986,Senior Cloud Data Engineer,Data / Analytics Engineer,Kunai,Remote,Remote,,,,2026-06-10,True,False,True,False,True,False,False,False,False,False,False,True,True,False,True,False,False,False,none,required,none,none
+375999,Senior Staff Data Engineer - Data Stewardship,Data / Analytics Engineer,Airbnb,,Remote,Contract,,,2026-06-10,True,False,True,False,False,False,False,False,False,False,True,False,False,False,False,True,True,False,none,none,none,none
+374085,Sr Business Data Analyst,Data Analyst,Careers.dhl.com,Ohio,Unknown,,,,2026-06-11,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+374086,Business Data Analyst II,Data Analyst,Careers.dhl.com,Ohio,Unknown,,,,2026-06-11,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+374641,Data Scientist III- Human Capital Data and Analytics Enablement,Data Scientist,Careers.truist.com,North Carolina,Unknown,,,,2026-06-11,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+375944,Senior Business Intelligence Analyst,Data Analyst,Ottimate,,Remote,"Full Time, Contract",,,2026-06-11,True,True,True,False,False,True,False,False,True,True,False,False,False,True,True,False,False,True,none,none,none,none
+371843,Data Scientist,Data Scientist,Cordial,,Remote,Full Time,140000.0,175000.0,2026-06-11,True,True,False,True,True,False,True,False,False,False,False,True,True,False,False,False,False,False,none,mentioned,none,none
+371817,Manager of Data Engineering,Data / Analytics Engineer,Justworks,New York,Unknown,Full Time,205000.0,261500.0,2026-06-11,True,True,True,False,True,False,False,False,False,False,False,True,True,True,False,False,False,False,none,none,none,none
+364918,"Risk Management & Compliance - Data Scientist Lead, Executive Director",Data Scientist,Jpmc.fa.oraclecloud.com,New Jersey,Unknown,,,,2026-06-12,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+361182,"Senior Flight Test Data Engineer, Loads",Data / Analytics Engineer,Archer56,California,Unknown,,,,2026-06-12,True,True,False,False,False,False,False,False,False,False,False,False,True,True,False,False,False,False,none,mentioned,none,none
+360885,ML Engineer - Instawork Robotics,ML Engineer,Instawork,California,On-site,,,,2026-06-12,True,False,False,True,True,False,False,False,False,False,True,False,True,False,False,False,False,False,none,none,mentioned,mentioned
+359895,Senior Data Engineer,Data / Analytics Engineer,Headway,,Unknown,Full Time,180000.0,225000.0,2026-06-13,True,True,True,False,False,False,False,False,False,False,False,True,True,False,False,False,False,False,none,none,none,none
+359782,Staff ML Engineer,ML Engineer,Reality Defender,New York,Unknown,Full Time,185000.0,235000.0,2026-06-13,True,True,False,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,preferred
+359745,Staff AI/ML Engineer,ML Engineer,Sigma Computing,New York,Unknown,Full Time,,,2026-06-13,True,False,False,True,True,False,False,False,False,False,False,False,False,False,False,False,False,True,none,required,none,none
+359735,Senior AI/ML Engineer,ML Engineer,Sigma Computing,New York,Unknown,Full Time,240000.0,270000.0,2026-06-13,True,False,False,True,True,False,False,False,False,False,False,False,False,False,False,False,False,True,none,required,none,none
+358680,Data Engineer - - Denver Tech Center / OVG NY Corporate,Data / Analytics Engineer,Comcastspectacor,Colorado,Unknown,Full Time,,,2026-06-13,True,False,False,False,False,False,False,False,False,False,False,False,True,False,False,False,False,False,none,none,none,none
+358076,Staff Data Scientist,Data Scientist,GoFundMe,Francisco,Unknown,Full Time,179500.0,269500.0,2026-06-14,True,True,True,False,False,True,False,False,False,False,False,True,False,True,False,False,False,True,none,none,none,mentioned
+351418,Senior Staff Analytics Engineer,Data / Analytics Engineer,Flex,New York,Unknown,Full Time,200000.0,240000.0,2026-06-15,True,False,True,False,False,True,False,True,False,False,False,True,False,False,False,False,True,False,none,none,none,none
+333135,Sr. Data Engineer,Data / Analytics Engineer,Caci,Virginia,On-site,Contract,,,2026-06-17,True,True,True,True,True,False,True,False,False,False,False,False,True,False,False,True,False,False,none,mentioned,mentioned,none
+334463,"Business Analyst, Data & AI",Data Analyst,Hdow.fa.us6.oraclecloud.com,New York,Unknown,,,,2026-06-17,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+332777,Senior Machine Learning Engineer,ML Engineer,Lyra Health,,Unknown,Full Time,143000.0,197000.0,2026-06-17,True,True,False,True,True,False,False,False,False,False,False,False,False,True,False,True,False,True,none,none,none,none
+332682,Machine Learning Engineer,ML Engineer,Handshake,Francisco,Unknown,Full Time,151000.0,189000.0,2026-06-17,True,True,False,True,True,False,False,False,False,False,False,False,False,True,False,False,False,True,none,mentioned,none,none
+332590,Staff AI/ML Engineer,ML Engineer,Sigma Computing,Francisco,Unknown,Full Time,240000.0,270000.0,2026-06-17,True,False,False,True,True,False,False,False,False,False,False,False,False,False,False,False,False,True,none,required,none,none
+332587,Senior AI/ML Engineer,ML Engineer,Sigma Computing,Francisco,Unknown,Full Time,240000.0,270000.0,2026-06-17,True,False,False,True,True,False,False,False,False,False,False,False,False,False,False,False,False,True,none,required,none,none
+328383,"Senior Data Scientist, Audience Analytics for Healthy Communities",Data Scientist,Fors Marsh,,Remote,Full Time,92000.0,105000.0,2026-06-17,True,True,True,False,True,True,True,True,True,False,False,False,True,True,True,False,False,False,none,none,mentioned,preferred
+323852,Financial Data Analyst,Data Analyst,Careers.usbank.com,Minnesota,Unknown,,,,2026-06-18,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+324517,Sr. Principal Data Scientist,Data Scientist,Careers.wbd.com,Georgia,Unknown,,,,2026-06-18,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+324632,Data Scientist II - Fraud Reporting,Data Scientist,Careers.truist.com,North Carolina,Unknown,,,,2026-06-18,True,False,False,True,False,False,False,False,False,False,False,False,False,False,False,False,False,True,none,none,none,none
+325595,Senior Business Intelligence & Data Analyst - Data Governance,Data Analyst,Jobs.tjx.com,Massachusetts,Unknown,,,,2026-06-18,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+320923,Senior Data Analyst,Data Analyst,Forge,New York,Unknown,Full Time,98000.0,100000.0,2026-06-18,True,True,True,False,False,True,True,True,False,False,False,True,False,True,False,False,False,False,none,mentioned,mentioned,none
+320820,Senior Machine Learning Engineer,ML Engineer,Zoox,California,Remote,Full Time,214000.0,290000.0,2026-06-18,True,True,False,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,mentioned,none,none
+320773,"Senior Machine Learning Engineer, User Signal & Ads",ML Engineer,Newsbreak,District of Columbia,Unknown,Full Time,,,2026-06-18,True,True,True,True,False,False,True,False,False,False,True,False,True,False,False,False,False,False,none,mentioned,mentioned,none
+319471,"Senior Manager, Data Architecture & Platforms",Data / Analytics Engineer,Cravath,New York,Unknown,Full Time,,,2026-06-18,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+318664,Data Scientist,Data Scientist,Peraton,Virginia,Unknown,Full Time,,,2026-06-18,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+311753,"Data Engineer, PV Prime Video TV - Tech",Data / Analytics Engineer,Amazon,District of Columbia,Unknown,Full Time,,,2026-06-19,True,False,False,True,True,False,False,False,False,False,True,False,True,False,False,False,False,False,none,none,none,none
+313870,Senior Business Analyst,Data Analyst,Evac.fa.us2.oraclecloud.com,California,Hybrid,,,,2026-06-19,True,False,False,False,False,False,False,False,False,False,False,False,False,False,True,False,False,False,none,none,none,none
+311513,Data Engineer,Data / Analytics Engineer,Regard,New York,Unknown,Full Time,140000.0,175000.0,2026-06-19,True,False,False,True,False,False,False,False,False,False,False,False,True,False,False,False,True,False,none,none,none,none
+307225,Director of Customer Success Data Engineering,Data / Analytics Engineer,Toast,Boston,Unknown,Full Time,188000.0,301000.0,2026-06-20,True,False,False,False,False,False,False,False,False,False,False,True,False,True,True,False,True,False,none,none,none,none
+304829,Senior Data Analyst,Data Analyst,Forge,Francisco,Unknown,Full Time,98000.0,100000.0,2026-06-21,True,True,True,False,False,True,True,True,False,False,False,True,False,True,False,False,False,False,none,mentioned,mentioned,none
+296902,"Applied Scientist III, AWS Identity",Data Scientist,Amazon,California,Unknown,Full Time,,,2026-06-22,True,False,False,True,True,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+300653,Data Analyst,Data Analyst,Careers.cisco.com,North Carolina,Hybrid,,,,2026-06-22,True,False,False,False,False,False,False,False,False,True,False,False,False,False,False,False,False,False,none,none,none,none
+301734,Data Scientist I - Fraud Reporting,Data Scientist,Careers.truist.com,North Carolina,Unknown,,,,2026-06-22,True,False,False,True,False,False,False,False,False,False,False,False,False,False,False,False,False,True,none,none,none,none
+303081,Risk Data Scientist,Data Scientist,Careers.regions.com,Alabama,Unknown,,,,2026-06-22,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+296045,Sr. Exploitation Specialist/Data Scientist,Data Scientist,Culmen,Virginia,Unknown,Full Time,,,2026-06-22,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+295035,Senior FDE Data Engineer,Data / Analytics Engineer,Jobgether,,Remote,Full Time,,,2026-06-22,True,False,False,False,False,False,False,False,False,False,True,False,True,True,False,False,False,False,none,none,none,none
+227070,DATA ANALYST NF4,Data Analyst,U.s. Marine Corps,Virginia,Unknown,,,,2026-06-22,True,False,False,False,False,False,True,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+293626,Business Analyst,Data Analyst,Aperiasolutions,Nebraska,Unknown,Full Time,,,2026-06-22,True,False,True,False,False,False,False,False,False,True,False,False,False,False,False,True,False,False,none,mentioned,none,none
+285060,"Sr. Data Scientist , Companion Product & Servi",Data Scientist,Amazon,District of Columbia,Unknown,Full Time,,,2026-06-23,True,True,True,True,False,False,False,False,False,False,False,False,False,False,False,False,False,True,none,none,none,none
+285157,"Senior Applied Scientist, Perimeter Protection Applied Science",Data Scientist,Amazon,District of Columbia,Unknown,Full Time,,,2026-06-23,True,False,False,True,True,False,False,False,False,False,False,False,True,False,False,False,False,False,none,none,none,none
+287187,Data Analytics Engineer - Senior Associate,Data / Analytics Engineer,Jpmc.fa.oraclecloud.com,Texas,Unknown,,,,2026-06-23,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,True,False,none,none,none,none
+289172,Lead Data Platform & Analytics Engineer - Money Movement Data Platform,Data / Analytics Engineer,Careers.usbank.com,North Carolina,Unknown,,,,2026-06-23,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+284989,Senior Data Engineer II,Data / Analytics Engineer,Braze,New York,Unknown,Full Time,,,2026-06-23,True,True,True,False,False,False,False,False,False,False,False,False,True,False,False,False,False,False,none,none,none,none
+283016,Senior Property Data Engineer,Data / Analytics Engineer,Ice,Florida,Unknown,Full Time,,,2026-06-23,True,False,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,required,none,none
+283893,Senior Data Engineer - Insurance Data Platform,Data / Analytics Engineer,Ccmsi,Illinois,Remote,,,,2026-06-23,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+281836,Data Scientist - Medicaid,Data Scientist,Peraton,,Unknown,Full Time,,,2026-06-23,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+281800,Sr. Data Analyst - Transport,Data Analyst,Jobgether,,Remote,Full Time,,,2026-06-23,True,True,True,False,False,True,False,False,False,True,False,False,True,True,True,False,True,False,none,none,none,none
+273655,Research Associate Data Scientist,Data Scientist,Hdkk.fa.us6.oraclecloud.com,California,Unknown,,,,2026-06-24,True,True,True,True,True,False,True,False,False,False,False,False,False,True,False,False,False,True,none,none,required,none
+274875,Data Engineer,Data / Analytics Engineer,Fa-Etbx-Saasfaprod1.fa.ocs.oraclecloud.com,Virginia,Unknown,,,,2026-06-24,True,False,False,False,False,False,False,False,False,False,False,False,True,False,False,False,False,False,none,none,none,none
+275386,Principal Data Engineer - FLINK,Data / Analytics Engineer,Hcgn.fa.us2.oraclecloud.com,,Unknown,,,,2026-06-24,True,True,False,True,True,False,False,False,False,False,False,False,True,False,False,True,True,False,none,preferred,preferred,none
+276229,Forward Deployed Analytics Engineer & AI Specialist,Data / Analytics Engineer,Careers.snowflake.com,California,Unknown,,,,2026-06-24,True,True,True,False,False,False,False,False,False,False,False,True,True,False,False,False,True,False,none,none,none,none
+276554,"Scientist II, Data Scientist, Bioprocess Digital Twin",Data Scientist,Jobs.thermofisher.com,New York,Unknown,,,,2026-06-24,True,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+277186,Alpha Data Services - Senior Data Analyst AVP,Data Analyst,Careers.statestreet.com,New Jersey,Unknown,,,,2026-06-24,True,True,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+227288,Data Engineer,Data / Analytics Engineer,Entarian,Pennsylvania,On-site,Other,,,2026-06-24,True,True,True,False,True,False,False,False,False,False,True,False,True,True,False,True,True,False,none,none,required,none
+227287,Senior Analytics Engineer - Healthcare & Benefits,Data / Analytics Engineer,Abett,Washington,Unknown,Contract,166400.0,208000.0,2026-06-24,True,True,True,False,False,True,False,False,True,False,False,False,False,True,True,False,True,False,none,none,none,none
+227327,Data Engineer,Data / Analytics Engineer,Stitch Fix Annex,,Unknown,Full Time,100100.0,167000.0,2026-06-24,True,True,True,False,False,False,False,False,False,False,True,False,True,True,False,False,True,True,none,none,none,none
+257943,Marketing Data Scientist Senior Associate,Data Scientist,Jpmc.fa.oraclecloud.com,Ohio,Unknown,,,,2026-06-25,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+259467,"Data Analyst, Global Modeling Unit",Data Analyst,Ecqf.fa.em2.oraclecloud.com,California,Unknown,,,,2026-06-25,True,False,False,False,False,False,True,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+261014,Business Data Analyst II- Human Capital Data and Analytics Enablement,Data Analyst,Careers.truist.com,North Carolina,Unknown,,,,2026-06-25,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+261990,Data Engineer Senior - Big Data Platform Team,Data / Analytics Engineer,Careers.pnc.com,Texas,Unknown,,,,2026-06-25,True,False,True,False,False,False,False,False,False,False,True,False,True,False,False,False,False,False,none,none,none,none
+262064,Data Scientist/Portfolio Risk Manager,Data Scientist,Jobs.bmo.com,Illinois,Unknown,,,,2026-06-25,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+249653,Software Data Engineer,Data / Analytics Engineer,Peraton,Maryland,Unknown,Full Time,,,2026-06-25,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+240985,Data Scientist,Data Scientist,Careers.toyota.com,Texas,Unknown,,,,2026-06-26,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+241055,Data Engineer,Data / Analytics Engineer,Careers.cisco.com,California,Unknown,,,,2026-06-26,True,False,False,False,False,False,False,False,False,False,False,False,True,False,False,False,False,False,none,none,none,none
+241090,Lead Cloud Data Engineer - Multi-Cloud Data Platforms,Data / Analytics Engineer,Careers.usbank.com,Texas,Unknown,,,,2026-06-26,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+241140,Senior Data Engineer,Data / Analytics Engineer,Careers.usbank.com,Minnesota,Unknown,,,,2026-06-26,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+241759,Data Analyst III,Data Analyst,Jobs.thermofisher.com,California,Unknown,,,,2026-06-26,True,False,False,False,False,True,False,False,False,True,False,False,False,False,False,False,False,False,none,none,none,none
+242445,Sr. Data Engineer,Data / Analytics Engineer,Careers.wbd.com,Georgia,Unknown,,,,2026-06-26,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+242617,Data Scientist II - Card Fraud,Data Scientist,Careers.truist.com,Georgia,Unknown,,,,2026-06-26,True,False,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+244846,"Sr Manager, Machine Learning Engineering",ML Engineer,Careers.adobe.com,California,Unknown,,,,2026-06-26,True,False,False,True,False,False,False,False,False,False,False,False,False,False,False,False,False,True,none,none,none,none
+244847,Senior Data Scientist,Data Scientist,Careers.adobe.com,California,Unknown,,,,2026-06-26,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+244975,Data Scientist - Anti-Money Laundering Analytics & Modeling,Data Scientist,Careers.pnc.com,Pennsylvania,Unknown,,,,2026-06-26,True,False,False,True,False,False,True,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+245196,Senior Data Scientist - Neuroscience Spatial Multi-omics,Data Scientist,Jobs.merck.com,Massachusetts,Unknown,,,,2026-06-26,True,False,False,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+237389,"Data Scientist, North America Onboarding Team",Data Scientist,Wise,Texas,Unknown,Full Time,,,2026-06-26,True,True,True,True,False,False,True,False,False,False,True,True,False,True,False,False,False,False,none,none,none,none
+237355,Data Scientist,Data Scientist,Anthropic,New York,Hybrid,Full Time,275000.0,370000.0,2026-06-26,True,True,True,True,False,True,False,False,False,False,False,False,False,True,False,False,False,False,none,required,none,none
+237138,Data Engineer,Data / Analytics Engineer,PlusAI,California,Unknown,Full Time,135000.0,180000.0,2026-06-26,True,True,True,False,True,False,False,False,False,False,True,False,True,True,False,False,True,True,none,none,mentioned,none
+234509,Associate Business Analyst,Data Analyst,Ice,New York,Unknown,Full Time,,,2026-06-26,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+233683,"Staff Data Analyst, Engine X",Data Analyst,Engine,Remote,Hybrid,,,,2026-06-26,True,False,True,False,False,True,True,True,False,False,False,True,False,True,True,False,True,False,none,mentioned,none,none
+233383,"Data Architecture, Senior Advisor",Data / Analytics Engineer,Peraton,,Remote,Full Time,,,2026-06-26,True,False,False,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+230377,Data Scientist Director - Business Banking Client Analytics,Data Scientist,Jpmc.fa.oraclecloud.com,New York,Unknown,,,,2026-06-27,True,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,none,none,none,none
+229209,Machine Learning Engineer,ML Engineer,Plaid,,Unknown,Full Time,211680.0,272160.0,2026-06-27,True,True,True,True,False,True,True,False,False,False,False,False,False,True,False,False,False,False,none,none,none,none
+337348,Data Scientist Multiple Positions Available,Data Scientist,JPMorgan Chase & Co.,New Jersey,On-site,Full Time,142000.0,170000.0,2026-06-29,True,True,True,True,True,True,True,True,True,True,True,True,True,False,True,False,True,False,none,mentioned,required,none
+746782,Senior Data Scientist,Data Scientist,Conviva,California,Unknown,Full Time,180000.0,230000.0,2026-07-14,False,,,,,,,,,,,,,,,,,,,,,
+746065,Operations Data Analyst,Data Analyst,EmployerDirect Healthcare,New York,Hybrid,Full Time,,,2026-07-14,False,,,,,,,,,,,,,,,,,,,,,
+745553,Senior Data Scientist,Data Scientist,Point Digital Finance,,Unknown,Internship,179550.0,198450.0,2026-07-14,False,,,,,,,,,,,,,,,,,,,,,
+745251,Senior Data Engineer,Data / Analytics Engineer,Checkr,California,Unknown,Full Time,185000.0,218000.0,2026-07-14,False,,,,,,,,,,,,,,,,,,,,,
+745248,Staff Data Engineer,Data / Analytics Engineer,Checkr,California,Unknown,Full Time,224000.0,264000.0,2026-07-14,False,,,,,,,,,,,,,,,,,,,,,
+745108,Data Analyst,Data Analyst,CharterUP,Georgia,Unknown,Full Time,70000.0,75000.0,2026-07-14,False,,,,,,,,,,,,,,,,,,,,,
+744373,"Data Scientist, Developer Productivity",Data Scientist,Anthropic,New York,Unknown,Full Time,380000.0,460000.0,2026-07-14,False,,,,,,,,,,,,,,,,,,,,,
+744397,"Data Scientist, GTM",Data Scientist,Anthropic,New York,Unknown,Full Time,285000.0,380000.0,2026-07-14,False,,,,,,,,,,,,,,,,,,,,,
+744432,"Data Scientist, Policy",Data Scientist,Anthropic,District of Columbia,Unknown,Full Time,285000.0,380000.0,2026-07-14,False,,,,,,,,,,,,,,,,,,,,,
+744434,"Data Scientist, Supply",Data Scientist,Anthropic,Washington,Unknown,Full Time,285000.0,460000.0,2026-07-14,False,,,,,,,,,,,,,,,,,,,,,
+744526,Data Engineer,Data / Analytics Engineer,Anthropic,Washington,Unknown,Full Time,320000.0,405000.0,2026-07-14,False,,,,,,,,,,,,,,,,,,,,,
+744039,Reporting Data Scientist,Data Scientist,Luster National,California,Unknown,Full Time,140000.0,210000.0,2026-07-14,False,,,,,,,,,,,,,,,,,,,,,
+743790,"Engineering Manager, Data Engineering & Infrastructure",Data / Analytics Engineer,Lucid Motors,California,Unknown,Full Time,171100.0,250910.0,2026-07-15,False,,,,,,,,,,,,,,,,,,,,,
+743779,"AI/ML Engineer, Data Scientist",ML Engineer,Sciemo,New York,Remote,Full Time,150000.0,300000.0,2026-07-15,False,,,,,,,,,,,,,,,,,,,,,
+743415,"Data Scientist, Marketing",Data Scientist,Anthropic,California,Unknown,Full Time,285000.0,380000.0,2026-07-15,False,,,,,,,,,,,,,,,,,,,,,
+741392,Senior Marketing Data Analyst,Data Analyst,AfterShip,California,Unknown,Full Time,157000.0,180000.0,2026-07-15,False,,,,,,,,,,,,,,,,,,,,,
+740414,"Senior Associate, Data Engineer",Data / Analytics Engineer,"Iconiq Capital, OpenView Venture Partners",New York,Unknown,Full Time,180000.0,200000.0,2026-07-15,False,,,,,,,,,,,,,,,,,,,,,
+740158,Senior Data Scientist,Data Scientist,Sofi,,Unknown,Full Time,,,2026-07-15,False,,,,,,,,,,,,,,,,,,,,,
+739260,Founding Data Engineer,Data / Analytics Engineer,Normal Computing,New York,Remote,Full Time,275000.0,340000.0,2026-07-15,False,,,,,,,,,,,,,,,,,,,,,
+736190,Client Services Business Analyst I - Healthcare Data,Data Analyst,Precision Medicine Group,Indiana,Unknown,Full Time,,,2026-07-16,False,,,,,,,,,,,,,,,,,,,,,
+736214,Client Services Business Analyst II - Healthcare Data,Data Analyst,Precision Medicine Group,Indiana,Unknown,Full Time,,,2026-07-16,False,,,,,,,,,,,,,,,,,,,,,
+736053,Client Services Business Analyst II - Healthcare Data,Data Analyst,Precision AQ,Indiana,Unknown,Full Time,,,2026-07-16,False,,,,,,,,,,,,,,,,,,,,,
+735229,Data Engineer,Data / Analytics Engineer,Excel Sports Management,Illinois,Unknown,Full Time,100000.0,100000.0,2026-07-16,False,,,,,,,,,,,,,,,,,,,,,
+734424,Senior Data Scientist,Data Scientist,Striveworks,Hawaii,Unknown,Full Time,220000.0,270000.0,2026-07-16,False,,,,,,,,,,,,,,,,,,,,,
+734027,"Senior Data Engineer, Fleet Monitoring & Analysis",Data / Analytics Engineer,Coreweave,Washington,Unknown,Full Time,153000.0,204000.0,2026-07-16,False,,,,,,,,,,,,,,,,,,,,,
+734094,Senior Data Engineer,Data / Analytics Engineer,Coreweave,New York,Unknown,Full Time,182000.0,242000.0,2026-07-16,False,,,,,,,,,,,,,,,,,,,,,
+734134,Sr. Data Scientist - Capacity Data,Data Scientist,Coreweave,California,Unknown,Full Time,143000.0,210000.0,2026-07-16,False,,,,,,,,,,,,,,,,,,,,,
+733745,Sr. Data Scientist,Data Scientist,Slickdeals,California,Unknown,Full Time,145000.0,175000.0,2026-07-16,False,,,,,,,,,,,,,,,,,,,,,
+732868,"Data Scientist, Safeguards",Data Scientist,Anthropic,Washington,Unknown,Full Time,285000.0,380000.0,2026-07-16,False,,,,,,,,,,,,,,,,,,,,,
+732254,Senior Data Engineer,Data / Analytics Engineer,Fastly,California,Unknown,Full Time,,,2026-07-16,False,,,,,,,,,,,,,,,,,,,,,
+732222,Clincal R programmer/ Principal Data Scientist Consultant,Data Scientist,ClinChoice,,Unknown,"Full Time, Contract",,,2026-07-16,False,,,,,,,,,,,,,,,,,,,,,
+732158,Lead Data Analyst,Data Analyst,Point Digital Finance,,Unknown,Full Time,180500.0,199500.0,2026-07-16,False,,,,,,,,,,,,,,,,,,,,,
+731983,Senior Staff Data Engineer,Data / Analytics Engineer,Bill.com,,Unknown,Full Time,195800.0,244800.0,2026-07-16,False,,,,,,,,,,,,,,,,,,,,,
+731993,Risk Data Analyst,Data Analyst,Bill.com,,Unknown,Full Time,112400.0,135000.0,2026-07-16,False,,,,,,,,,,,,,,,,,,,,,
+731943,Operations Data Analyst,Data Analyst,"HeartFlow, Inc.",Texas,Unknown,Full Time,108000.0,141000.0,2026-07-16,False,,,,,,,,,,,,,,,,,,,,,
+731747,Staff Data Engineer,Data / Analytics Engineer,Verkada,California,Unknown,Full Time,190000.0,250000.0,2026-07-16,False,,,,,,,,,,,,,,,,,,,,,
+731838,Senior Data Engineer,Data / Analytics Engineer,Verkada,California,Unknown,Full Time,140000.0,210000.0,2026-07-16,False,,,,,,,,,,,,,,,,,,,,,
+731675,Staff Data Engineer,Data / Analytics Engineer,Nexhealth,California,Unknown,Full Time,180000.0,240000.0,2026-07-16,False,,,,,,,,,,,,,,,,,,,,,
+731640,"Data Scientist, Optimization - Pricing",Data Scientist,Lyft,New York,Unknown,Full Time,128000.0,160000.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+731635,"Senior Data Scientist - Optimization, Central Market Management & AI",Data Scientist,Lyft,California,Unknown,Full Time,148000.0,185000.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+731636,"Senior Data Scientist - Optimization, Central Market Management & AI",Data Scientist,Lyft,New York,Unknown,Full Time,148000.0,185000.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+727963,Senior Data Engineer,Data / Analytics Engineer,ESS Inc,Virginia,Unknown,Full Time,125000.0,180000.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+727677,Senior Data Engineer,Data / Analytics Engineer,M3,Georgia,Unknown,Full Time,,,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+727601,Principal Data Scientist,Data Scientist,Thoughtworks,Illinois,Unknown,Full Time,182000.0,320000.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+727290,"Data Scientist, Finance",Data Scientist,Figma,New York,Unknown,Full Time,140000.0,348000.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+727291,"Data Scientist, Core Data - PhD",Data Scientist,Figma,New York,Unknown,Internship,170000.0,178000.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+727292,Data Scientist,Data Scientist,Figma,New York,Unknown,Full Time,140000.0,348000.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+727293,Data Engineer,Data / Analytics Engineer,Figma,New York,Unknown,Full Time,140000.0,348000.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+727367,"Data Scientist, Marketing",Data Scientist,Figma,New York,Unknown,Full Time,140000.0,348000.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+726864,Senior Data Analyst,Data Analyst,Constant Contact,Massachusetts,Unknown,Full Time,84420.0,105525.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+726257,"Principal Data Engineer, People Data",Data / Analytics Engineer,Okta,District of Columbia,Unknown,Full Time,,,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+726219,Data Engineer,Data / Analytics Engineer,Mill,California,Unknown,Full Time,185000.0,210000.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+726034,"Sr. Data Scientist, Monetization",Data Scientist,Pinterest,Washington,Unknown,Full Time,164428.0,287749.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+726053,Data Scientist,Data Scientist,Pinterest,California,Remote,Full Time,101382.0,209296.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+726154,"Sr. Data Scientist, Trust and Safety",Data Scientist,Pinterest,California,Remote,Full Time,139764.0,287749.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+725725,Staff Data Scientist - Trust and Safety,Data Scientist,Databricks,California,Unknown,Full Time,192000.0,260000.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+725726,Staff Data Scientist - Infrastructure,Data Scientist,Databricks,California,Unknown,Full Time,192000.0,260000.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+725727,Staff Data Scientist,Data Scientist,Databricks,California,Unknown,Full Time,192000.0,260000.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+725863,Senior Data Scientist,Data Scientist,Databricks,California,Unknown,Full Time,123200.0,218000.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+725491,Data Engineer,Data / Analytics Engineer,Axle,Maryland,Unknown,Full Time,,,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+725483,Data Scientist II,Data Scientist,Axle,Maryland,Unknown,Full Time,130000.0,145000.0,2026-07-17,False,,,,,,,,,,,,,,,,,,,,,
+723232,Principal Data Scientist,Data Scientist,Databricks,California,Unknown,Full Time,,,2026-07-18,False,,,,,,,,,,,,,,,,,,,,,
+722704,Data Analyst III,Data Analyst,Itd,,Unknown,Full Time,,,2026-07-18,False,,,,,,,,,,,,,,,,,,,,,
+721869,Staff Data Scientist - Experimentation & Causal Inference,Data Scientist,Gohighlevel,,Unknown,Full Time,163400.0,220000.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+719707,"Senior Manager, Risk Strategy Data Scientist",Data Scientist,Bill.com,,Unknown,Full Time,190400.0,238050.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+717321,"Staff Data Scientist, ML",Data Scientist,Robinhood,New York,Unknown,Full Time,217000.0,255000.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+716796,Senior GTM Data Analyst,Data Analyst,Intercom,Illinois,Unknown,Full Time,168100.0,200810.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+716741,Sr. Data Analyst,Data Analyst,Lucidchart,Utah,Unknown,Full Time,,,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+716740,Sr. Data Analyst,Data Analyst,Lucidchart,North Carolina,Unknown,Full Time,,,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+716668,"Data Scientist, Storefront",Data Scientist,Quince,California,Unknown,Full Time,171000.0,285000.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+716337,Senior Data Analyst,Data Analyst,Suvoda,Pennsylvania,Unknown,Full Time,,,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+716233,Data Engineer IV,Data / Analytics Engineer,Itd,,Unknown,Full Time,,,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+716145,Staff Data Scientist,Data Scientist,Ripple,Illinois,Unknown,Full Time,196000.0,245000.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+715690,Senior Data Engineer - Finance,Data / Analytics Engineer,Oura,California,Hybrid,Full Time,172550.0,203000.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+715665,Senior Data Engineer,Data / Analytics Engineer,SpyCloud,Texas,Unknown,Full Time,144000.0,187000.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+715652,"Staff Data Engineer, Cloud Optimization",Data / Analytics Engineer,Attentive,,Unknown,Full Time,180000.0,240000.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+715391,Senior Staff Data Engineer - Platform Data and Analytics,Data / Analytics Engineer,Faire,California,Unknown,Full Time,268000.0,368500.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714975,Staff Data Engineer,Data / Analytics Engineer,Butterfly Network,New York,Unknown,Full Time,185000.0,195000.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714795,Senior Data Scientist,Data Scientist,Epic Games,North Carolina,Unknown,Full Time,,,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714137,Sr. Data Engineer,Data / Analytics Engineer,Accenture Federal Services,District of Columbia,Unknown,Full Time,116900.0,243100.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714138,Sr. Cloud Data Engineer,Data / Analytics Engineer,Accenture Federal Services,Virginia,Unknown,Full Time,137300.0,165100.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714198,Senior Data Scientist,Data Scientist,Accenture Federal Services,District of Columbia,Unknown,Full Time,116900.0,243100.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714199,"Senior Data Analyst in St. Louis, MO",Data Analyst,Accenture Federal Services,Missouri,Unknown,Full Time,114700.0,221100.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714208,Senior AI/ML & Data Engineer,Data / Analytics Engineer,Accenture Federal Services,Virginia,Unknown,Full Time,100200.0,203400.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714262,SAP Data Scientist,Data Scientist,Accenture Federal Services,District of Columbia,Unknown,Full Time,116900.0,243100.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714308,Palantir Data Scientist,Data Scientist,Accenture Federal Services,California,On-site,Full Time,86400.0,176200.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714309,Palantir Data Engineer,Data / Analytics Engineer,Accenture Federal Services,Virginia,Unknown,Full Time,96200.0,192300.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714384,Data Scientist,Data Scientist,Accenture Federal Services,District of Columbia,Unknown,Full Time,98500.0,184900.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714390,Data Engineer Team Lead,Data / Analytics Engineer,Accenture Federal Services,Virginia,Unknown,Full Time,160700.0,306500.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714391,Data Engineer Specialist,Data / Analytics Engineer,Accenture Federal Services,Virginia,Unknown,Full Time,108400.0,203400.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714392,Data Engineer Senior Analyst,Data / Analytics Engineer,Accenture Federal Services,Virginia,Unknown,Full Time,76100.0,136700.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714393,Data Engineer,Data / Analytics Engineer,Accenture Federal Services,California,On-site,Full Time,86400.0,176200.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714394,"Data Engineer in St. Louis, MO",Data / Analytics Engineer,Accenture Federal Services,Missouri,Unknown,Full Time,114700.0,221100.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714395,Data Engineering Lead,Data / Analytics Engineer,Accenture Federal Services,Virginia,Unknown,Full Time,106300.0,221100.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714396,Data Engineer,Data / Analytics Engineer,Accenture Federal Services,Maryland,Unknown,Full Time,117900.0,169600.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714446,Cleared Data Scientist,Data Scientist,Accenture Federal Services,District of Columbia,Unknown,Full Time,98500.0,184900.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714447,Cleared Data Engineer,Data / Analytics Engineer,Accenture Federal Services,District of Columbia,Unknown,Full Time,93400.0,176200.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714467,Data Engineer,Data / Analytics Engineer,Accenture Federal Services,District of Columbia,Unknown,Full Time,93400.0,176200.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714478,Senior Data Engineer,Data / Analytics Engineer,Accenture Federal Services,Virginia,Unknown,Full Time,106300.0,221100.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714503,Senior Data Scientist,Data Scientist,Accenture Federal Services,Virginia,Unknown,Full Time,106300.0,221100.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714514,Jr. Data Scientist,Data Scientist,Accenture Federal Services,Maryland,Unknown,Full Time,90000.0,120000.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714516,Data Scientist,Data Scientist,Accenture Federal Services,Maryland,Unknown,Full Time,120000.0,220000.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714584,Data Analyst in California,Data Analyst,Accenture Federal Services,California,Unknown,Full Time,70500.0,136700.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714590,Forward Data Engineer,Data / Analytics Engineer,Accenture Federal Services,Virginia,Unknown,Full Time,130200.0,265300.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714593,Forward Deployed Data Engineer - Databricks,Data / Analytics Engineer,Accenture Federal Services,District of Columbia,Unknown,Full Time,100200.0,243100.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+714594,Enterprise Data Engineer,Data / Analytics Engineer,Accenture Federal Services,Virginia,Unknown,Full Time,111800.0,221800.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+713991,Senior Data Engineer - The Points Guy,Data / Analytics Engineer,Red Ventures,,Unknown,Full Time,100000.0,182500.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+713785,Senior Data Engineer - Consumer Subscriptions,Data / Analytics Engineer,xAI,New York,Unknown,Full Time,180000.0,440000.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+713792,Sr. IT Data Engineer,Data / Analytics Engineer,xAI,California,Unknown,Full Time,135000.0,260000.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+713855,Data Engineer,Data / Analytics Engineer,xAI,California,Unknown,Internship,150000.0,210000.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+713862,Data Analyst - Physical Infrastructure,Data Analyst,xAI,Tennessee,Unknown,Full Time,,,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+713867,Senior Data Analyst- Fraud & AML,Data Analyst,xAI,New York,Unknown,Full Time,148000.0,220000.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+713639,Associate Data Scientist,Data Scientist,Billtrust,New Jersey,Unknown,Full Time,,,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+713420,"Azure Data Engineer in St. Louis, MO",Data / Analytics Engineer,Accenture Federal Services,Missouri,Unknown,Full Time,114700.0,221100.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+713306,Student Worker - Data Analyst,Data Analyst,Zoox,California,Unknown,"Full Time, Part Time",,,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+711497,Data Engineer,Data / Analytics Engineer,SpaceX,Texas,Unknown,Internship,,,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+711447,Data Engineer,Data / Analytics Engineer,SpaceX,Washington,Unknown,Internship,125000.0,150000.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+711343,Sr. Data Engineer,Data / Analytics Engineer,SpaceX,Washington,Unknown,Full Time,,,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+710989,Data Engineer,Data / Analytics Engineer,SpaceX,Texas,Unknown,Internship,,,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+710838,Data Engineer,Data / Analytics Engineer,SpaceX,California,Unknown,Full Time,,,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+710648,Google Cloud Platform Data Engineer,Data / Analytics Engineer,Accenture Federal Services,Virginia,Unknown,Full Time,100200.0,203400.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+710524,Data Scientist IV,Data Scientist,MediaAlpha,California,Unknown,Full Time,168000.0,222000.0,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+710375,Data Analytics Engineer 1 # 4878,Data / Analytics Engineer,Grailbio,North Carolina,Unknown,Full Time,,,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+710170,Data Scientist,Data Scientist,Block,California,Unknown,Full Time,,,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+710214,"Senior Data Engineer, Risk",Data / Analytics Engineer,Block,California,Unknown,Full Time,,,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+710268,"Staff Data Analyst, Block Compliance",Data Analyst,Block,California,Unknown,Full Time,,,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+710269,"Staff Data Analyst, Block Compliance",Data Analyst,Block,New York,Unknown,Full Time,,,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+710270,"Staff Data Analyst, Block Compliance",Data Analyst,Block,Colorado,Unknown,Full Time,,,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+710296,"Senior Data Scientist, AI & Model Risk - , US",Data Scientist,Block,California,Remote,Full Time,,,2026-07-20,False,,,,,,,,,,,,,,,,,,,,,
+709716,Principal Data Engineer,Data / Analytics Engineer,Dragos,,Unknown,Full Time,,,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+709701,Staff Data Engineer,Data / Analytics Engineer,Dragos,,Unknown,Full Time,,,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+708261,Financial Data Analyst,Data Analyst,Appodeal,Florida,Unknown,Full Time,,,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+707830,Senior Data Analyst,Data Analyst,Gigs,New York,Unknown,Full Time,,,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+707712,Data Analyst,Data Analyst,LTK,,Unknown,Full Time,,,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+707490,Senior Data Engineer,Data / Analytics Engineer,"Babylist - Oakland, CA",,Unknown,Full Time,,,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+705653,Principal GenAI Data Engineer,Data / Analytics Engineer,Zscaler,District of Columbia,Unknown,Full Time,182000.0,260000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+704963,Senior Data Analyst,Data Analyst,Mongodb,,Unknown,Full Time,,,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+704486,Sr. Data Engineer,Data / Analytics Engineer,Megazone,New York,Unknown,Full Time,145000.0,165000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+703196,Lead Data Scientist,Data Scientist,84.51°,Illinois,Unknown,Full Time,125000.0,207000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+703197,Lead Data Engineer,Data / Analytics Engineer,84.51°,Illinois,Unknown,Full Time,125000.0,207000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+703198,Senior Data Engineer,Data / Analytics Engineer,84.51°,Illinois,Unknown,Full Time,98000.0,169050.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+703011,Lead Data Engineer,Data / Analytics Engineer,PitchBook,District of Columbia,Unknown,Full Time,175000.0,220000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+702831,Data Analyst,Data Analyst,"Gotion, Inc.",Illinois,Unknown,Full Time,,,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+702519,Senior Data Engineer,Data / Analytics Engineer,Grailed,California,Unknown,Full Time,128000.0,160000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+702274,Principal Data Scientist,Data Scientist,Formation Bio,New York,Unknown,Full Time,204500.0,267000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+702276,"Data Scientist, Portfolio Optimization",Data Scientist,Formation Bio,New York,Unknown,Internship,154500.0,202000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+702278,Senior Data Scientist - Real World Data,Data Scientist,Formation Bio,New York,Unknown,Full Time,185500.0,232000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+702273,Senior Data Scientist,Data Scientist,Formation Bio,New York,Unknown,Full Time,177500.0,232000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+701827,Senior Data Engineer - People Technology,Data / Analytics Engineer,SolarWinds,Texas,Unknown,Full Time,,,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+701429,"Staff Data Scientist, Planning and Forecasting",Data Scientist,Quince,,Unknown,Full Time,250000.0,285000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+701420,"Data Scientist, Planning and Forecasting",Data Scientist,Quince,,Unknown,Full Time,213000.0,242000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+701204,Data & Analytics Engineer,Data / Analytics Engineer,True Classic Tees LLC,California,Unknown,Full Time,,,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+701047,Staff Data Scientist,Data Scientist,Gofundme,California,Unknown,Full Time,179500.0,269500.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+701042,Senior Data Scientist - Growth Measurement,Data Scientist,Roblox,California,Unknown,Full Time,220300.0,262380.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+700963,Senior / Principal Data Scientist - Discovery,Data Scientist,Roblox,California,Unknown,Full Time,307430.0,373680.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+700929,Senior Data Scientist - Consumer Frontend,Data Scientist,Roblox,California,Unknown,Full Time,263670.0,322820.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+700925,Senior Data Scientist - Family Experience,Data Scientist,Roblox,California,Unknown,Full Time,221380.0,263670.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+700840,Senior Data Scientist - Machine Intelligence,Data Scientist,Roblox,California,Unknown,Full Time,221380.0,263670.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+700749,Principal Data Scientist - Safety,Data Scientist,Roblox,California,Unknown,Full Time,321230.0,373680.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+700628,Lead Consultant Data Engineer,Data / Analytics Engineer,Excella,Virginia,Unknown,"Full Time, Contract",138000.0,185000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+699938,Senior Data Engineer,Data / Analytics Engineer,Roku,California,Unknown,Full Time,148750.0,361000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+699939,Senior Data Engineer,Data / Analytics Engineer,Roku,Texas,Unknown,Full Time,,,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+699859,Mission Data Engineer,Data / Analytics Engineer,North Point Technology,Virginia,Unknown,Full Time,,,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+699838,Senior Research Data Scientist,Data Scientist,Roku,Massachusetts,Unknown,Full Time,330000.0,375000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+699839,Senior Research Data Scientist,Data Scientist,Roku,New York,Unknown,Full Time,330000.0,375000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+699841,Senior Research Data Scientist,Data Scientist,Roku,California,Unknown,Full Time,330000.0,375000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+699829,Sr. Data Scientist,Data Scientist,Roku,California,Unknown,Full Time,179900.0,190000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+699808,Senior Data Scientist,Data Scientist,Roku,New York,Unknown,Full Time,127500.0,170400.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+699545,Staff Data Engineer,Data / Analytics Engineer,Radar,California,Unknown,Full Time,200000.0,260000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+699440,"Data Scientist, Growth",Data Scientist,Quince,California,Unknown,Full Time,171000.0,198000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+699267,Senior Data Engineer,Data / Analytics Engineer,Gemini,New York,Remote,Full Time,126000.0,180000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+698955,Staff Data Scientist,Data Scientist,"HeartFlow, Inc.",California,Unknown,Full Time,220000.0,280000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+698931,Senior Data Engineer,Data / Analytics Engineer,Forge Global,New York,Unknown,Full Time,110000.0,130000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+698926,Senior Data Engineer,Data / Analytics Engineer,Forge Global,California,Unknown,Full Time,110000.0,130000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+698397,"Senior Data Scientist, Creator Platform",Data Scientist,Roblox,California,Unknown,Full Time,263670.0,322820.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,
+698362,Staff Data Analyst,Data Analyst,2K Games,California,Unknown,Internship,180000.0,180000.0,2026-07-21,False,,,,,,,,,,,,,,,,,,,,,

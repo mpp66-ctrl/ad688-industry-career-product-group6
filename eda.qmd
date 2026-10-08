@@ -14,27 +14,87 @@ selected career pathway inside our selected industry?** All charts below are gen
 from `data/processed/career_market_panel.csv` -- see [Data Preparation](data_preparation.qmd)
 for how this dataset was built and cleaned.
 
-**Chart theme:** every chart on this page uses Seaborn/Matplotlib with one shared color palette, so the visuals look consistent from top to bottom.
+**Chart theme:** every chart on this page is interactive (built with Plotly) and uses one shared color palette. Hover over a bar to see exact values and sample sizes, drag to zoom, and double-click to reset.
 
 ```{python}
 #| label: load-data
 import pandas as pd
-import matplotlib.pyplot as plt
+import plotly.express as px
+import plotly.graph_objects as go
 
 # Consistent color theme used across every chart on this page
 PALETTE = ["#457b9d", "#2a9d8f", "#e9c46a", "#e76f51", "#6d597a", "#f4a261"]
+GRAY = "#b8bec6"
+# the same work arrangement always gets the same color
+ARRANGEMENT_COLORS = {"remote": PALETTE[0], "hybrid": PALETTE[1], "onsite": PALETTE[2], "unknown": PALETTE[3]}
+ARRANGEMENT_LABELS = {"remote": "Remote", "hybrid": "Hybrid", "onsite": "Onsite", "unknown": "Not stated"}
 
 df = pd.read_csv("data/processed/career_market_panel.csv")
 TOTAL = len(df)
 print(f"Total postings in baseline: {TOTAL}")
 
-SCOPE = "Data Analyst -> Data Scientist pathway postings, NAICS 5182, US"
+SCOPE = "Analyst-to-Scientist pathway, NAICS 5182, US"
+ROLE_LABELS = {"ml engineer": "ML Engineer", "bi analyst": "BI Analyst"}
 
 
-def titled(ax, title, subtitle):
+def role_label(key):
+    return ROLE_LABELS.get(key, key.title())
+
+
+def style(fig, title, subtitle, height=480, legend=False):
     # chart name, then a gray line saying which postings the chart covers and how many
-    ax.set_title(title, pad=24)
-    ax.text(0.5, 1.02, subtitle, transform=ax.transAxes, ha="center", va="bottom", fontsize=9, color="gray")
+    fig.update_layout(
+        title=dict(text=f"<b>{title}</b><br><span style='font-size:12px;color:gray'>{subtitle}</span>",
+                   x=0, xanchor="left"),
+        template="simple_white", height=height, showlegend=legend,
+        font=dict(family="Segoe UI, Helvetica, Arial, sans-serif", size=13),
+        margin=dict(l=10, r=20, t=95, b=50),
+        hoverlabel=dict(bgcolor="white", font_size=13),
+        legend=dict(orientation="h", x=1, xanchor="right", y=1.02, yanchor="bottom"),
+    )
+    fig.update_xaxes(gridcolor="#eceff3")
+    fig.update_yaxes(gridcolor="#eceff3")
+    return fig
+
+
+def show(fig):
+    fig.show(config={"displaylogo": False, "responsive": True, "modeBarButtonsToRemove": ["lasso2d", "select2d"]})
+
+
+def hbar(labels, values, xtitle, title, subtitle, texts=None, custom=None, hover=None, color=None, money=False, height=480):
+    # horizontal bar chart; labels are listed bottom to top, so pass them sorted ascending
+    fig = go.Figure(go.Bar(
+        x=list(values), y=list(labels), orientation="h", marker_color=color or PALETTE[0],
+        text=list(texts) if texts is not None else list(values), textposition="outside", cliponaxis=False,
+        customdata=None if custom is None else list(custom),
+        hovertemplate=hover or "<b>%{y}</b><br>%{x:,.0f}<extra></extra>"))
+    fig.update_xaxes(title=xtitle, range=[0, max(values) * 1.18])
+    if money:
+        fig.update_xaxes(tickprefix="$", tickformat=",.0f")
+    return style(fig, title, subtitle, height)
+
+
+def salary_bars(stats, keys, labels, colors, title, subtitle):
+    # average salary as bars, median as a diamond, sample size under each label
+    xs = [f"{labels[k]}<br>(n={int(stats.loc[k, 'count'])})" for k in keys]
+    label_colors = ["#1d2733" if colors[k] in (PALETTE[2], GRAY) else "white" for k in keys]
+    fig = go.Figure()
+    fig.add_trace(go.Bar(
+        x=xs, y=[stats.loc[k, "mean"] for k in keys], name="Average", marker_color=[colors[k] for k in keys],
+        text=[f"${stats.loc[k, 'mean']:,.0f}" for k in keys], textposition="inside", insidetextanchor="start",
+        textfont=dict(color=label_colors, size=14),
+        customdata=[[stats.loc[k, "median"]] for k in keys],
+        hovertemplate="<b>%{x}</b><br>Average: $%{y:,.0f}<br>Median: $%{customdata[0]:,.0f}<extra></extra>"))
+    fig.add_trace(go.Scatter(
+        x=xs, y=[stats.loc[k, "median"] for k in keys], mode="markers", name="Median",
+        marker=dict(symbol="diamond", size=12, color="black", line=dict(color="white", width=1)),
+        hovertemplate="Median: $%{y:,.0f}<extra></extra>"))
+    fig.update_yaxes(title="Estimated annual salary (USD)", tickprefix="$", tickformat=",.0f",
+                     range=[0, stats["mean"].max() * 1.15])
+    style(fig, title, subtitle, height=520, legend=True)
+    fig.update_layout(legend=dict(orientation="h", x=0.5, xanchor="center", y=-0.2, yanchor="top"),
+                      margin=dict(b=110))
+    return fig
 ```
 
 ```{python}
@@ -69,16 +129,13 @@ df["salary_mid"] = df.apply(salary_mid, axis=1)
 
 ```{python}
 #| label: job-volume
-vol = df["role_bucket"].value_counts()
+vol = df["role_bucket"].value_counts().sort_values()
 
-fig, ax = plt.subplots(figsize=(8, 5))
-vol.sort_values().plot(kind="barh", ax=ax, color=PALETTE[0])
-ax.set_xlabel("Number of postings")
-titled(ax, "Job Volume by Role Type", f"{SCOPE} | {TOTAL} postings")
-ax.text(0.99, 0.02, f"Total postings analyzed: {TOTAL}", transform=ax.transAxes,
-        ha="right", va="bottom", fontsize=9, color="gray")
-plt.tight_layout()
-plt.show()
+fig = hbar([role_label(k) for k in vol.index], vol.values, "Number of postings",
+           "Job Volume by Role Type", f"{SCOPE} | {TOTAL} postings",
+           custom=vol.values / TOTAL * 100,
+           hover="<b>%{y}</b><br>%{x} postings (%{customdata:.0f}% of all)<extra></extra>")
+show(fig)
 ```
 
 **Interpretation:** Data Engineer roles dominate this pool, followed by Data Scientist and
@@ -96,15 +153,16 @@ than entry-level analyst positions.
 #| label: salary-dist
 sal_df = df.dropna(subset=["salary_mid"])
 
-fig, ax = plt.subplots(figsize=(8, 5))
-ax.hist(sal_df["salary_mid"], bins=20, color=PALETTE[0], edgecolor="white")
-ax.set_xlabel("Estimated annual salary (USD)")
-ax.set_ylabel("Number of postings")
-titled(ax, "Salary Distribution", f"{SCOPE} | {len(sal_df)} postings with salary disclosed")
-ax.text(0.99, 0.95, f"Total postings analyzed: {TOTAL}\nWith salary disclosed: {len(sal_df)}",
-        transform=ax.transAxes, ha="right", va="top", fontsize=9, color="gray")
-plt.tight_layout()
-plt.show()
+fig = px.histogram(sal_df, x="salary_mid", nbins=20, marginal="box",
+                   labels={"salary_mid": "Estimated annual salary (USD)"})
+fig.update_traces(marker_color=PALETTE[0], selector=dict(type="histogram"))
+fig.update_traces(marker_color=PALETTE[0], selector=dict(type="box"))
+fig.update_traces(marker_line=dict(color="white", width=1), selector=dict(type="histogram"))
+fig.update_traces(hovertemplate="Salary: %{x}<br>Postings: %{y}<extra></extra>", selector=dict(type="histogram"))
+fig.update_yaxes(title_text="Number of postings", row=1, col=1)
+fig.update_xaxes(tickprefix="$", tickformat=",.0f")
+style(fig, "Salary Distribution", f"{SCOPE} | {len(sal_df)} postings with salary disclosed")
+show(fig)
 
 print(sal_df["salary_mid"].describe().round(0))
 ```
@@ -122,17 +180,11 @@ for exactly how this was derived.
 role_sal = sal_df.groupby("role_bucket")["salary_mid"].agg(["mean", "count"])
 role_sal = role_sal[role_sal["count"] >= 2].sort_values("mean")
 
-fig, ax = plt.subplots(figsize=(8, 5))
-bars = ax.barh(role_sal.index, role_sal["mean"], color=PALETTE[0])
-ax.set_xlabel("Average estimated annual salary (USD)")
-titled(ax, "Average Salary by Role Type", f"{SCOPE} | salary-disclosed postings only")
-for bar, v in zip(bars, role_sal["mean"]):
-    ax.text(bar.get_width() + 2000, bar.get_y() + bar.get_height()/2, f"${v:,.0f}",
-            va="center", fontsize=8)
-ax.text(0.99, 0.02, f"Roles with 2+ salary-disclosed postings shown; total salary-disclosed: {len(sal_df)}",
-        transform=ax.transAxes, ha="right", va="bottom", fontsize=8, color="gray")
-plt.tight_layout()
-plt.show()
+fig = hbar([role_label(k) for k in role_sal.index], role_sal["mean"].round(0), "Average estimated annual salary (USD)",
+           "Average Salary by Role Type", f"{SCOPE} | {len(sal_df)} salary-disclosed postings, roles with 2+",
+           texts=[f"${v:,.0f}" for v in role_sal["mean"]], custom=role_sal["count"], money=True,
+           hover="<b>%{y}</b><br>Average: $%{x:,.0f}<br>Postings with salary: %{customdata}<extra></extra>")
+show(fig)
 ```
 
 **Interpretation:** Machine Learning Engineer and Data Scientist roles command the highest
@@ -146,19 +198,14 @@ Data Analyst toward Data Scientist / ML Engineer is actually worth in this indus
 #| label: salary-by-state
 state_sal_df = sal_df[sal_df["state_clean"] != "Unknown"]
 state_sal = state_sal_df.groupby("state_clean")["salary_mid"].agg(["mean", "count"])
-state_sal = state_sal[state_sal["count"] >= 2].sort_values("mean", ascending=False).head(10)
+state_sal = state_sal[state_sal["count"] >= 2].sort_values("mean", ascending=False).head(10).iloc[::-1]
 
-fig, ax = plt.subplots(figsize=(8, 5))
-bars = ax.barh(state_sal.index[::-1], state_sal["mean"][::-1], color=PALETTE[0])
-ax.set_xlabel("Average estimated annual salary (USD)")
-titled(ax, "Top 10 Highest-Paying States", f"Pathway roles pooled | {len(state_sal_df)} salary-disclosed postings with a state")
-for bar, v in zip(bars, state_sal["mean"][::-1]):
-    ax.text(bar.get_width() + 2000, bar.get_y() + bar.get_height()/2, f"${v:,.0f}",
-            va="center", fontsize=8)
-ax.text(0.99, 0.02, "States with 2+ salary-disclosed postings shown", transform=ax.transAxes,
-        ha="right", va="bottom", fontsize=8, color="gray")
-plt.tight_layout()
-plt.show()
+fig = hbar(state_sal.index, state_sal["mean"].round(0), "Average estimated annual salary (USD)",
+           "Top 10 Highest-Paying States",
+           f"Roles pooled | {len(state_sal_df)} salary-disclosed postings, states with 2+",
+           texts=[f"${v:,.0f}" for v in state_sal["mean"]], custom=state_sal["count"], money=True,
+           hover="<b>%{y}</b><br>Average: $%{x:,.0f}<br>Postings with salary: %{customdata}<extra></extra>")
+show(fig)
 ```
 
 **Interpretation:** Texas, Washington, and California lead on average disclosed pay --
@@ -171,19 +218,14 @@ postings rather than a broad state-wide premium (small sample size caveat applie
 #| label: salary-by-company
 co_sal_df = sal_df[~sal_df["company_name_clean"].str.startswith("Unknown")]
 co_sal = co_sal_df.groupby("company_name_clean")["salary_mid"].agg(["mean", "count"])
-co_sal = co_sal.sort_values("mean", ascending=False).head(10)
+co_sal = co_sal.sort_values("mean", ascending=False).head(10).iloc[::-1]
 
-fig, ax = plt.subplots(figsize=(8, 5))
-bars = ax.barh(co_sal.index[::-1], co_sal["mean"][::-1], color=PALETTE[0])
-ax.set_xlabel("Average estimated annual salary (USD)")
-titled(ax, "Top 10 Companies by Average Salary", f"Pathway roles pooled | {len(co_sal_df)} salary-disclosed postings with a named company")
-for bar, v in zip(bars, co_sal["mean"][::-1]):
-    ax.text(bar.get_width() + 2000, bar.get_y() + bar.get_height()/2, f"${v:,.0f}",
-            va="center", fontsize=8)
-ax.text(0.99, 0.02, "Based on salary-disclosed postings only; small sample per company",
-        transform=ax.transAxes, ha="right", va="bottom", fontsize=8, color="gray")
-plt.tight_layout()
-plt.show()
+fig = hbar(co_sal.index, co_sal["mean"].round(0), "Average estimated annual salary (USD)",
+           "Top 10 Companies by Average Salary",
+           f"Roles pooled | {len(co_sal_df)} salary-disclosed postings with a named company",
+           texts=[f"${v:,.0f}" for v in co_sal["mean"]], custom=co_sal["count"], money=True,
+           hover="<b>%{y}</b><br>Average: $%{x:,.0f}<br>Postings with salary: %{customdata}<extra></extra>")
+show(fig)
 ```
 
 **Interpretation:** most companies here have only 1-2 salary-disclosed postings, so this is
@@ -195,16 +237,13 @@ confident ranking. The averages also pool different roles at each company.
 
 ```{python}
 #| label: location
-loc = df[df["state_clean"] != "Unknown"]["state_clean"].value_counts().head(10)
+loc = df[df["state_clean"] != "Unknown"]["state_clean"].value_counts().head(10).sort_values()
 
-fig, ax = plt.subplots(figsize=(8, 5))
-loc.sort_values().plot(kind="barh", ax=ax, color=PALETTE[0])
-ax.set_xlabel("Number of postings")
-titled(ax, "Top 10 States by Job Volume", f"{SCOPE} | postings with a resolved US state")
-ax.text(0.99, 0.02, f"Total postings analyzed: {TOTAL}", transform=ax.transAxes,
-        ha="right", va="bottom", fontsize=9, color="gray")
-plt.tight_layout()
-plt.show()
+fig = hbar(loc.index, loc.values, "Number of postings", "Top 10 States by Job Volume",
+           f"{SCOPE} | postings with a resolved US state",
+           custom=loc.values / TOTAL * 100,
+           hover="<b>%{y}</b><br>%{x} postings (%{customdata:.0f}% of all)<extra></extra>")
+show(fig)
 ```
 
 **Interpretation:** California and New York lead by a clear margin, with Texas, Virginia,
@@ -218,22 +257,88 @@ excluded from this chart rather than misattributed. Since California and New Yor
 #| label: experience-dist
 exp_df = df.dropna(subset=["experience_min_years"])
 
-fig, ax = plt.subplots(figsize=(8, 5))
-ax.hist(exp_df["experience_min_years"], bins=range(0, 17), color=PALETTE[0],
-        edgecolor="white", align="left")
-ax.set_xlabel("Minimum years of experience required")
-ax.set_ylabel("Number of postings")
-titled(ax, "Experience Requirement Distribution", f"{SCOPE} | {len(exp_df)} of {TOTAL} postings state experience")
-ax.text(0.99, 0.95, f"Total postings analyzed: {TOTAL}\nWith experience stated: {len(exp_df)}",
-        transform=ax.transAxes, ha="right", va="top", fontsize=9, color="gray")
-plt.tight_layout()
-plt.show()
+fig = go.Figure(go.Histogram(x=exp_df["experience_min_years"], xbins=dict(start=-0.5, end=15.5, size=1),
+                             marker=dict(color=PALETTE[0], line=dict(color="white", width=1)),
+                             hovertemplate="%{x:.0f} years<br>%{y} postings<extra></extra>"))
+fig.update_xaxes(title="Minimum years of experience required", dtick=1)
+fig.update_yaxes(title="Number of postings")
+style(fig, "Experience Requirement Distribution", f"{SCOPE} | {len(exp_df)} of {TOTAL} postings state experience")
+show(fig)
 ```
 
 **Interpretation:** Where stated, most postings cluster around 3-8 years of experience --
 this is a market that skews mid-to-senior level rather than entry-level, which is a direct,
 actionable signal for a Data Analyst-pathway job seeker about how much experience they may
 need to build before this specific industry's roles become attainable. For a candidate currently below the 3-year threshold, this suggests the realistic path into this industry may run through an adjacent, less experience-gated role first, rather than applying directly to NAICS 5182 postings.
+
+## Education Requirements
+
+**How we count.** Each posting is counted once, under the education level its data states, and nothing is inferred: a posting that lists only a Master's degree counts as Master's and is not also counted as Bachelor's, and a posting with no education listed counts as *Not specified*. The MET API stores a single level per posting, taken from the posting text by keyword matching. The data does not record whether a stated level is *required* or merely *preferred*, so these counts are postings that mention a level, not a verified hard requirement.
+
+### Postings by Stated Education Level
+
+```{python}
+#| label: education-counts
+edu_order = ["Bachelor's", "Master's", "PhD", "Not specified"]
+edu_colors = {"Bachelor's": PALETTE[0], "Master's": PALETTE[1], "PhD": PALETTE[2], "Not specified": GRAY}
+edu_counts = df["education_level"].fillna("Not specified").value_counts().reindex(edu_order, fill_value=0)
+
+fig = go.Figure(go.Bar(
+    x=list(edu_counts.index), y=list(edu_counts.values), marker_color=[edu_colors[k] for k in edu_counts.index],
+    text=[f"{v} ({v / TOTAL:.0%})" for v in edu_counts.values], textposition="outside", cliponaxis=False,
+    hovertemplate="<b>%{x}</b><br>%{y} postings<extra></extra>"))
+fig.update_yaxes(title="Number of postings", range=[0, edu_counts.max() * 1.15])
+style(fig, "Postings by Stated Education Level", f"{SCOPE} | {TOTAL} postings, each counted once", height=450)
+show(fig)
+```
+
+**Interpretation:** Only 45 of the 258 postings (17%) state an education level at all. Of those, PhD is the most common (20 postings, 8% of the total), followed by Bachelor's (13, 5%) and Master's (12, 5%). So in this industry slice, **12 postings name a Master's and 20 name a PhD**, while 213 (83%) say nothing about education. Most of the PhD demand sits at the top of the pathway: 18 of the 20 PhD postings have Data Scientist, ML, or applied scientist titles. Because 83% of postings are silent on education, the counts show how employers phrase postings more than what the whole market demands.
+
+### Average Salary by Stated Education Level
+
+```{python}
+#| label: education-salary
+edu_sal = sal_df.assign(education_level=sal_df["education_level"].fillna("Not specified"))
+edu_stats = edu_sal.groupby("education_level")["salary_mid"].agg(["mean", "median", "count"]).reindex(edu_order)
+
+fig = salary_bars(edu_stats, edu_order, {k: k for k in edu_order}, edu_colors,
+                  "Average Salary by Stated Education Level",
+                  f"{SCOPE} | {len(sal_df)} salary-disclosed postings")
+show(fig)
+```
+
+**Interpretation:** Postings that name a PhD have the highest average disclosed salary ($207K, n=11), ahead of Bachelor's ($189K, n=6) and Master's ($186K, n=7). The Master's median ($164K) is well below its average, so a few high-paying postings pull that bar up. Each stated-level group rests on only 6 to 11 postings, so the differences between Bachelor's and Master's are well within the noise; only the PhD gap is large enough to be worth noting, and even that should be treated as directional. Postings with no education stated average $180K (n=65).
+
+### Degree Wording in the Posting Text
+
+The charts above use the education level stored in the data. The MET Career Compass 2026 jobs data (the course job files described in the [Skill Gap Analysis](skill_gap_analysis.qmd) page) also contains the full posting text for 173 pathway postings, so here we read what each posting actually says. A degree counts as **required** only when a sentence naming it also says *require*, *minimum*, *must*, or *mandatory* and has no preference word. A sentence with *prefer*, *a plus*, or *nice to have* counts as **preferred**, and a degree that is named with neither is **named, no requirement wording**. Nothing is inferred: a posting that names only a Master's counts under Master's alone, and a sentence such as "Master's or PhD required" counts as required for both levels it names.
+
+```{python}
+#| label: degree-wording
+tp = pd.read_csv("data/processed/met_text_panel.csv")
+tp = tp[tp["has_text"]]
+levels = [("Bachelor", "Bachelor's"), ("Master", "Master's"), ("PhD", "PhD")]
+wording = [("required", "Stated as required", PALETTE[1]),
+           ("preferred", "Stated as preferred", PALETTE[2]),
+           ("mentioned", "Named, no requirement wording", GRAY)]
+
+fig = go.Figure()
+for key, label, color in wording:
+    counts = [int((tp["degree_" + col] == key).sum()) for col, _ in levels]
+    fig.add_trace(go.Bar(
+        x=[name for _, name in levels], y=counts, name=label, marker_color=color,
+        text=[str(c) if c else "" for c in counts], textposition="inside",
+        textfont=dict(color="#1d2733", size=13),
+        hovertemplate="<b>%{x}</b><br>" + label + ": %{y} postings<extra></extra>"))
+fig.update_layout(barmode="stack")
+fig.update_yaxes(title="Number of postings", gridcolor="#eceff3")
+style(fig, "How Postings Word Their Degree Requirement",
+      f"MET Career Compass 2026 pathway postings with posting text | {len(tp)} postings", height=480, legend=True)
+fig.update_layout(legend=dict(orientation="h", x=0.5, xanchor="center", y=-0.12, yanchor="top"), margin=dict(b=110))
+show(fig)
+```
+
+**Interpretation:** Out of 173 postings with text, **5 state a Master's as required and 1 states a PhD as required**. Another 2 postings call a Master's preferred and 5 call a PhD preferred, and 15 and 5 name them without any requirement wording. A Bachelor's is stated as required in 10 postings, preferred in 3, and named without wording in 28. So a graduate degree is rarely a hard requirement in this sample: a PhD is more often a preference than a requirement, and most postings do not state a degree at all. These counts are a floor, because a requirement can be written without these trigger words (for example, under a "Qualifications" heading in a separate sentence), and posting text is missing for about half of the postings in the source files.
 
 ## Remote Work Patterns
 
@@ -244,39 +349,47 @@ need to build before this specific industry's roles become attainable. For a can
 order = ["remote", "hybrid", "onsite", "unknown"]
 remote_counts = df["remote_status"].value_counts().reindex(order, fill_value=0)
 
-fig, ax = plt.subplots(figsize=(6, 5))
-colors = PALETTE[:4]
-ax.bar(remote_counts.index, remote_counts.values, color=colors)
-ax.set_ylabel("Number of postings")
-titled(ax, "Remote vs Onsite vs Hybrid vs Unstated", f"{SCOPE} | {TOTAL} postings")
-for i, v in enumerate(remote_counts.values):
-    ax.text(i, v + 2, str(v), ha="center")
-ax.text(0.01, 0.98, f"Total postings analyzed: {TOTAL}", transform=ax.transAxes,
-        ha="left", va="top", fontsize=9, color="gray")
-plt.tight_layout()
-plt.show()
+fig = go.Figure(go.Bar(
+    x=[ARRANGEMENT_LABELS[k] for k in order], y=list(remote_counts.values),
+    marker_color=[ARRANGEMENT_COLORS[k] for k in order],
+    text=[f"{v} ({v / TOTAL:.0%})" for v in remote_counts.values], textposition="outside", cliponaxis=False,
+    hovertemplate="<b>%{x}</b><br>%{y} postings<extra></extra>"))
+fig.update_yaxes(title="Number of postings", range=[0, remote_counts.max() * 1.15])
+style(fig, "Remote vs Onsite vs Hybrid vs Not Stated", f"{SCOPE} | {TOTAL} postings", height=450)
+show(fig)
 ```
 
 **Interpretation:** The majority of postings (65%) don't explicitly state a remote/onsite
 policy at all -- itself a notable market finding, not a data gap. Among postings that do
 specify, hybrid arrangements are the most common, followed by fully remote and then onsite.
 
+### Average Salary by Work Arrangement
+
+```{python}
+#| label: salary-by-remote
+order = ["hybrid", "remote", "onsite", "unknown"]
+rem_sal = sal_df.groupby("remote_status")["salary_mid"].agg(["mean", "median", "count"]).reindex(order)
+
+fig = salary_bars(rem_sal, order, ARRANGEMENT_LABELS, ARRANGEMENT_COLORS,
+                  "Average Salary by Work Arrangement", f"{SCOPE} | {len(sal_df)} salary-disclosed postings")
+show(fig)
+```
+
+**Interpretation:** Among postings that state a work arrangement, hybrid roles have the highest average disclosed salary ($179K), ahead of remote ($167K) and onsite ($156K), but each group rests on only 12 to 15 postings, so the gaps are small relative to the spread and should not be read as a firm ranking. Remote's median ($148K) sits well below its average, which means a few very high-paying remote postings pull the average up. Postings that do not state a work arrangement have the highest average ($198K, n=48); that group is the largest and mixes many roles and employers, so it says more about who omits the policy than about pay for any one arrangement.
+
 ### Top 10 States by Hybrid Role Volume
 
 ```{python}
 #| label: hybrid-states
 hybrid_df = df[(df["remote_status"] == "hybrid") & (df["state_clean"] != "Unknown")]
-hybrid_states = hybrid_df["state_clean"].value_counts().head(10)
+hybrid_states = hybrid_df["state_clean"].value_counts().head(10).sort_values()
 total_hybrid = (df["remote_status"] == "hybrid").sum()
 
-fig, ax = plt.subplots(figsize=(8, 5))
-hybrid_states.sort_values().plot(kind="barh", ax=ax, color=PALETTE[0])
-ax.set_xlabel("Number of hybrid postings")
-titled(ax, "Top 10 States by Hybrid Role Volume", f"Hybrid postings only ({total_hybrid}) | pathway postings, NAICS 5182, US")
-ax.text(0.99, 0.02, f"Total hybrid postings: {total_hybrid}", transform=ax.transAxes,
-        ha="right", va="bottom", fontsize=9, color="gray")
-plt.tight_layout()
-plt.show()
+fig = hbar(hybrid_states.index, hybrid_states.values, "Number of hybrid postings",
+           "Top 10 States by Hybrid Role Volume",
+           f"Hybrid postings only ({total_hybrid}) | {SCOPE}",
+           color=ARRANGEMENT_COLORS["hybrid"])
+show(fig)
 ```
 
 **Interpretation:** California and Texas lead in hybrid-specific postings, tracking their
@@ -287,16 +400,11 @@ overall job volume lead rather than showing a distinct hybrid-specific hotspot.
 ```{python}
 #| label: top-employers
 emp_df = df[~df["company_name_clean"].str.startswith("Unknown")]
-top_emp = emp_df["company_name_clean"].value_counts().head(10)
+top_emp = emp_df["company_name_clean"].value_counts().head(10).sort_values()
 
-fig, ax = plt.subplots(figsize=(8, 5))
-top_emp.sort_values().plot(kind="barh", ax=ax, color=PALETTE[0])
-ax.set_xlabel("Number of postings")
-titled(ax, "Top 10 Employers", f"{SCOPE} | {TOTAL} postings")
-ax.text(0.99, 0.02, "Excludes unattributable ATS/aggregator listings", transform=ax.transAxes,
-        ha="right", va="bottom", fontsize=8, color="gray")
-plt.tight_layout()
-plt.show()
+fig = hbar(top_emp.index, top_emp.values, "Number of postings", "Top 10 Employers",
+           f"{SCOPE} | excludes unattributable listings")
+show(fig)
 ```
 
 **Interpretation:** Amazon is the single largest poster in this pool, consistent with AWS's
@@ -316,27 +424,4 @@ aggregator listings) and are excluded from this ranking.
 - Most postings **don't disclose remote/onsite policy**; hybrid is the most common stated arrangement
 - **Amazon** and several large financial institutions are the top identifiable employers
 
-These findings feed our Step 3 [Skill Gap Analysis](skill_gap_analysis.qmd) page, which compares team skill levels with how often each skill appears in the Lightcast Data Analyst postings and sets upskilling priorities. The ~2.3x pay gap between roles is the reason to also plan a move toward Data Scientist / ML roles; the posting-level skill requirements for those roles still need to be validated in Module 5.
-
-## Cross-Dataset Comparison
-
-As a sanity check, we compared our primary dataset (258 postings, live MET Employability API,
-2026) against a second, independently-sourced dataset: a static 2024 Lightcast bulk export,
-filtered using the identical industry, geographic, and career-pathway rules (209 postings after
-filtering; see `build_lightcast_dataset.py`).
-
-| Metric | MET API (2026, primary) | Lightcast (2024, comparison) |
-|---|---|---|
-| Postings after filtering | 258 | 209 |
-| Salary disclosure rate | 34% | 43% |
-| Top state | California | California (53), then New York (19) |
-| Salary range (disclosed) | $120K-$210K cluster | Median ~$119,625 |
-
-**What agrees:** California and New York lead location share in both independent datasets,
-two years apart -- a strong signal this is a genuinely stable pattern in the industry, not an
-artifact of one data source or one point in time.
-
-**What differs:** the top employers are almost entirely different between the two datasets
-(Amazon and large financial institutions in the 2026 API data vs. Concentrix, TikTok, Peraton,
-and Snowflake in the 2024 snapshot) -- likely reflecting real turnover in which companies are
-actively hiring for this pathway at any given moment, rather than a data quality issue.
+These findings feed our Step 3 [Skill Gap Analysis](skill_gap_analysis.qmd) page, which compares team skill levels with a target proficiency level and sets upskilling priorities. The ~2.3x pay gap between roles is the reason to also plan a move toward Data Scientist / ML roles; the posting-level skill requirements for those roles still need to be validated in Module 5.

@@ -67,3 +67,27 @@ Pulled 2026-09-16. 258 rows after deduplication.
   "Unknown employer (job board aggregator listing)". In total, 35/258 (14%) rows have no
   attributable real employer name; these are excluded from "top employers" rankings but kept
   in the dataset since the role/salary/location data is still valid.
+
+---
+
+## met_text_panel.csv (MET Career Compass 2026 job files)
+
+Built by `build_met_text_panel.py` from the 17 parquet files in the course's "jobs 2026" Google Drive folder
+(https://drive.google.com/drive/folders/1Tq5Uixwz5J-aG_NfUQdI6X9CIrNz9ZFS, shared by Professor for the
+assignments and confirmed for this project). One row per posting; 350 rows (NAICS 518, pathway job titles).
+Posting text is not stored in the file; the flags below were computed from it when the file was built.
+
+| Column | Description |
+|---|---|
+| `job_id` | Posting ID from the source files |
+| `title` | Cleaned job title |
+| `role` | Role family from the title: Data Analyst, Data Scientist, ML Engineer, or Data / Analytics Engineer |
+| `company_name`, `state`, `remote_status`, `employment_type` | As in the source (empty when not given) |
+| `salary_min_annual`, `salary_max_annual` | Annual salary range in USD; empty when not disclosed (176 rows) |
+| `posted_at` | Posting date |
+| `has_text` | True when the source has posting text (173 rows); the flags below are empty otherwise |
+| `skill_<name>` | True when the posting text matches the skill's name pattern (Python, SQL, Machine Learning, Cloud/AWS, Data Visualization, Statistics, and 11 more; patterns are in the build script) |
+| `degree_Associate`, `degree_Bachelor`, `degree_Master`, `degree_PhD` | `required` (a sentence naming the degree says require, minimum, must, or mandatory, with no preference word), `preferred`, `mentioned` (named without requirement wording), or `none` |
+
+Known limits: the source `SKILLS_NAME` field is truncated and `EDUCATION_LEVELS_NAME` is a modeled level, so
+neither is used. Text-based flags undercount when a posting words a skill or requirement differently.

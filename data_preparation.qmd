@@ -151,3 +151,28 @@ The full column-by-column data dictionary is available in
 itself is at [`data/processed/career_market_panel.csv`](data/processed/career_market_panel.csv).
 
 See the [Exploratory Analysis](eda.qmd) page for the resulting exploratory analysis.
+
+## Second Source: MET Career Compass 2026 Job Files
+
+For the skill and degree analysis we also used the **MET Career Compass 2026 jobs data**, the
+17 parquet files shared with the course for the assignments (165,386 postings, January 2 to July 21,
+2026). Professor confirmed this is the dataset to use. It is too large for the repository, so
+`build_met_text_panel.py` filters it and saves the small result to
+[`data/processed/met_text_panel.csv`](data/processed/met_text_panel.csv).
+
+| Step | Rows left | Note |
+|---|---|---|
+| All postings in the files | 165,386 | |
+| NAICS 518 (industry code, same prefix filter as above) | 2,008 | |
+| Pathway job-title keywords | 350 | same keyword list as the API data |
+| One row per posting ID | 350 | no duplicates found |
+| With posting text (`BODY`) | 173 | skills and degree wording come from this subset |
+
+Two fields in these files were not usable as they are. `SKILLS_NAME` is filled for only 137 of the 350
+postings and holds about three skills each, listed alphabetically, so it cannot rank skills.
+`EDUCATION_LEVELS_NAME` is filled for every posting, but it is a modeled level and not something the
+posting states. For both reasons we searched the posting text instead: each skill is matched by a
+name pattern, and each degree (Bachelor's, Master's, PhD) is labeled *required*, *preferred*, or *named
+without requirement wording* from the sentences that name it. Salaries are annual; the few hourly rates
+(55 to 100 dollars an hour) are converted using 2,080 hours, and a salary of 0 is treated as not disclosed.
+About 143 of the 350 postings also appear in our API data, so the two datasets are not independent.
