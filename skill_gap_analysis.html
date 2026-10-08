@@ -111,6 +111,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script>
+window.PlotlyConfig = {MathJaxConfig: 'local'};
+if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}
+</script>
+<script type="module">import "https://cdn.plot.ly/plotly-4.1.1.min"</script>
+
 
 
 <link rel="stylesheet" href="styles.css">
@@ -185,7 +191,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Skill Gap Analysis</h1>
-<p class="subtitle lead">Team Skills vs.&nbsp;Data Analyst Market Demand</p>
+<p class="subtitle lead">Team Skills vs.&nbsp;What Data Analyst and Data Scientist Postings Ask For</p>
 </div>
 
 
@@ -204,7 +210,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p>This page compares our team’s current skill levels against how often each skill appears in real Data Analyst job postings inside NAICS 5182, then proposes an improvement plan and a draft set of recommendations for job seekers.</p>
+<p>This page compares our team’s current skill levels against how often each skill appears in real job postings for our pathway, <strong>Data Analyst to Data Scientist</strong>, inside NAICS 5182. It shows where the largest gaps are, how the skills of the two roles differ, and then proposes an improvement plan and a draft set of recommendations for job seekers.</p>
 </section>
 <section id="team-skill-levels" class="level2">
 <h2 class="anchored" data-anchor-id="team-skill-levels">Team Skill Levels</h2>
@@ -218,20 +224,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <div id="cell-team-skills" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>skills_data <span class="op">=</span> {</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Name"</span>: [<span class="st">"Manan Patel"</span>, <span class="st">"Richard Park"</span>, <span class="st">"Michael Phillips"</span>],</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Python"</span>: [<span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">4</span>],</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SQL"</span>: [<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">3</span>],</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Machine Learning"</span>: [<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">5</span>],</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Cloud/AWS"</span>: [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">3</span>],</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Data Visualization"</span>: [<span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">5</span>],</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Statistics"</span>: [<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">3</span>],</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>df_skills <span class="op">=</span> pd.DataFrame(skills_data)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>df_skills.set_index(<span class="st">"Name"</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>df_skills</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>PALETTE <span class="op">=</span> [<span class="st">"#457b9d"</span>, <span class="st">"#2a9d8f"</span>, <span class="st">"#e9c46a"</span>, <span class="st">"#e76f51"</span>, <span class="st">"#6d597a"</span>, <span class="st">"#f4a261"</span>]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>GRAY <span class="op">=</span> <span class="st">"#b8bec6"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> style(fig, title, subtitle, height<span class="op">=</span><span class="dv">450</span>):</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    fig.update_layout(</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        title<span class="op">=</span><span class="bu">dict</span>(text<span class="op">=</span><span class="ss">f"&lt;b&gt;</span><span class="sc">{</span>title<span class="sc">}</span><span class="ss">&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:12px;color:gray'&gt;</span><span class="sc">{</span>subtitle<span class="sc">}</span><span class="ss">&lt;/span&gt;"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                   x<span class="op">=</span><span class="dv">0</span>, xanchor<span class="op">=</span><span class="st">"left"</span>),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        template<span class="op">=</span><span class="st">"simple_white"</span>, height<span class="op">=</span>height,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        font<span class="op">=</span><span class="bu">dict</span>(family<span class="op">=</span><span class="st">"Segoe UI, Helvetica, Arial, sans-serif"</span>, size<span class="op">=</span><span class="dv">13</span>),</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        margin<span class="op">=</span><span class="bu">dict</span>(l<span class="op">=</span><span class="dv">10</span>, r<span class="op">=</span><span class="dv">20</span>, t<span class="op">=</span><span class="dv">95</span>, b<span class="op">=</span><span class="dv">50</span>), hoverlabel<span class="op">=</span><span class="bu">dict</span>(bgcolor<span class="op">=</span><span class="st">"white"</span>, font_size<span class="op">=</span><span class="dv">13</span>),</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        legend<span class="op">=</span><span class="bu">dict</span>(orientation<span class="op">=</span><span class="st">"h"</span>, x<span class="op">=</span><span class="dv">1</span>, xanchor<span class="op">=</span><span class="st">"right"</span>, y<span class="op">=</span><span class="fl">1.02</span>, yanchor<span class="op">=</span><span class="st">"bottom"</span>))</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> fig</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show(fig):</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    fig.show(config<span class="op">=</span>{<span class="st">"displaylogo"</span>: <span class="va">False</span>, <span class="st">"responsive"</span>: <span class="va">True</span>, <span class="st">"modeBarButtonsToRemove"</span>: [<span class="st">"lasso2d"</span>, <span class="st">"select2d"</span>]})</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>skills_data <span class="op">=</span> {</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Name"</span>: [<span class="st">"Manan Patel"</span>, <span class="st">"Richard Park"</span>, <span class="st">"Michael Phillips"</span>],</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Python"</span>: [<span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">4</span>],</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SQL"</span>: [<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">3</span>],</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Machine Learning"</span>: [<span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">5</span>],</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Cloud/AWS"</span>: [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">3</span>],</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Data Visualization"</span>: [<span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">5</span>],</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Statistics"</span>: [<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">3</span>],</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>df_skills <span class="op">=</span> pd.DataFrame(skills_data)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>df_skills.set_index(<span class="st">"Name"</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>df_skills</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div id="team-skills" class="cell-output cell-output-display" data-execution_count="1">
 <div>
 
@@ -292,176 +319,184 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div id="cell-skill-heatmap" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">4</span>))</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>sns.heatmap(df_skills, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">"coolwarm"</span>, linewidths<span class="op">=</span><span class="fl">0.5</span>, vmin<span class="op">=</span><span class="dv">1</span>, vmax<span class="op">=</span><span class="dv">5</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Team Skill Levels Heatmap"</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="skill_gap_analysis_files/figure-html/skill-heatmap-output-1.png" id="skill-heatmap" width="763" height="380" class="figure-img"></p>
-</figure>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure(go.Heatmap(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    z<span class="op">=</span>df_skills.values, x<span class="op">=</span><span class="bu">list</span>(df_skills.columns), y<span class="op">=</span><span class="bu">list</span>(df_skills.index),</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    zmin<span class="op">=</span><span class="dv">1</span>, zmax<span class="op">=</span><span class="dv">5</span>, colorscale<span class="op">=</span><span class="st">"Blues"</span>, text<span class="op">=</span>df_skills.values, texttemplate<span class="op">=</span><span class="st">"%</span><span class="sc">{text}</span><span class="st">"</span>, textfont<span class="op">=</span><span class="bu">dict</span>(size<span class="op">=</span><span class="dv">16</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    xgap<span class="op">=</span><span class="dv">3</span>, ygap<span class="op">=</span><span class="dv">3</span>, colorbar<span class="op">=</span><span class="bu">dict</span>(title<span class="op">=</span><span class="st">"Level"</span>, tickvals<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    hovertemplate<span class="op">=</span><span class="st">"&lt;b&gt;%</span><span class="sc">{y}</span><span class="st">&lt;/b&gt;&lt;br&gt;%</span><span class="sc">{x}</span><span class="st">: level %</span><span class="sc">{z}</span><span class="st">&lt;extra&gt;&lt;/extra&gt;"</span>))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>fig.update_yaxes(autorange<span class="op">=</span><span class="st">"reversed"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>style(fig, <span class="st">"Team Skill Levels Heatmap"</span>, <span class="st">"Self-rated proficiency, 1 (Beginner) to 5 (Expert)"</span>, height<span class="op">=</span><span class="dv">360</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>show(fig)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="skill-heatmap" class="cell-output cell-output-display">
+<div style="height:360px; width:100%;">            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script><script>if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="0672356a-4acb-4773-a410-2937eee88005" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("0672356a-4acb-4773-a410-2937eee88005")) {                    Plotly.newPlot(                        "0672356a-4acb-4773-a410-2937eee88005",                        [{"colorbar":{"tickvals":[1,2,3,4,5],"title":{"text":"Level"}},"colorscale":[[0.0,"rgb(247,251,255)"],[0.125,"rgb(222,235,247)"],[0.25,"rgb(198,219,239)"],[0.375,"rgb(158,202,225)"],[0.5,"rgb(107,174,214)"],[0.625,"rgb(66,146,198)"],[0.75,"rgb(33,113,181)"],[0.875,"rgb(8,81,156)"],[1.0,"rgb(8,48,107)"]],"hovertemplate":"\u003cb\u003e%{y}\u003c\u002fb\u003e\u003cbr\u003e%{x}: level %{z}\u003cextra\u003e\u003c\u002fextra\u003e","text":{"dtype":"i1","bdata":"BQUDBAQCAwQDBQMEBAMFAwUD","shape":"3, 6"},"textfont":{"size":16},"texttemplate":"%{text}","x":["Python","SQL","Machine Learning","Cloud\u002fAWS","Data Visualization","Statistics"],"xgap":3,"y":["Manan Patel","Richard Park","Michael Phillips"],"ygap":3,"z":{"dtype":"i1","bdata":"BQUDBAQCAwQDBQMEBAMFAwUD","shape":"3, 6"},"zmax":5,"zmin":1,"type":"heatmap"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"rgb(36,36,36)"},"error_y":{"color":"rgb(36,36,36)"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"rgb(36,36,36)","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"rgb(36,36,36)"},"baxis":{"endlinecolor":"rgb(36,36,36)","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"rgb(36,36,36)"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"histogram2d"}],"histogram":[{"marker":{"line":{"color":"white","width":0.6}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"rgb(237,237,237)"},"line":{"color":"white"}},"header":{"fill":{"color":"rgb(217,217,217)"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"colorscale":{"diverging":[[0.0,"rgb(103,0,31)"],[0.1,"rgb(178,24,43)"],[0.2,"rgb(214,96,77)"],[0.3,"rgb(244,165,130)"],[0.4,"rgb(253,219,199)"],[0.5,"rgb(247,247,247)"],[0.6,"rgb(209,229,240)"],[0.7,"rgb(146,197,222)"],[0.8,"rgb(67,147,195)"],[0.9,"rgb(33,102,172)"],[1.0,"rgb(5,48,97)"]],"sequential":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"sequentialminus":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]]},"colorway":["#1F77B4","#FF7F0E","#2CA02C","#D62728","#9467BD","#8C564B","#E377C2","#7F7F7F","#BCBD22","#17BECF"],"font":{"color":"rgb(36,36,36)"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"bgcolor":"white","radialaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"yaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"zaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"}},"shapedefaults":{"fillcolor":"black","line":{"width":0},"opacity":0.3},"ternary":{"aaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"baxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"bgcolor":"white","caxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside","title":{"standoff":15},"zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"yaxis":{"automargin":true,"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside","title":{"standoff":15},"zeroline":false,"zerolinecolor":"rgb(36,36,36)"}}},"yaxis":{"autorange":"reversed"},"title":{"text":"\u003cb\u003eTeam Skill Levels Heatmap\u003c\u002fb\u003e\u003cbr\u003e\u003cspan style='font-size:12px;color:gray'\u003eSelf-rated proficiency, 1 (Beginner) to 5 (Expert)\u003c\u002fspan\u003e","x":0,"xanchor":"left"},"font":{"family":"Segoe UI, Helvetica, Arial, sans-serif","size":13},"margin":{"l":10,"r":20,"t":95,"b":50},"hoverlabel":{"font":{"size":13},"bgcolor":"white"},"legend":{"orientation":"h","x":1,"xanchor":"right","y":1.02,"yanchor":"bottom"},"height":360},                        {"displaylogo": false, "responsive": true, "modeBarButtonsToRemove": ["lasso2d", "select2d"]}                    ).then(function(){
+                            
+var gd = document.getElementById('0672356a-4acb-4773-a410-2937eee88005');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
 </div>
 </div>
-</div>
-<p><strong>Reading the heatmap:</strong> no single team member is strongest across every skill – Manan leads in Python/SQL, Michael leads in Machine Learning/Data Visualization, and Richard leads in Cloud/AWS. Statistics has the lowest team average (3.0), with ratings ranging from 2 to 4. Richard meets the Advanced level; Manan and Michael fall below it.</p>
+<p><strong>Interpretation:</strong> no single team member is strongest across every skill – Manan leads in Python/SQL, Michael leads in Machine Learning/Data Visualization, and Richard leads in Cloud/AWS. Statistics has the lowest team average (3.0), with ratings ranging from 2 to 4. Richard meets the Advanced level; Manan and Michael fall below it.</p>
 </section>
 <section id="what-the-market-asks-for" class="level2">
 <h2 class="anchored" data-anchor-id="what-the-market-asks-for">What the Market Asks For</h2>
-<p>To ground the comparison in real postings, we used our second dataset, the 2024 Lightcast export (209 postings, filtered with the same industry, location, and career-pathway rules; see <a href="./data_preparation.html">Data Preparation</a>). Unlike the MET API extract, whose <code>skills</code> field is truncated to the first few skills alphabetically for each posting (every one of its top 20 most-frequent values started with “A” or “B”, so we did not use it), the Lightcast <code>skills</code> field is complete: each posting lists its full set of skills, about 24 on average.</p>
-<p>We classified each posting into a role family from its title, then counted how many postings in each role list each of our six skill areas. A skill area counts as listed when any of a posting’s skills matches the area’s name patterns (for example, <code>Python (Programming Language)</code> counts for Python, and Tableau or Power BI count for Data Visualization). The patterns are in the code below.</p>
+<p>To ground the comparison in real postings, we used the <strong>MET Career Compass 2026 jobs data</strong> shared with the course, the same files used in our assignments (165,386 postings, January to July 2026). We filtered it with the same rules as our main dataset: NAICS 518, then pathway job titles, giving <strong>350 postings</strong> (see <a href="./data_preparation.html">Data Preparation</a>). The script is <code>build_met_text_panel.py</code>.</p>
+<p>The <code>skills</code> field in these files is truncated (about three skills per posting, listed alphabetically), so it cannot rank skills. Instead we <strong>searched the full posting text</strong> for each skill. That text is available for <strong>173 of the 350 postings</strong>, and those 173 are the base for everything on this page. We grouped postings by role from the job title: Data Analyst (26 postings), Data Scientist or ML Engineer (72, pooled because both are the target of our pathway), and Data / Analytics Engineer (75). A posting counts for a skill when its text matches the skill’s name patterns, which are listed in the build script.</p>
 <div id="cell-market-demand" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>lc <span class="op">=</span> pd.read_csv(<span class="st">"data/processed/lightcast_market_panel.csv"</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>lc[<span class="st">"skill_list"</span>] <span class="op">=</span> lc[<span class="st">"skills"</span>].<span class="bu">apply</span>(json.loads)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> classify_role(title):</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> <span class="bu">str</span>(title).lower()</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> re.search(<span class="vs">r"machine learning engineer</span><span class="cf">|</span><span class="vs">ml engineer"</span>, t):</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"ML Engineer"</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> re.search(<span class="vs">r"data scientist</span><span class="cf">|</span><span class="vs">applied scientist"</span>, t):</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Data Scientist"</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> re.search(<span class="vs">r"data engineer</span><span class="cf">|</span><span class="vs">analytics engineer</span><span class="cf">|</span><span class="vs">data architect</span><span class="cf">|</span><span class="vs">database architect"</span>, t):</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Data / Analytics Engineer"</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> re.search(<span class="vs">r"data analyst</span><span class="cf">|</span><span class="vs">business analyst</span><span class="cf">|</span><span class="vs">bi analyst</span><span class="cf">|</span><span class="vs">business intelligence analyst"</span>, t):</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Data Analyst"</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"Other"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>mp <span class="op">=</span> pd.read_csv(<span class="st">"data/processed/met_text_panel.csv"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>mp <span class="op">=</span> mp[mp[<span class="st">"has_text"</span>]].copy()</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>mp[<span class="st">"group"</span>] <span class="op">=</span> mp[<span class="st">"role"</span>].<span class="bu">map</span>({</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Data Analyst"</span>: <span class="st">"Data Analyst"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Data Scientist"</span>: <span class="st">"Data Scientist / ML"</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ML Engineer"</span>: <span class="st">"Data Scientist / ML"</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Data / Analytics Engineer"</span>: <span class="st">"Data / Analytics Engineer"</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>groups <span class="op">=</span> [<span class="st">"Data Analyst"</span>, <span class="st">"Data Scientist / ML"</span>, <span class="st">"Data / Analytics Engineer"</span>]</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>group_n <span class="op">=</span> mp[<span class="st">"group"</span>].value_counts()</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>skill_cols <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> mp.columns <span class="cf">if</span> c.startswith(<span class="st">"skill_"</span>)]</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>demand <span class="op">=</span> (mp.groupby(<span class="st">"group"</span>)[skill_cols].<span class="bu">apply</span>(<span class="kw">lambda</span> g: g.astype(<span class="bu">bool</span>).mean()).T</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>          .rename(index<span class="op">=</span><span class="kw">lambda</span> c: c[<span class="bu">len</span>(<span class="st">"skill_"</span>):])[groups])</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>six <span class="op">=</span> [<span class="st">"Python"</span>, <span class="st">"SQL"</span>, <span class="st">"Machine Learning"</span>, <span class="st">"Cloud/AWS"</span>, <span class="st">"Data Visualization"</span>, <span class="st">"Statistics"</span>]</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>heat <span class="op">=</span> demand.loc[six]</span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>lc[<span class="st">"role"</span>] <span class="op">=</span> lc[<span class="st">"title"</span>].<span class="bu">apply</span>(classify_role)</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>skill_patterns <span class="op">=</span> {</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Python"</span>: <span class="vs">r"</span><span class="dv">^</span><span class="vs">Python"</span>,</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SQL"</span>: <span class="vs">r"</span><span class="dv">^</span><span class="vs">SQL</span><span class="cf">|</span><span class="vs">Structured Query"</span>,</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Machine Learning"</span>: <span class="vs">r"</span><span class="dv">^</span><span class="vs">Machine Learning"</span>,</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Cloud/AWS"</span>: <span class="vs">r"Amazon Web Services</span><span class="cf">|</span><span class="kw">(</span><span class="dv">^</span><span class="cf">|</span><span class="pp">[^A-Za-z]</span><span class="kw">)</span><span class="vs">AWS</span><span class="kw">(</span><span class="pp">[^A-Za-z]</span><span class="cf">|</span><span class="dv">$</span><span class="kw">)</span><span class="cf">|</span><span class="vs">Cloud Computing</span><span class="cf">|</span><span class="vs">Azure</span><span class="cf">|</span><span class="vs">Google Cloud</span><span class="cf">|</span><span class="vs">Cloud Platform"</span>,</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Data Visualization"</span>: <span class="vs">r"Data Visuali</span><span class="cf">|</span><span class="vs">Tableau</span><span class="cf">|</span><span class="vs">Power BI</span><span class="cf">|</span><span class="vs">Looker</span><span class="cf">|</span><span class="vs">Qlik"</span>,</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Statistics"</span>: <span class="vs">r"Statistic"</span>,</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> share_with_skill(frame, pattern):</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(frame) <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">float</span>(<span class="st">"nan"</span>)</span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    listed <span class="op">=</span> frame[<span class="st">"skill_list"</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> skills: <span class="bu">any</span>(re.search(pattern, s, re.I) <span class="cf">for</span> s <span class="kw">in</span> skills))</span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> listed.mean()</span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>roles <span class="op">=</span> [<span class="st">"Data Analyst"</span>, <span class="st">"Data / Analytics Engineer"</span>, <span class="st">"Data Scientist"</span>, <span class="st">"ML Engineer"</span>]</span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>role_counts <span class="op">=</span> lc[<span class="st">"role"</span>].value_counts()</span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>demand_by_role <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"</span><span class="sc">{</span>r<span class="sc">}</span><span class="ss"> (n=</span><span class="sc">{</span><span class="bu">int</span>(role_counts.get(r, <span class="dv">0</span>))<span class="sc">}</span><span class="ss">)"</span>: {</span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>        skill: share_with_skill(lc[lc[<span class="st">"role"</span>] <span class="op">==</span> r], pat) <span class="cf">for</span> skill, pat <span class="kw">in</span> skill_patterns.items()</span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> r <span class="kw">in</span> roles</span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>demand_by_role.index.name <span class="op">=</span> <span class="st">"Skill"</span></span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>demand_by_role.<span class="bu">map</span>(<span class="kw">lambda</span> v: <span class="st">"no postings"</span> <span class="cf">if</span> pd.isna(v) <span class="cf">else</span> <span class="ss">f"</span><span class="sc">{</span>v<span class="sc">:.0%}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div id="market-demand" class="cell-output cell-output-display" data-execution_count="3">
-<div>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure(go.Heatmap(</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    z<span class="op">=</span>heat.values, x<span class="op">=</span>[<span class="ss">f"</span><span class="sc">{</span>g<span class="sc">}</span><span class="ss">&lt;br&gt;(n=</span><span class="sc">{</span>group_n[g]<span class="sc">}</span><span class="ss">)"</span> <span class="cf">for</span> g <span class="kw">in</span> groups], y<span class="op">=</span>six, zmin<span class="op">=</span><span class="dv">0</span>, zmax<span class="op">=</span><span class="dv">1</span>, colorscale<span class="op">=</span><span class="st">"Blues"</span>,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    text<span class="op">=</span>heat.values, texttemplate<span class="op">=</span><span class="st">"%</span><span class="sc">{text:.0%}</span><span class="st">"</span>, textfont<span class="op">=</span><span class="bu">dict</span>(size<span class="op">=</span><span class="dv">15</span>), xgap<span class="op">=</span><span class="dv">3</span>, ygap<span class="op">=</span><span class="dv">3</span>, showscale<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    hovertemplate<span class="op">=</span><span class="st">"&lt;b&gt;%</span><span class="sc">{y}</span><span class="st">&lt;/b&gt; in %</span><span class="sc">{x}</span><span class="st">&lt;br&gt;Named in %</span><span class="sc">{z:.0%}</span><span class="st"> of postings&lt;extra&gt;&lt;/extra&gt;"</span>))</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>fig.update_yaxes(autorange<span class="op">=</span><span class="st">"reversed"</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>style(fig, <span class="st">"Skill Demand by Role"</span>, <span class="st">"Share of postings whose text names each skill area | 173 postings with text"</span>, height<span class="op">=</span><span class="dv">420</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>show(fig)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="market-demand" class="cell-output cell-output-display">
+<div style="height:420px; width:100%;">            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script><script>if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="beca134a-58d8-4658-a825-c3ceabb82343" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("beca134a-58d8-4658-a825-c3ceabb82343")) {                    Plotly.newPlot(                        "beca134a-58d8-4658-a825-c3ceabb82343",                        [{"colorscale":[[0.0,"rgb(247,251,255)"],[0.125,"rgb(222,235,247)"],[0.25,"rgb(198,219,239)"],[0.375,"rgb(158,202,225)"],[0.5,"rgb(107,174,214)"],[0.625,"rgb(66,146,198)"],[0.75,"rgb(33,113,181)"],[0.875,"rgb(8,81,156)"],[1.0,"rgb(8,48,107)"]],"hovertemplate":"\u003cb\u003e%{y}\u003c\u002fb\u003e in %{x}\u003cbr\u003eNamed in %{z:.0%} of postings\u003cextra\u003e\u003c\u002fextra\u003e","showscale":false,"text":{"dtype":"f8","bdata":"sRM7sRM70T\u002fkOI7jOI7bP7gehetRuN4\u002f2Ymd2Imd2D8cx3Ecx3HMP5NfLPnFkt8\u002fFDuxEzuxsz85juM4juPkP08b6LSBTss\u002fFDuxEzuxsz\u002fHcRzHcRzXPylcj8L1KNw\u002fdmIndmIn1j85juM4juO4P08b6LSBTrs\u002fntiJndiJzT\u002fHcRzHcRzHP08b6LSBTos\u002f","shape":"6, 3"},"textfont":{"size":15},"texttemplate":"%{text:.0%}","x":["Data Analyst\u003cbr\u003e(n=26)","Data Scientist \u002f ML\u003cbr\u003e(n=72)","Data \u002f Analytics Engineer\u003cbr\u003e(n=75)"],"xgap":3,"y":["Python","SQL","Machine Learning","Cloud\u002fAWS","Data Visualization","Statistics"],"ygap":3,"z":{"dtype":"f8","bdata":"sRM7sRM70T\u002fkOI7jOI7bP7gehetRuN4\u002f2Ymd2Imd2D8cx3Ecx3HMP5NfLPnFkt8\u002fFDuxEzuxsz85juM4juPkP08b6LSBTss\u002fFDuxEzuxsz\u002fHcRzHcRzXPylcj8L1KNw\u002fdmIndmIn1j85juM4juO4P08b6LSBTrs\u002fntiJndiJzT\u002fHcRzHcRzHP08b6LSBTos\u002f","shape":"6, 3"},"zmax":1,"zmin":0,"type":"heatmap"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"rgb(36,36,36)"},"error_y":{"color":"rgb(36,36,36)"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"rgb(36,36,36)","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"rgb(36,36,36)"},"baxis":{"endlinecolor":"rgb(36,36,36)","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"rgb(36,36,36)"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"histogram2d"}],"histogram":[{"marker":{"line":{"color":"white","width":0.6}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"rgb(237,237,237)"},"line":{"color":"white"}},"header":{"fill":{"color":"rgb(217,217,217)"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"colorscale":{"diverging":[[0.0,"rgb(103,0,31)"],[0.1,"rgb(178,24,43)"],[0.2,"rgb(214,96,77)"],[0.3,"rgb(244,165,130)"],[0.4,"rgb(253,219,199)"],[0.5,"rgb(247,247,247)"],[0.6,"rgb(209,229,240)"],[0.7,"rgb(146,197,222)"],[0.8,"rgb(67,147,195)"],[0.9,"rgb(33,102,172)"],[1.0,"rgb(5,48,97)"]],"sequential":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"sequentialminus":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]]},"colorway":["#1F77B4","#FF7F0E","#2CA02C","#D62728","#9467BD","#8C564B","#E377C2","#7F7F7F","#BCBD22","#17BECF"],"font":{"color":"rgb(36,36,36)"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"bgcolor":"white","radialaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"yaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"zaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"}},"shapedefaults":{"fillcolor":"black","line":{"width":0},"opacity":0.3},"ternary":{"aaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"baxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"bgcolor":"white","caxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside","title":{"standoff":15},"zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"yaxis":{"automargin":true,"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside","title":{"standoff":15},"zeroline":false,"zerolinecolor":"rgb(36,36,36)"}}},"yaxis":{"autorange":"reversed"},"title":{"text":"\u003cb\u003eSkill Demand by Role\u003c\u002fb\u003e\u003cbr\u003e\u003cspan style='font-size:12px;color:gray'\u003eShare of postings whose text names each skill area | 173 postings with text\u003c\u002fspan\u003e","x":0,"xanchor":"left"},"font":{"family":"Segoe UI, Helvetica, Arial, sans-serif","size":13},"margin":{"l":10,"r":20,"t":95,"b":50},"hoverlabel":{"font":{"size":13},"bgcolor":"white"},"legend":{"orientation":"h","x":1,"xanchor":"right","y":1.02,"yanchor":"bottom"},"height":420},                        {"displaylogo": false, "responsive": true, "modeBarButtonsToRemove": ["lasso2d", "select2d"]}                    ).then(function(){
+                            
+var gd = document.getElementById('beca134a-58d8-4658-a825-c3ceabb82343');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
 
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
 
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Data Analyst (n=195)</th>
-<th data-quarto-table-cell-role="th">Data / Analytics Engineer (n=14)</th>
-<th data-quarto-table-cell-role="th">Data Scientist (n=0)</th>
-<th data-quarto-table-cell-role="th">ML Engineer (n=0)</th>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">Skill</th>
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th"></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">Python</th>
-<td>46%</td>
-<td>79%</td>
-<td>no postings</td>
-<td>no postings</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">SQL</th>
-<td>57%</td>
-<td>93%</td>
-<td>no postings</td>
-<td>no postings</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">Machine Learning</th>
-<td>17%</td>
-<td>7%</td>
-<td>no postings</td>
-<td>no postings</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">Cloud/AWS</th>
-<td>10%</td>
-<td>21%</td>
-<td>no postings</td>
-<td>no postings</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">Data Visualization</th>
-<td>69%</td>
-<td>21%</td>
-<td>no postings</td>
-<td>no postings</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">Statistics</th>
-<td>32%</td>
-<td>14%</td>
-<td>no postings</td>
-<td>no postings</td>
-</tr>
-</tbody>
-</table>
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
 
+                        })                };            </script>        </div>
 </div>
 </div>
+<p><strong>Interpretation:</strong> the two roles ask for clearly different things. Data Scientist and ML Engineer postings (n=72) name Machine Learning most often (65%), followed by Python (43%) and Cloud/AWS (36%). Data Analyst postings (n=26) lean on SQL (38%) and Data Visualization (35%), and name Machine Learning in only 8% of cases. Data / Analytics Engineer postings (n=75) emphasize SQL (49%), Python (48%), and Cloud/AWS (44%). These shares are low overall because posting text is often short and a skill may be written in other words, so read them as relative differences between roles, not as exact requirements. The Data Analyst group is small (26 postings), so its percentages move a lot with a few postings.</p>
+<div id="cell-analyst-vs-scientist" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>extra <span class="op">=</span> [<span class="st">"SQL"</span>, <span class="st">"Python"</span>, <span class="st">"Machine Learning"</span>, <span class="st">"Cloud/AWS"</span>, <span class="st">"ETL"</span>, <span class="st">"Deep Learning"</span>, <span class="st">"Data Visualization"</span>,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Dashboards"</span>, <span class="st">"Excel"</span>, <span class="st">"Statistics"</span>, <span class="st">"Communication"</span>, <span class="st">"Spark"</span>]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cmp</span> <span class="op">=</span> demand.loc[extra, [<span class="st">"Data Analyst"</span>, <span class="st">"Data Scientist / ML"</span>]]</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">cmp</span> <span class="op">=</span> <span class="bu">cmp</span>.loc[(<span class="bu">cmp</span>[<span class="st">"Data Scientist / ML"</span>] <span class="op">-</span> <span class="bu">cmp</span>[<span class="st">"Data Analyst"</span>]).sort_values().index]</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure()</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col, color <span class="kw">in</span> [(<span class="st">"Data Analyst"</span>, PALETTE[<span class="dv">0</span>]), (<span class="st">"Data Scientist / ML"</span>, PALETTE[<span class="dv">3</span>])]:</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    fig.add_trace(go.Bar(</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="bu">cmp</span>[col], y<span class="op">=</span>[<span class="ss">f"&lt;b&gt;</span><span class="sc">{</span>s<span class="sc">}</span><span class="ss">&lt;/b&gt;"</span> <span class="cf">if</span> s <span class="kw">in</span> six <span class="cf">else</span> s <span class="cf">for</span> s <span class="kw">in</span> <span class="bu">cmp</span>.index], orientation<span class="op">=</span><span class="st">"h"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        name<span class="op">=</span><span class="ss">f"</span><span class="sc">{</span>col<span class="sc">}</span><span class="ss"> (n=</span><span class="sc">{</span>group_n[col]<span class="sc">}</span><span class="ss">)"</span>, marker_color<span class="op">=</span>color,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        text<span class="op">=</span>[<span class="ss">f"</span><span class="sc">{</span>v<span class="sc">:.0%}</span><span class="ss">"</span> <span class="cf">for</span> v <span class="kw">in</span> <span class="bu">cmp</span>[col]], textposition<span class="op">=</span><span class="st">"outside"</span>, cliponaxis<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        hovertemplate<span class="op">=</span><span class="st">"&lt;b&gt;%</span><span class="sc">{y}</span><span class="st">&lt;/b&gt;&lt;br&gt;"</span> <span class="op">+</span> col <span class="op">+</span> <span class="st">": %</span><span class="sc">{x:.0%}</span><span class="st"> of postings&lt;extra&gt;&lt;/extra&gt;"</span>))</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>fig.update_layout(barmode<span class="op">=</span><span class="st">"group"</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>fig.update_xaxes(title<span class="op">=</span><span class="st">"Share of postings whose text names the skill"</span>, tickformat<span class="op">=</span><span class="st">".0%"</span>, <span class="bu">range</span><span class="op">=</span>[<span class="dv">0</span>, <span class="fl">0.8</span>],</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>                 gridcolor<span class="op">=</span><span class="st">"#eceff3"</span>)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>style(fig, <span class="st">"Skills Requested: Analyst vs. Scientist / ML"</span>,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Bold = a skill area our team rated | 173 postings with text"</span>, height<span class="op">=</span><span class="dv">640</span>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>fig.update_layout(legend<span class="op">=</span><span class="bu">dict</span>(orientation<span class="op">=</span><span class="st">"h"</span>, x<span class="op">=</span><span class="fl">0.5</span>, xanchor<span class="op">=</span><span class="st">"center"</span>, y<span class="op">=-</span><span class="fl">0.12</span>, yanchor<span class="op">=</span><span class="st">"top"</span>), margin<span class="op">=</span><span class="bu">dict</span>(b<span class="op">=</span><span class="dv">110</span>))</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>show(fig)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="analyst-vs-scientist" class="cell-output cell-output-display">
+<div style="height:640px; width:100%;">            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script><script>if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="e2cd9195-1d32-441e-af98-e8a9a7bba44d" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("e2cd9195-1d32-441e-af98-e8a9a7bba44d")) {                    Plotly.newPlot(                        "e2cd9195-1d32-441e-af98-e8a9a7bba44d",                        [{"cliponaxis":false,"hovertemplate":"\u003cb\u003e%{y}\u003c\u002fb\u003e\u003cbr\u003eData Analyst: %{x:.0%} of postings\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#457b9d"},"name":"Data Analyst (n=26)","orientation":"h","text":["31%","27%","35%","38%","31%","23%","4%","12%","27%","4%","8%","8%"],"textposition":"outside","x":{"dtype":"f8","bdata":"FDuxEzux0z+xEzuxEzvRP3ZiJ3ZiJ9Y\u002f2Ymd2Imd2D8UO7ETO7HTP57YiZ3Yic0\u002fFDuxEzuxoz+e2Imd2Im9P7ETO7ETO9E\u002fFDuxEzuxoz8UO7ETO7GzPxQ7sRM7sbM\u002f"},"y":["Dashboards","Excel","\u003cb\u003eData Visualization\u003c\u002fb\u003e","\u003cb\u003eSQL\u003c\u002fb\u003e","Communication","\u003cb\u003eStatistics\u003c\u002fb\u003e","Spark","ETL","\u003cb\u003ePython\u003c\u002fb\u003e","Deep Learning","\u003cb\u003eCloud\u002fAWS\u003c\u002fb\u003e","\u003cb\u003eMachine Learning\u003c\u002fb\u003e"],"type":"bar"},{"cliponaxis":false,"hovertemplate":"\u003cb\u003e%{y}\u003c\u002fb\u003e\u003cbr\u003eData Scientist \u002f ML: %{x:.0%} of postings\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#e76f51"},"name":"Data Scientist \u002f ML (n=72)","orientation":"h","text":["4%","1%","10%","22%","24%","18%","12%","24%","43%","31%","36%","65%"],"textposition":"outside","x":{"dtype":"f8","bdata":"VVVVVVVVpT8cx3Ecx3GMPzmO4ziO47g\u002fHMdxHMdxzD+O4ziO4zjOP8dxHMdxHMc\u002fAAAAAAAAwD+O4ziO4zjOP+Q4juM4jts\u002f5DiO4ziO0z\u002fHcRzHcRzXPzmO4ziO4+Q\u002f"},"y":["Dashboards","Excel","\u003cb\u003eData Visualization\u003c\u002fb\u003e","\u003cb\u003eSQL\u003c\u002fb\u003e","Communication","\u003cb\u003eStatistics\u003c\u002fb\u003e","Spark","ETL","\u003cb\u003ePython\u003c\u002fb\u003e","Deep Learning","\u003cb\u003eCloud\u002fAWS\u003c\u002fb\u003e","\u003cb\u003eMachine Learning\u003c\u002fb\u003e"],"type":"bar"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"rgb(36,36,36)"},"error_y":{"color":"rgb(36,36,36)"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"rgb(36,36,36)","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"rgb(36,36,36)"},"baxis":{"endlinecolor":"rgb(36,36,36)","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"rgb(36,36,36)"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"histogram2d"}],"histogram":[{"marker":{"line":{"color":"white","width":0.6}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"rgb(237,237,237)"},"line":{"color":"white"}},"header":{"fill":{"color":"rgb(217,217,217)"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"colorscale":{"diverging":[[0.0,"rgb(103,0,31)"],[0.1,"rgb(178,24,43)"],[0.2,"rgb(214,96,77)"],[0.3,"rgb(244,165,130)"],[0.4,"rgb(253,219,199)"],[0.5,"rgb(247,247,247)"],[0.6,"rgb(209,229,240)"],[0.7,"rgb(146,197,222)"],[0.8,"rgb(67,147,195)"],[0.9,"rgb(33,102,172)"],[1.0,"rgb(5,48,97)"]],"sequential":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"sequentialminus":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]]},"colorway":["#1F77B4","#FF7F0E","#2CA02C","#D62728","#9467BD","#8C564B","#E377C2","#7F7F7F","#BCBD22","#17BECF"],"font":{"color":"rgb(36,36,36)"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"bgcolor":"white","radialaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"yaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"zaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"}},"shapedefaults":{"fillcolor":"black","line":{"width":0},"opacity":0.3},"ternary":{"aaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"baxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"bgcolor":"white","caxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside","title":{"standoff":15},"zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"yaxis":{"automargin":true,"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside","title":{"standoff":15},"zeroline":false,"zerolinecolor":"rgb(36,36,36)"}}},"barmode":"group","xaxis":{"title":{"text":"Share of postings whose text names the skill"},"tickformat":".0%","range":[0,0.8],"gridcolor":"#eceff3"},"title":{"text":"\u003cb\u003eSkills Requested: Analyst vs. Scientist \u002f ML\u003c\u002fb\u003e\u003cbr\u003e\u003cspan style='font-size:12px;color:gray'\u003eBold = a skill area our team rated | 173 postings with text\u003c\u002fspan\u003e","x":0,"xanchor":"left"},"font":{"family":"Segoe UI, Helvetica, Arial, sans-serif","size":13},"margin":{"l":10,"r":20,"t":95,"b":110},"hoverlabel":{"font":{"size":13},"bgcolor":"white"},"legend":{"orientation":"h","x":0.5,"xanchor":"center","y":-0.12,"yanchor":"top"},"height":640},                        {"displaylogo": false, "responsive": true, "modeBarButtonsToRemove": ["lasso2d", "select2d"]}                    ).then(function(){
+                            
+var gd = document.getElementById('e2cd9195-1d32-441e-af98-e8a9a7bba44d');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
 </div>
-<p><strong>What this dataset can and cannot tell us:</strong> the Lightcast sample is almost entirely Data Analyst postings, with a small group of Data / Analytics Engineer postings and no Data Scientist or ML Engineer postings. The market demand below therefore describes the <strong>Data Analyst</strong> role. It cannot yet show what separates Data Analyst roles from Data Scientist roles, and the Data / Analytics Engineer figures rest on very few postings, so treat them as directional only.</p>
+</div>
+<p><strong>Interpretation:</strong> the chart is sorted from the skills most tied to Data Scientist / ML postings (top) to those most tied to Data Analyst postings (bottom). Moving along the pathway swaps a visualization and spreadsheet toolkit (Data Visualization 35%, Dashboards 31%, Excel 27% for analysts, against 10%, 4%, and 1% for scientists) for a modeling and engineering toolkit (Machine Learning 65%, Python 43%, Cloud/AWS 36%, Deep Learning 31%, ETL 24%). SQL is the exception: it is the most-named skill for analysts (38%) and stays common for scientists (22%).</p>
 </section>
 <section id="comparing-team-skills-to-market-demand" class="level2">
 <h2 class="anchored" data-anchor-id="comparing-team-skills-to-market-demand">Comparing Team Skills to Market Demand</h2>
-<p>The scorecard lists the six skills from most to least often listed in Data Analyst postings. We group demand into tiers (High is 50% or more of postings, Moderate is 25-49%, Low is under 25%) and use <strong>Advanced (4)</strong> as the level a team member should reach in a high-demand skill. The tiers and the target level are team-chosen reading aids; the demand percentages come from the postings.</p>
-<div id="cell-skill-gap-scorecard" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>analyst <span class="op">=</span> lc[lc[<span class="st">"role"</span>] <span class="op">==</span> <span class="st">"Data Analyst"</span>]</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>analyst_demand <span class="op">=</span> pd.Series({skill: share_with_skill(analyst, pat) <span class="cf">for</span> skill, pat <span class="kw">in</span> skill_patterns.items()})</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> demand_tier(share):</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> share <span class="op">&gt;=</span> <span class="fl">0.5</span>:</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"High (50%+)"</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> share <span class="op">&gt;=</span> <span class="fl">0.25</span>:</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Moderate (25-49%)"</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"Low (under 25%)"</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>skills_in_order <span class="op">=</span> analyst_demand.sort_values(ascending<span class="op">=</span><span class="va">False</span>).index.tolist()</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>scorecard <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Share of Data Analyst postings"</span>: [<span class="ss">f"</span><span class="sc">{</span>analyst_demand[s]<span class="sc">:.0%}</span><span class="ss">"</span> <span class="cf">for</span> s <span class="kw">in</span> skills_in_order],</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Demand tier"</span>: [demand_tier(analyst_demand[s]) <span class="cf">for</span> s <span class="kw">in</span> skills_in_order],</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Team Average"</span>: [<span class="bu">round</span>(df_skills[s].mean(), <span class="dv">2</span>) <span class="cf">for</span> s <span class="kw">in</span> skills_in_order],</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Team Minimum"</span>: [<span class="bu">int</span>(df_skills[s].<span class="bu">min</span>()) <span class="cf">for</span> s <span class="kw">in</span> skills_in_order],</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Members below Advanced (4)"</span>: [<span class="st">", "</span>.join(df_skills.index[df_skills[s] <span class="op">&lt;</span> <span class="dv">4</span>]) <span class="kw">or</span> <span class="st">"none"</span> <span class="cf">for</span> s <span class="kw">in</span> skills_in_order],</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>}, index<span class="op">=</span>pd.Index(skills_in_order, name<span class="op">=</span><span class="st">"Skill"</span>))</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>scorecard</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div id="skill-gap-scorecard" class="cell-output cell-output-display" data-execution_count="4">
+<p>The scorecard lists our six skill areas, sorted by how often Data Scientist / ML postings name them, because that is where our pathway leads. We group demand into tiers using the higher of the two role shares (High is 50% or more of postings, Moderate is 25-49%, Low is under 25%) and use <strong>Advanced (4)</strong> as the level a team member should reach in a high- or moderate-demand skill. The tiers and the target level are team-chosen reading aids; the demand percentages come from the postings.</p>
+<div id="cell-skill-gap-scorecard" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>TARGET <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> demand_tier(share):</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> share <span class="op">&gt;=</span> <span class="fl">0.5</span>:</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"High (50%+)"</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> share <span class="op">&gt;=</span> <span class="fl">0.25</span>:</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Moderate (25-49%)"</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"Low (under 25%)"</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>order <span class="op">=</span> demand.loc[six].sort_values(<span class="st">"Data Scientist / ML"</span>, ascending<span class="op">=</span><span class="va">False</span>).index.tolist()</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>top_share <span class="op">=</span> demand.loc[order, [<span class="st">"Data Analyst"</span>, <span class="st">"Data Scientist / ML"</span>]].<span class="bu">max</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>scorecard <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Data Analyst postings"</span>: [<span class="ss">f"</span><span class="sc">{</span>demand<span class="sc">.</span>loc[s, <span class="st">'Data Analyst'</span>]<span class="sc">:.0%}</span><span class="ss">"</span> <span class="cf">for</span> s <span class="kw">in</span> order],</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Data Scientist / ML postings"</span>: [<span class="ss">f"</span><span class="sc">{</span>demand<span class="sc">.</span>loc[s, <span class="st">'Data Scientist / ML'</span>]<span class="sc">:.0%}</span><span class="ss">"</span> <span class="cf">for</span> s <span class="kw">in</span> order],</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Demand tier"</span>: [demand_tier(top_share[s]) <span class="cf">for</span> s <span class="kw">in</span> order],</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Team Average"</span>: [<span class="bu">round</span>(df_skills[s].mean(), <span class="dv">2</span>) <span class="cf">for</span> s <span class="kw">in</span> order],</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Team Minimum"</span>: [<span class="bu">int</span>(df_skills[s].<span class="bu">min</span>()) <span class="cf">for</span> s <span class="kw">in</span> order],</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Members below Advanced (4)"</span>: [<span class="st">", "</span>.join(df_skills.index[df_skills[s] <span class="op">&lt;</span> TARGET]) <span class="kw">or</span> <span class="st">"none"</span> <span class="cf">for</span> s <span class="kw">in</span> order],</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>}, index<span class="op">=</span>pd.Index(order, name<span class="op">=</span><span class="st">"Skill"</span>))</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>scorecard</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="skill-gap-scorecard" class="cell-output cell-output-display" data-execution_count="5">
 <div>
 
 
@@ -469,7 +504,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Share of Data Analyst postings</th>
+<th data-quarto-table-cell-role="th">Data Analyst postings</th>
+<th data-quarto-table-cell-role="th">Data Scientist / ML postings</th>
 <th data-quarto-table-cell-role="th">Demand tier</th>
 <th data-quarto-table-cell-role="th">Team Average</th>
 <th data-quarto-table-cell-role="th">Team Minimum</th>
@@ -482,56 +518,63 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">Data Visualization</th>
-<td>69%</td>
-<td>High (50%+)</td>
-<td>4.00</td>
-<td>3</td>
-<td>Richard Park</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">SQL</th>
-<td>57%</td>
-<td>High (50%+)</td>
-<td>4.00</td>
-<td>3</td>
-<td>Michael Phillips</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">Python</th>
-<td>46%</td>
-<td>Moderate (25-49%)</td>
-<td>4.00</td>
-<td>3</td>
-<td>Richard Park</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">Statistics</th>
-<td>32%</td>
-<td>Moderate (25-49%)</td>
-<td>3.00</td>
-<td>2</td>
-<td>Manan Patel, Michael Phillips</td>
-</tr>
-<tr class="odd">
 <th data-quarto-table-cell-role="th">Machine Learning</th>
-<td>17%</td>
-<td>Low (under 25%)</td>
+<td>8%</td>
+<td>65%</td>
+<td>High (50%+)</td>
 <td>3.67</td>
 <td>3</td>
 <td>Manan Patel, Richard Park</td>
 </tr>
 <tr class="even">
+<th data-quarto-table-cell-role="th">Python</th>
+<td>27%</td>
+<td>43%</td>
+<td>Moderate (25-49%)</td>
+<td>4.00</td>
+<td>3</td>
+<td>Richard Park</td>
+</tr>
+<tr class="odd">
 <th data-quarto-table-cell-role="th">Cloud/AWS</th>
-<td>10%</td>
-<td>Low (under 25%)</td>
+<td>8%</td>
+<td>36%</td>
+<td>Moderate (25-49%)</td>
 <td>4.00</td>
 <td>3</td>
 <td>Michael Phillips</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">SQL</th>
+<td>38%</td>
+<td>22%</td>
+<td>Moderate (25-49%)</td>
+<td>4.00</td>
+<td>3</td>
+<td>Michael Phillips</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Statistics</th>
+<td>23%</td>
+<td>18%</td>
+<td>Low (under 25%)</td>
+<td>3.00</td>
+<td>2</td>
+<td>Manan Patel, Michael Phillips</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Data Visualization</th>
+<td>35%</td>
+<td>10%</td>
+<td>Moderate (25-49%)</td>
+<td>4.00</td>
+<td>3</td>
+<td>Richard Park</td>
 </tr>
 </tbody>
 </table>
@@ -539,8 +582,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p><strong>Interpretation:</strong> Data Visualization (69% of Data Analyst postings) and SQL (57%) are the two most frequently listed skills, and both are in the high-demand tier. The team averages 4.0 in each, but Richard rates Data Visualization at 3 and Michael rates SQL at 3, so each high-demand skill still has one member below Advanced. Python (46%) sits just under the high-demand line; the team averages 4.0, with Richard at 3. Statistics (32%) is in the moderate tier and is the team’s weakest area (average 3.0, with Manan at 2 and Michael at 3). Machine Learning (17%) and Cloud/AWS (10%) appear in few Data Analyst postings, so they matter less at the analyst entry point. Cloud/AWS is still relevant to our industry context (NAICS 5182 is cloud computing and hosting), and it is a skill where Michael rates 3.</p>
-<p>The small Data / Analytics Engineer group (see the first table) leans much more on SQL and Python than on visualization, which suggests that a move toward engineering roles raises the importance of those two skills. With only 14 postings, this is directional only.</p>
+<div id="cell-skill-gap-chart" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> scorecard.index.tolist()[::<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>avg <span class="op">=</span> df_skills.mean()[rows]</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>low <span class="op">=</span> df_skills.<span class="bu">min</span>()[rows]</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>high <span class="op">=</span> df_skills.<span class="bu">max</span>()[rows]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure(go.Bar(</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="bu">list</span>(avg), y<span class="op">=</span>rows, orientation<span class="op">=</span><span class="st">"h"</span>, marker_color<span class="op">=</span>PALETTE[<span class="dv">0</span>],</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    text<span class="op">=</span>[<span class="ss">f"</span><span class="sc">{</span>v<span class="sc">:.1f}</span><span class="ss">"</span> <span class="cf">for</span> v <span class="kw">in</span> avg], textposition<span class="op">=</span><span class="st">"inside"</span>, insidetextanchor<span class="op">=</span><span class="st">"start"</span>, textfont<span class="op">=</span><span class="bu">dict</span>(color<span class="op">=</span><span class="st">"white"</span>, size<span class="op">=</span><span class="dv">13</span>),</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    error_x<span class="op">=</span><span class="bu">dict</span>(<span class="bu">type</span><span class="op">=</span><span class="st">"data"</span>, symmetric<span class="op">=</span><span class="va">False</span>, array<span class="op">=</span><span class="bu">list</span>(high <span class="op">-</span> avg), arrayminus<span class="op">=</span><span class="bu">list</span>(avg <span class="op">-</span> low),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                 color<span class="op">=</span><span class="st">"black"</span>, thickness<span class="op">=</span><span class="fl">1.5</span>, width<span class="op">=</span><span class="dv">5</span>),</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    customdata<span class="op">=</span>[[lo, hi] <span class="cf">for</span> lo, hi <span class="kw">in</span> <span class="bu">zip</span>(low, high)],</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    hovertemplate<span class="op">=</span><span class="st">"&lt;b&gt;%</span><span class="sc">{y}</span><span class="st">&lt;/b&gt;&lt;br&gt;Team average: %</span><span class="sc">{x:.1f}</span><span class="st">&lt;br&gt;Lowest: %</span><span class="sc">{customdata[0]}</span><span class="st"> | Highest: %</span><span class="sc">{customdata[1]}</span><span class="st">&lt;extra&gt;&lt;/extra&gt;"</span>))</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>fig.add_vline(x<span class="op">=</span>TARGET, line_dash<span class="op">=</span><span class="st">"dash"</span>, line_color<span class="op">=</span>PALETTE[<span class="dv">3</span>], line_width<span class="op">=</span><span class="dv">3</span>, layer<span class="op">=</span><span class="st">"above"</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>              annotation_text<span class="op">=</span><span class="st">"Target: Advanced (4)"</span>, annotation_position<span class="op">=</span><span class="st">"top"</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>fig.update_xaxes(title<span class="op">=</span><span class="st">"Self-rated proficiency (1-5)"</span>, <span class="bu">range</span><span class="op">=</span>[<span class="dv">0</span>, <span class="fl">5.2</span>], gridcolor<span class="op">=</span><span class="st">"#eceff3"</span>)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>style(fig, <span class="st">"Team Average vs. Target by Skill"</span>, <span class="st">"Sorted by Data Scientist / ML demand | black lines show the lowest to highest member rating"</span>, height<span class="op">=</span><span class="dv">460</span>)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>show(fig)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="skill-gap-chart" class="cell-output cell-output-display">
+<div style="height:460px; width:100%;">            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script><script>if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="e9e4806e-2aa9-439c-bd21-74613b5ec1a4" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("e9e4806e-2aa9-439c-bd21-74613b5ec1a4")) {                    Plotly.newPlot(                        "e9e4806e-2aa9-439c-bd21-74613b5ec1a4",                        [{"customdata":[[3,5],[2,4],[3,5],[3,5],[3,5],[3,5]],"error_x":{"array":[1.0,1.0,1.0,1.0,1.0,1.3333333333333335],"arrayminus":[1.0,1.0,1.0,1.0,1.0,0.6666666666666665],"color":"black","symmetric":false,"thickness":1.5,"type":"data","width":5},"hovertemplate":"\u003cb\u003e%{y}\u003c\u002fb\u003e\u003cbr\u003eTeam average: %{x:.1f}\u003cbr\u003eLowest: %{customdata[0]} | Highest: %{customdata[1]}\u003cextra\u003e\u003c\u002fextra\u003e","insidetextanchor":"start","marker":{"color":"#457b9d"},"orientation":"h","text":["4.0","3.0","4.0","4.0","4.0","3.7"],"textfont":{"color":"white","size":13},"textposition":"inside","x":[4.0,3.0,4.0,4.0,4.0,3.6666666666666665],"y":["Data Visualization","Statistics","SQL","Cloud\u002fAWS","Python","Machine Learning"],"type":"bar"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"rgb(36,36,36)"},"error_y":{"color":"rgb(36,36,36)"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"rgb(36,36,36)","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"rgb(36,36,36)"},"baxis":{"endlinecolor":"rgb(36,36,36)","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"rgb(36,36,36)"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"histogram2d"}],"histogram":[{"marker":{"line":{"color":"white","width":0.6}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"rgb(237,237,237)"},"line":{"color":"white"}},"header":{"fill":{"color":"rgb(217,217,217)"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"colorscale":{"diverging":[[0.0,"rgb(103,0,31)"],[0.1,"rgb(178,24,43)"],[0.2,"rgb(214,96,77)"],[0.3,"rgb(244,165,130)"],[0.4,"rgb(253,219,199)"],[0.5,"rgb(247,247,247)"],[0.6,"rgb(209,229,240)"],[0.7,"rgb(146,197,222)"],[0.8,"rgb(67,147,195)"],[0.9,"rgb(33,102,172)"],[1.0,"rgb(5,48,97)"]],"sequential":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"sequentialminus":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]]},"colorway":["#1F77B4","#FF7F0E","#2CA02C","#D62728","#9467BD","#8C564B","#E377C2","#7F7F7F","#BCBD22","#17BECF"],"font":{"color":"rgb(36,36,36)"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"bgcolor":"white","radialaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"yaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"zaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"}},"shapedefaults":{"fillcolor":"black","line":{"width":0},"opacity":0.3},"ternary":{"aaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"baxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"bgcolor":"white","caxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside","title":{"standoff":15},"zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"yaxis":{"automargin":true,"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside","title":{"standoff":15},"zeroline":false,"zerolinecolor":"rgb(36,36,36)"}}},"shapes":[{"layer":"above","line":{"color":"#e76f51","dash":"dash","width":3},"type":"line","x0":4,"x1":4,"xref":"x","y0":0,"y1":1,"yref":"y domain"}],"annotations":[{"showarrow":false,"text":"Target: Advanced (4)","x":4,"xanchor":"center","xref":"x","y":1,"yanchor":"bottom","yref":"y domain"}],"xaxis":{"title":{"text":"Self-rated proficiency (1-5)"},"range":[0,5.2],"gridcolor":"#eceff3"},"title":{"text":"\u003cb\u003eTeam Average vs. Target by Skill\u003c\u002fb\u003e\u003cbr\u003e\u003cspan style='font-size:12px;color:gray'\u003eSorted by Data Scientist \u002f ML demand | black lines show the lowest to highest member rating\u003c\u002fspan\u003e","x":0,"xanchor":"left"},"font":{"family":"Segoe UI, Helvetica, Arial, sans-serif","size":13},"margin":{"l":10,"r":20,"t":95,"b":50},"hoverlabel":{"font":{"size":13},"bgcolor":"white"},"legend":{"orientation":"h","x":1,"xanchor":"right","y":1.02,"yanchor":"bottom"},"height":460},                        {"displaylogo": false, "responsive": true, "modeBarButtonsToRemove": ["lasso2d", "select2d"]}                    ).then(function(){
+                            
+var gd = document.getElementById('e9e4806e-2aa9-439c-bd21-74613b5ec1a4');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> Machine Learning is the most-requested skill for Data Scientist / ML postings (65%) and one of the team’s weaker areas: the team averages 3.7, and Manan and Richard each rate 3, so it is the clearest gap for our pathway. Python (43% of Data Scientist / ML postings) and Cloud/AWS (36%) are in the moderate tier; the team averages 4.0 in both, but Richard rates Python 3 and Michael rates Cloud/AWS 3. SQL (38% of Data Analyst postings) and Data Visualization (35%) matter most for the analyst step; the team averages 4.0 in both, with Michael at 3 in SQL and Richard at 3 in Data Visualization. Statistics is the team’s lowest average (3.0, with Manan at 2 and Michael at 3), but it appears in only 23% of Data Analyst and 18% of Data Scientist / ML postings, so it ranks lower than the market data alone would suggest.</p>
 </section>
 <section id="improvement-plan" class="level2">
 <h2 class="anchored" data-anchor-id="improvement-plan">Improvement Plan</h2>
@@ -556,7 +645,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <thead>
 <tr class="header">
 <th>Member</th>
-<th>Priority (self-rating; share of Data Analyst postings)</th>
+<th>Priority (self-rating; share of Data Scientist / ML or Data Analyst postings)</th>
 <th>Proposed action</th>
 <th>Suggested resource</th>
 <th>Timeframe and evidence</th>
@@ -565,47 +654,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>Manan Patel</td>
-<td>Statistics (2; 32%)</td>
-<td>Practice hypothesis testing and regression with Richard’s review.</td>
-<td>Khan Academy, “Statistics and Probability” (free)</td>
+<td>Machine Learning (3; 65% of Data Scientist / ML), then Statistics (2)</td>
+<td>Pair with Michael on a small supervised-learning project; practice hypothesis testing and regression with Richard’s review.</td>
+<td>“Machine Learning Specialization” (Coursera, DeepLearning.AI); Khan Academy, “Statistics and Probability” (free)</td>
 <td>Within two weeks: one reproducible notebook explaining assumptions, results, and limitations.</td>
 </tr>
 <tr class="even">
 <td>Richard Park</td>
-<td>Data Visualization (3; 69%), then Python (3; 46%)</td>
-<td>Pair with Michael on visualization and with Manan on Python.</td>
-<td>Tableau Public free training videos; “Python for Everybody” (Coursera, University of Michigan)</td>
+<td>Machine Learning (3; 65%), Python (3; 43%), Data Visualization (3; 35% of Data Analyst)</td>
+<td>Pair with Michael on Machine Learning and visualization and with Manan on Python.</td>
+<td>“Python for Everybody” (Coursera, University of Michigan); Tableau Public free training videos</td>
 <td>Within two weeks: one Python analysis with two labeled charts and written interpretations.</td>
 </tr>
 <tr class="odd">
 <td>Michael Phillips</td>
-<td>SQL (3; 57%), then Statistics (3; 32%) and Cloud/AWS (3; 10%)</td>
-<td>Start with SQL aggregation practice, then statistical interpretation; follow with a small AWS analysis because of the industry scope.</td>
+<td>SQL (3; 38% of Data Analyst), then Cloud/AWS (3; 36%) and Statistics (3)</td>
+<td>Start with SQL aggregation practice, then a small AWS analysis because of the industry scope.</td>
 <td>Mode, “SQL Tutorial” (free); “AWS Cloud Practitioner Essentials” (AWS Skill Builder)</td>
 <td>Within two weeks: SQL aggregation queries with written results; within four weeks: a small analysis run on AWS, documenting setup, outputs, and resource cleanup.</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Shared priority:</strong> the two highest-demand skills are Data Visualization and SQL. Richard and Michael can each teach the other’s weaker skill (Richard rates SQL at 4 and Michael rates Data Visualization at 5), so they should pair on those first. Statistics remains the team’s lowest average, so within two weeks the team should also complete one worked statistical example and peer-review its interpretation.</p>
+<p><strong>Shared priority:</strong> Machine Learning is the most-requested skill for the role our pathway leads to, and Michael (rating 5) can coach Manan and Richard. Richard and Michael can also teach each other’s weaker skill (Richard rates SQL at 4 and Michael rates Data Visualization at 5). Statistics remains the team’s lowest average, so within two weeks the team should also complete one worked statistical example and peer-review its interpretation.</p>
 </section>
 <section id="draft-recommendations" class="level2">
 <h2 class="anchored" data-anchor-id="draft-recommendations">Draft Recommendations</h2>
-<p>These draft recommendations for job seekers come from the Exploratory Analysis page and the scorecard above. They describe the Data Analyst pathway in NAICS 5182 and should be revisited with the final analytics in Module 5.</p>
+<p>These draft recommendations for job seekers come from the Exploratory Analysis page and the market comparison above. They describe the Data Analyst to Data Scientist pathway in NAICS 5182.</p>
 <ol type="1">
-<li><strong>Lead with SQL and data visualization.</strong> They are the two most frequently listed skills, in 57% and 69% of Data Analyst postings. Build portfolio dashboards in Tableau or Power BI backed by SQL queries.</li>
-<li><strong>Add Python and statistics next.</strong> Python appears in 46% of Data Analyst postings and statistics in 32%. Statistics is also the team’s lowest-rated skill.</li>
+<li><strong>Learn the analyst toolkit first, then add modeling.</strong> Data Analyst postings most often name SQL (38%) and Data Visualization (35%), with Dashboards and Excel close behind. Build portfolio dashboards backed by SQL queries before moving on.</li>
+<li><strong>Make Machine Learning and Python the bridge to Data Scientist roles.</strong> Data Scientist / ML postings name Machine Learning in 65% of cases and Python in 43%, compared with 8% and 27% for Data Analyst postings.</li>
+<li><strong>Add Cloud/AWS and data-pipeline skills.</strong> They appear in 36% and 24% of Data Scientist / ML postings and far more often in engineering roles, which fits an industry built around cloud and data hosting.</li>
 <li><strong>Expect a mid-level market and build experience early.</strong> Where experience is stated, requirements mostly fall in the 3-8 year range, so projects, internships, and certifications can help offset limited work history.</li>
-<li><strong>Look at California and New York for volume, and Texas for pay.</strong> California and New York have the most postings in both datasets, and Texas leads on average disclosed pay in the 2026 data.</li>
-<li><strong>Ask about the work arrangement.</strong> Most postings do not state a remote or onsite policy, and hybrid is the most common stated arrangement.</li>
-<li><strong>Plan the move toward Data Scientist / ML roles if pay growth is the goal.</strong> The average disclosed pay for ML Engineer and Data Scientist postings is about 2.3 times that of Data Analyst postings. The skills that separate those roles still need to be validated in Module 5.</li>
+<li><strong>Look at California and New York for volume, and Texas for pay.</strong> California and New York have the most postings, and Texas leads on average disclosed pay in the 2026 data.</li>
+<li><strong>Weigh the pay gain.</strong> Average disclosed pay for Data Scientist and ML Engineer postings is about 1.7 times that of Data Analyst postings in the course job data and about 2.3 times in our API data. The direction is the same in both; the size depends on the sample.</li>
+<li><strong>Do not assume a degree is stated.</strong> Only a minority of postings name a degree; see the education section of the Exploratory Analysis page for how many state it as required.</li>
 </ol>
 </section>
 <section id="limitations-and-next-steps" class="level2">
 <h2 class="anchored" data-anchor-id="limitations-and-next-steps">Limitations and Next Steps</h2>
 <ul>
-<li>The Lightcast sample is a 2024 snapshot of 209 postings, almost all Data Analyst roles. Market demand here applies to the Data Analyst role only; there are no Data Scientist or ML Engineer postings in it.</li>
-<li>The MET API <code>skills</code> field is truncated, so it cannot be used to rank skills. Skill requirements for Data Scientist, ML Engineer, and Analytics Engineer roles still need posting-level data or cited occupational sources, and answering how those roles differ from Data Analyst roles is planned for Module 5.</li>
-<li>Skills are matched by name patterns (listed in the code above), so postings that name a skill in another way would be missed.</li>
+<li>Posting text is available for 173 of the 350 postings, and some of that text is short, so skill shares are understated and should be compared across roles, not read as exact requirements.</li>
+<li>The Data Analyst group is small (26 postings with text, and only 16 of all 55 Data Analyst postings disclose a salary), so role comparisons are directional.</li>
+<li>Skills are matched by name patterns (listed in <code>build_met_text_panel.py</code>), so a posting that names a skill in another way is missed, and a pattern can match unrelated uses of a word.</li>
+<li>The target level (Advanced, 4) is a team choice, not a figure taken from postings.</li>
 <li>Self-ratings are subjective. Each member should confirm their ratings, particularly any 5 (Expert), with a project or work example.</li>
 <li>Review the proposed milestones together and reassess individual gaps after the deliverables are completed.</li>
 </ul>

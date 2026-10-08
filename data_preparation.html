@@ -147,6 +147,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#a-note-on-soc-code-reliability" id="toc-a-note-on-soc-code-reliability" class="nav-link" data-scroll-target="#a-note-on-soc-code-reliability">A Note on SOC Code Reliability</a></li>
   </ul></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#second-source-met-career-compass-2026-job-files" id="toc-second-source-met-career-compass-2026-job-files" class="nav-link" data-scroll-target="#second-source-met-career-compass-2026-job-files">Second Source: MET Career Compass 2026 Job Files</a></li>
   </ul>
 </nav>
     </div>
@@ -279,6 +280,52 @@ ul.task-list li input[type="checkbox"] {
 </table>
 <p>The full column-by-column data dictionary is available in <a href="./data/processed/data_dictionary.html"><code>data/processed/data_dictionary.md</code></a>. The cleaned dataset itself is at <a href="data/processed/career_market_panel.csv"><code>data/processed/career_market_panel.csv</code></a>.</p>
 <p>See the <a href="./eda.html">Exploratory Analysis</a> page for the resulting exploratory analysis.</p>
+</section>
+<section id="second-source-met-career-compass-2026-job-files" class="level2">
+<h2 class="anchored" data-anchor-id="second-source-met-career-compass-2026-job-files">Second Source: MET Career Compass 2026 Job Files</h2>
+<p>For the skill and degree analysis we also used the <strong>MET Career Compass 2026 jobs data</strong>, the 17 parquet files shared with the course for the assignments (165,386 postings, January 2 to July 21, 2026). Professor confirmed this is the dataset to use. It is too large for the repository, so <code>build_met_text_panel.py</code> filters it and saves the small result to <a href="data/processed/met_text_panel.csv"><code>data/processed/met_text_panel.csv</code></a>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>Rows left</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>All postings in the files</td>
+<td>165,386</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>NAICS 518 (industry code, same prefix filter as above)</td>
+<td>2,008</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Pathway job-title keywords</td>
+<td>350</td>
+<td>same keyword list as the API data</td>
+</tr>
+<tr class="even">
+<td>One row per posting ID</td>
+<td>350</td>
+<td>no duplicates found</td>
+</tr>
+<tr class="odd">
+<td>With posting text (<code>BODY</code>)</td>
+<td>173</td>
+<td>skills and degree wording come from this subset</td>
+</tr>
+</tbody>
+</table>
+<p>Two fields in these files were not usable as they are. <code>SKILLS_NAME</code> is filled for only 137 of the 350 postings and holds about three skills each, listed alphabetically, so it cannot rank skills. <code>EDUCATION_LEVELS_NAME</code> is filled for every posting, but it is a modeled level and not something the posting states. For both reasons we searched the posting text instead: each skill is matched by a name pattern, and each degree (Bachelor’s, Master’s, PhD) is labeled <em>required</em>, <em>preferred</em>, or <em>named without requirement wording</em> from the sentences that name it. Salaries are annual; the few hourly rates (55 to 100 dollars an hour) are converted using 2,080 hours, and a salary of 0 is treated as not disclosed. About 143 of the 350 postings also appear in our API data, so the two datasets are not independent.</p>
 
 
 </section>

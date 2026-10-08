@@ -134,6 +134,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#data-dictionary-career_market_panel.csv" id="toc-data-dictionary-career_market_panel.csv" class="nav-link active" data-scroll-target="#data-dictionary-career_market_panel.csv">Data Dictionary: career_market_panel.csv</a>
   <ul class="collapse">
   <li><a href="#cleaning-decisions-summary" id="toc-cleaning-decisions-summary" class="nav-link" data-scroll-target="#cleaning-decisions-summary">Cleaning decisions summary</a></li>
+  <li><a href="#met_text_panel.csv-met-career-compass-2026-job-files" id="toc-met_text_panel.csv-met-career-compass-2026-job-files" class="nav-link" data-scroll-target="#met_text_panel.csv-met-career-compass-2026-job-files">met_text_panel.csv (MET Career Compass 2026 job files)</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -285,6 +286,62 @@ ul.task-list li input[type="checkbox"] {
 <li><strong>Education</strong>: no structured field exists; keyword-parsed from free text. Only 45/258 (17%) yielded a value – most postings simply don’t state a degree requirement.</li>
 <li><strong>Company names</strong>: ATS-hosted postings where the “company” field was actually a login-portal subdomain (e.g.&nbsp;<code>careers.snowflake.com</code>, or opaque Oracle Cloud tenant codes) were cleaned where the real employer was recoverable from the domain, and explicitly labeled “Unknown employer” (not guessed) where it was not. Separately, 19 rows had <code>"Jobs via Dice"</code> as the company name – a job-board aggregator placeholder, not a real employer – and were relabeled “Unknown employer (job board aggregator listing)”. In total, 35/258 (14%) rows have no attributable real employer name; these are excluded from “top employers” rankings but kept in the dataset since the role/salary/location data is still valid.</li>
 </ul>
+<hr>
+</section>
+<section id="met_text_panel.csv-met-career-compass-2026-job-files" class="level2">
+<h2 class="anchored" data-anchor-id="met_text_panel.csv-met-career-compass-2026-job-files">met_text_panel.csv (MET Career Compass 2026 job files)</h2>
+<p>Built by <code>build_met_text_panel.py</code> from the 17 parquet files in the course’s “jobs 2026” Google Drive folder (https://drive.google.com/drive/folders/1Tq5Uixwz5J-aG_NfUQdI6X9CIrNz9ZFS, shared by Professor for the assignments and confirmed for this project). One row per posting; 350 rows (NAICS 518, pathway job titles). Posting text is not stored in the file; the flags below were computed from it when the file was built.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>job_id</code></td>
+<td>Posting ID from the source files</td>
+</tr>
+<tr class="even">
+<td><code>title</code></td>
+<td>Cleaned job title</td>
+</tr>
+<tr class="odd">
+<td><code>role</code></td>
+<td>Role family from the title: Data Analyst, Data Scientist, ML Engineer, or Data / Analytics Engineer</td>
+</tr>
+<tr class="even">
+<td><code>company_name</code>, <code>state</code>, <code>remote_status</code>, <code>employment_type</code></td>
+<td>As in the source (empty when not given)</td>
+</tr>
+<tr class="odd">
+<td><code>salary_min_annual</code>, <code>salary_max_annual</code></td>
+<td>Annual salary range in USD; empty when not disclosed (176 rows)</td>
+</tr>
+<tr class="even">
+<td><code>posted_at</code></td>
+<td>Posting date</td>
+</tr>
+<tr class="odd">
+<td><code>has_text</code></td>
+<td>True when the source has posting text (173 rows); the flags below are empty otherwise</td>
+</tr>
+<tr class="even">
+<td><code>skill_&lt;name&gt;</code></td>
+<td>True when the posting text matches the skill’s name pattern (Python, SQL, Machine Learning, Cloud/AWS, Data Visualization, Statistics, and 11 more; patterns are in the build script)</td>
+</tr>
+<tr class="odd">
+<td><code>degree_Associate</code>, <code>degree_Bachelor</code>, <code>degree_Master</code>, <code>degree_PhD</code></td>
+<td><code>required</code> (a sentence naming the degree says require, minimum, must, or mandatory, with no preference word), <code>preferred</code>, <code>mentioned</code> (named without requirement wording), or <code>none</code></td>
+</tr>
+</tbody>
+</table>
+<p>Known limits: the source <code>SKILLS_NAME</code> field is truncated and <code>EDUCATION_LEVELS_NAME</code> is a modeled level, so neither is used. Text-based flags undercount when a posting words a skill or requirement differently.</p>
 
 
 </section>
