@@ -359,6 +359,152 @@ the experience for it. An ML Engineer role pays the most but is the hardest to e
 target. This supports the recommendations in the [Skill Gap Analysis](skill_gap_analysis.qmd) page, which
 identify Machine Learning and Python as the bridge between the first two steps.
 
+## Part 3: Salary Estimator
+
+Use the estimator to see what the Part 1 regression predicts for a posting with the characteristics you choose.
+It runs the fitted ridge model directly in your browser, so the estimate changes as you change the selections,
+and it also shows the postings in our sample that are most like your choice, the role's scorecard result, and
+the skills that role's postings name most often.
+
+**How to read it.** The estimate is the model's best guess of the midpoint of a posted salary range. The
+range shown is where 80% of the model's cross-validated errors fell (never below the lowest salary in our
+sample), so it is the honest spread to expect, not a promise. The model uses only role, senior title, state, and remote status. **Skills do not change the
+estimate** because the salary data does not include enough postings with skill information to model them; they
+are shown below the estimate for context only.
+
+```{python}
+#| label: salary-estimator
+#| echo: false
+import json
+from IPython.display import HTML, display
+
+prefixes = ["role", "level", "state_group", "remote"]
+weights = {p: {} for p in prefixes}
+for name, value in coef.items():
+    clean = name.replace("cat__", "")
+    for p in prefixes:
+        if clean.startswith(p + "_"):
+            weights[p][clean[len(p) + 1:]] = round(float(value), 2)
+
+resid = y - oof
+options = {
+    "role": ["Data Analyst", "Data Scientist", "ML Engineer", "Data / Analytics Engineer"],
+    "level": ["Senior title", "Other title"],
+    "state_group": ["California", "New York", "Virginia", "District of Columbia", "Other states", "State not given"],
+    "remote": ["Not remote or not stated", "Remote"],
+}
+labels = {
+    "role": "Role", "level": "Job title level", "state_group": "State", "remote": "Work arrangement",
+}
+role_info = {}
+for role in options["role"]:
+    tg = text_posts[text_posts["role"] == role]
+    role_info[role] = {
+        "score": round(float(sc.loc[role, "Opportunity score"]), 3),
+        "pay": round(float(sc.loc[role, "Pay score"]), 3),
+        "access": round(float(sc.loc[role, "Accessibility score"]), 3),
+        "fit": round(float(sc.loc[role, "Fit score"]), 3),
+        "rank": int(sc.index.get_loc(role)) + 1,
+        "skills": {s: round(float(tg["skill_" + s].astype(bool).mean()), 3) for s in skill_areas},
+    }
+payload = {
+    "intercept": round(float(final.named_steps["model"].intercept_), 2),
+    "weights": weights,
+    "options": options,
+    "labels": labels,
+    "low": round(float(np.quantile(resid, 0.10)), 0),
+    "high": round(float(np.quantile(resid, 0.90)), 0),
+    "mae": round(float(results.loc["Ridge regression", "MAE (USD)"]), 0),
+    "min_salary": round(float(y.min()), 0),
+    "overall_median": round(float(np.median(y)), 0),
+    "rows": [[r, l, s, m, round(float(v))] for r, l, s, m, v in
+             zip(sal["role"], sal["level"], sal["state_group"], sal["remote"], y)],
+    "roles": role_info,
+    "team": {s: round(float(team_avg[s]), 2) for s in skill_areas},
+}
+
+page = """
+<style>
+#se-box {border:1px solid #d5dbe3; border-radius:10px; padding:18px; background:#fafbfc; margin:12px 0 20px 0;}
+#se-box h3 {margin:0 0 4px 0; font-size:1.25rem; color:#2a7f7a;}
+#se-grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px; margin:12px 0;}
+#se-grid label {display:block; font-size:0.85rem; color:#556; margin-bottom:3px;}
+#se-grid select {width:100%; padding:7px; border:1px solid #9aa5b1; border-radius:6px; font-size:0.95rem; background:#fff;}
+#se-result {display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin-top:8px;}
+.se-card {background:#fff; border:1px solid #e1e6ec; border-radius:8px; padding:12px 14px;}
+.se-card .big {font-size:1.9rem; font-weight:700; color:#1d3557;}
+.se-card .sub {color:#667; font-size:0.85rem;}
+.se-card h4 {margin:0 0 6px 0; font-size:0.95rem; color:#2a7f7a;}
+.se-bar {height:9px; background:#e8edf2; border-radius:5px; margin:2px 0 7px 0; position:relative;}
+.se-bar span {display:block; height:9px; border-radius:5px; background:#457b9d;}
+.se-small {font-size:0.82rem; color:#556;}
+#se-note {font-size:0.82rem; color:#8a5a00; margin-top:10px;}
+</style>
+<div id="se-box">
+  <h3>Salary Estimator (ridge regression)</h3>
+  <div class="se-small">Pick the characteristics of a posting. Estimates update instantly.</div>
+  <div id="se-grid"></div>
+  <div id="se-result"></div>
+  <div id="se-note"></div>
+</div>
+<script>
+(function () {
+  var D = __DATA__;
+  var order = ["role", "level", "state_group", "remote"];
+  var grid = document.getElementById("se-grid");
+  order.forEach(function (k) {
+    var wrap = document.createElement("div");
+    var lab = document.createElement("label"); lab.textContent = D.labels[k]; lab.setAttribute("for", "se-" + k);
+    var sel = document.createElement("select"); sel.id = "se-" + k;
+    D.options[k].forEach(function (o) { var op = document.createElement("option"); op.value = o; op.textContent = o; sel.appendChild(op); });
+    sel.addEventListener("change", update);
+    wrap.appendChild(lab); wrap.appendChild(sel); grid.appendChild(wrap);
+  });
+  document.getElementById("se-role").value = "Data Scientist";
+  function money(v) { return "$" + Math.round(v).toLocaleString("en-US"); }
+  function median(a) { var s = a.slice().sort(function (x, y) { return x - y; }); var m = Math.floor(s.length / 2); return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; }
+  function update() {
+    var v = {}; order.forEach(function (k) { v[k] = document.getElementById("se-" + k).value; });
+    var pred = D.intercept; order.forEach(function (k) { pred += D.weights[k][v[k]] || 0; });
+    pred = Math.max(pred, 0);
+    var lo = Math.max(pred + D.low, D.min_salary), hi = pred + D.high;
+    var same = D.rows.filter(function (r) { return r[0] === v.role && r[1] === v.level; });
+    var sameAll = D.rows.filter(function (r) { return r[0] === v.role; });
+    var info = D.roles[v.role];
+    var diff = pred - D.overall_median;
+    var html = "";
+    html += '<div class="se-card"><h4>Estimated salary</h4><div class="big">' + money(pred) + '</div>' +
+      '<div class="sub">Typical range: ' + money(lo) + ' to ' + money(hi) + '</div>' +
+      '<div class="sub">' + (diff >= 0 ? "+" : "-") + money(Math.abs(diff)).replace("$", "$") + ' vs. the median posting in our sample (' + money(D.overall_median) + ')</div></div>';
+    html += '<div class="se-card"><h4>Similar postings in our sample</h4>';
+    if (same.length) {
+      var sv = same.map(function (r) { return r[4]; });
+      html += '<div class="big">' + same.length + '</div><div class="sub">postings with this role and title level (with salary)</div>' +
+        '<div class="sub">Median ' + money(median(sv)) + '; range ' + money(Math.min.apply(null, sv)) + ' to ' + money(Math.max.apply(null, sv)) + '</div>';
+    } else {
+      html += '<div class="big">0</div><div class="sub">No postings match this role and title level.</div>';
+    }
+    html += '<div class="sub">All ' + sameAll.length + ' ' + v.role + ' postings with salary: median ' + money(median(sameAll.map(function (r) { return r[4]; }))) + '</div></div>';
+    html += '<div class="se-card"><h4>Role scorecard</h4><div class="big">' + info.score.toFixed(3) + '</div>' +
+      '<div class="sub">Rank ' + info.rank + ' of 4 roles</div>' +
+      '<div class="sub">Pay ' + info.pay.toFixed(2) + ' | Accessibility ' + info.access.toFixed(2) + ' | Fit ' + info.fit.toFixed(2) + '</div></div>';
+    html += '<div class="se-card"><h4>Skills named in this role&#39;s postings</h4>';
+    Object.keys(info.skills).forEach(function (s) {
+      html += '<div class="se-small">' + s + ': ' + Math.round(info.skills[s] * 100) + '% of postings | team average rating ' + D.team[s].toFixed(1) + '</div>' +
+        '<div class="se-bar"><span style="width:' + Math.round(info.skills[s] * 100) + '%"></span></div>';
+    });
+    html += '</div>';
+    document.getElementById("se-result").innerHTML = html;
+    var warn = same.length < 10 ? "Only " + same.length + " matching postings, so treat the similar-postings figures as rough. " : "";
+    document.getElementById("se-note").textContent = warn + "The model explains about 17% of pay differences and is typically " + money(D.mae) + " off, so use it to compare options, not to predict an offer. State and remote effects rest on few postings.";
+  }
+  update();
+})();
+</script>
+"""
+display(HTML(page.replace("__DATA__", json.dumps(payload))))
+```
+
 ## Limitations
 
 - **Small samples.** The regression uses 176 postings with a salary, and the Data Analyst and ML Engineer
