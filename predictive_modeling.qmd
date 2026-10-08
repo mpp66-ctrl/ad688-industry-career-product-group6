@@ -1,0 +1,376 @@
+---
+title: "Predictive Modeling"
+subtitle: "Final Analytics: What Is Associated With Higher Pay, and Which Role Is the Best Opportunity?"
+format:
+  html:
+    toc: true
+execute:
+  echo: true
+  warning: false
+---
+
+## Overview
+
+The earlier pages describe the market. This page turns that description into decision support for a
+job seeker on the **Data Analyst to Data Scientist** pathway in NAICS 5182. It has two analyses:
+
+1. **A salary regression** (Part 1) that asks which factors are associated with higher disclosed pay.
+2. **A role opportunity scorecard** (Part 2) that ranks the four pathway roles on pay, how accessible
+   they are, and how well they fit our team's current skills.
+
+Both use the **MET Career Compass 2026 job postings** described in [Data Preparation](data_preparation.qmd):
+350 pathway postings in NAICS 518, of which 176 disclose a salary and 173 include posting text. The build
+script is `build_met_text_panel.py`. Each part states what was modeled, why it matters, which variables
+were used, how it was evaluated, and what the result means in practical terms.
+
+```{python}
+#| label: setup
+import re
+import warnings
+
+import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+from sklearn.compose import ColumnTransformer
+from sklearn.dummy import DummyRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import Ridge
+from sklearn.model_selection import KFold, RepeatedKFold, cross_val_predict, cross_validate
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder
+
+warnings.filterwarnings("ignore")
+
+PALETTE = ["#457b9d", "#2a9d8f", "#e9c46a", "#e76f51", "#6d597a", "#f4a261"]
+GRAY = "#b8bec6"
+
+
+def style(fig, title, subtitle, height=450, legend=False):
+    fig.update_layout(
+        title=dict(text=f"<b>{title}</b><br><span style='font-size:12px;color:gray'>{subtitle}</span>",
+                   x=0, xanchor="left"),
+        template="simple_white", height=height, showlegend=legend,
+        font=dict(family="Segoe UI, Helvetica, Arial, sans-serif", size=13),
+        margin=dict(l=10, r=20, t=95, b=50), hoverlabel=dict(bgcolor="white", font_size=13),
+        legend=dict(orientation="h", x=0.5, xanchor="center", y=-0.15, yanchor="top"))
+    fig.update_xaxes(gridcolor="#eceff3")
+    fig.update_yaxes(gridcolor="#eceff3")
+    return fig
+
+
+def show(fig):
+    fig.show(config={"displaylogo": False, "responsive": True, "modeBarButtonsToRemove": ["lasso2d", "select2d"]})
+
+
+mp = pd.read_csv("data/processed/met_text_panel.csv")
+mp["salary_mid"] = (mp["salary_min_annual"] + mp["salary_max_annual"]) / 2
+SENIOR = r"senior|\bsr\b|staff|principal|\blead\b|manager|director|head of|architect"
+mp["level"] = np.where(mp["title"].str.lower().str.contains(SENIOR), "Senior title", "Other title")
+state = mp["state"].fillna("")
+mp["state_group"] = np.where(state.isin(["California", "New York", "Virginia", "District of Columbia"]), state,
+                             np.where(state == "", "State not given", "Other states"))
+mp["remote"] = np.where(mp["remote_status"] == "Remote", "Remote", "Not remote or not stated")
+print(f"{len(mp)} postings, {mp['salary_mid'].notna().sum()} with a salary, {int(mp['has_text'].sum())} with posting text")
+```
+
+## Part 1: What Is Associated With Higher Pay?
+
+**What was modeled.** The annual salary of a posting, taken as the midpoint of its disclosed range.
+
+**Why it matters for a job seeker.** The pay gap between roles and places is the main reason to move along
+the pathway. A model shows which factors are still associated with pay once the others are held fixed, for
+example whether a New York posting pays more than a California one for the same role.
+
+**Variables used.** Four features, all read from the posting: the **role** (Data Analyst, Data / Analytics
+Engineer, Data Scientist, or ML Engineer, from the job title), whether the title signals a **senior** level
+(senior, staff, principal, lead, manager, director, head of, or architect), the **state group**
+(California, New York, Virginia, District of Columbia, other states, or no state given), and whether the
+posting is **remote**. Experience is not in these files, and skills are available for only about half the
+postings, so they are not used here.
+
+**How it was evaluated.** We compared three models with repeated 5-fold cross-validation (5 repeats), so
+every score comes from postings the model had not seen: a **baseline** that always guesses the median
+salary, a **ridge regression** (a linear model that shrinks coefficients to avoid overfitting a small
+sample), and a **random forest**. The metrics are RMSE and MAE (typical error in dollars) and R² (the share
+of the variation in pay that the model explains; a value at or below zero means no better than guessing the
+average).
+
+```{python}
+#| label: salary-models
+sal = mp.dropna(subset=["salary_mid"]).copy()
+features = ["role", "level", "state_group", "remote"]
+X, y = sal[features], sal["salary_mid"].values
+
+
+def pipe(model):
+    pre = ColumnTransformer([("cat", OneHotEncoder(handle_unknown="ignore"), features)])
+    return Pipeline([("prep", pre), ("model", model)])
+
+
+models = {
+    "Baseline (median)": DummyRegressor(strategy="median"),
+    "Ridge regression": Ridge(alpha=3.0),
+    "Random forest": RandomForestRegressor(n_estimators=300, min_samples_leaf=3, random_state=0),
+}
+cv = RepeatedKFold(n_splits=5, n_repeats=5, random_state=0)
+rows = []
+for name, model in models.items():
+    r = cross_validate(pipe(model), X, y, cv=cv,
+                       scoring=("neg_root_mean_squared_error", "neg_mean_absolute_error", "r2"))
+    rows.append({"Model": name,
+                 "RMSE (USD)": -r["test_neg_root_mean_squared_error"].mean(),
+                 "MAE (USD)": -r["test_neg_mean_absolute_error"].mean(),
+                 "R2": r["test_r2"].mean()})
+results = pd.DataFrame(rows).set_index("Model")
+results.round({"RMSE (USD)": 0, "MAE (USD)": 0, "R2": 2})
+```
+
+```{python}
+#| label: model-comparison-chart
+fig = go.Figure()
+for col, color in [("RMSE (USD)", PALETTE[0]), ("MAE (USD)", PALETTE[1])]:
+    fig.add_trace(go.Bar(
+        x=results.index, y=results[col], name=col, marker_color=color,
+        text=[f"${v / 1000:,.1f}K" for v in results[col]], textposition="outside", cliponaxis=False,
+        hovertemplate="<b>%{x}</b><br>" + col + ": $%{y:,.0f}<extra></extra>"))
+fig.update_layout(barmode="group")
+fig.update_yaxes(title="Typical prediction error (USD)", tickprefix="$", tickformat=",.0f",
+                 range=[0, results["RMSE (USD)"].max() * 1.18])
+style(fig, "How Well Each Model Predicts Salary",
+      f"Cross-validated error on {len(sal)} salary-disclosed postings | lower is better", legend=True)
+show(fig)
+```
+
+**Interpretation:** the ridge regression is the best of the three. Its typical error (RMSE) is about
+$58.7K against $67.6K for the baseline, its mean absolute error is $44.5K against $51.8K, and its R² is
+0.17 against -0.08 for the baseline. The random forest did not beat it (RMSE $61.1K, R² 0.09), so we keep the
+simpler, more explainable ridge model. In practical terms, role, seniority, state, and remote status together
+explain only about 17% of the differences in pay between postings. The model is useful for comparing
+factors, but a typical estimate is still about $44K away from the real figure, so it should not be used to
+predict a specific offer.
+
+```{python}
+#| label: salary-factors
+final = pipe(Ridge(alpha=3.0)).fit(X, y)
+names = final.named_steps["prep"].get_feature_names_out()
+coef = pd.Series(final.named_steps["model"].coef_, index=names)
+
+# 400 bootstrap refits give a 90% range for each factor
+rng = np.random.default_rng(0)
+boot = []
+for _ in range(400):
+    idx = rng.integers(0, len(sal), len(sal))
+    m = pipe(Ridge(alpha=3.0)).fit(X.iloc[idx], y[idx])
+    boot.append(pd.Series(m.named_steps["model"].coef_, index=m.named_steps["prep"].get_feature_names_out()))
+boot = pd.DataFrame(boot).reindex(columns=coef.index).fillna(0)
+eff = pd.DataFrame({"effect": coef, "low": boot.quantile(0.05), "high": boot.quantile(0.95)})
+eff.index = [i.replace("cat__", "") for i in eff.index]
+
+show_rows = {
+    "role_ML Engineer": "Role: ML Engineer",
+    "role_Data Scientist": "Role: Data Scientist",
+    "role_Data / Analytics Engineer": "Role: Data / Analytics Engineer",
+    "role_Data Analyst": "Role: Data Analyst",
+    "state_group_New York": "State: New York",
+    "state_group_California": "State: California",
+    "state_group_Other states": "State: other states",
+    "state_group_District of Columbia": "State: District of Columbia",
+    "state_group_State not given": "State: not given",
+    "state_group_Virginia": "State: Virginia",
+    "level_Senior title": "Senior title",
+    "remote_Remote": "Remote posting",
+}
+plot = eff.loc[list(show_rows)].rename(index=show_rows).sort_values("effect")
+group_color = [PALETTE[3] if i.startswith("Role") else PALETTE[0] if i.startswith("State")
+               else PALETTE[1] for i in plot.index]
+
+fig = go.Figure(go.Scatter(
+    x=plot["effect"], y=list(plot.index), mode="markers",
+    marker=dict(size=11, color=group_color),
+    error_x=dict(type="data", symmetric=False, array=plot["high"] - plot["effect"],
+                 arrayminus=plot["effect"] - plot["low"], color="#6b7280", thickness=1.5, width=4),
+    customdata=np.stack([plot["low"], plot["high"]], axis=1),
+    hovertemplate="<b>%{y}</b><br>Effect: %{x:+,.0f} USD<br>90% range: %{customdata[0]:+,.0f} to %{customdata[1]:+,.0f}<extra></extra>"))
+fig.add_vline(x=0, line_dash="dash", line_color="#6b7280")
+fig.update_xaxes(title="Difference from an average posting (USD per year)", tickformat="+,.0f", zeroline=False)
+style(fig, "What Is Associated With Higher or Lower Pay",
+      "Ridge regression, other factors held fixed | dots are estimates, lines are 90% bootstrap ranges", height=560)
+show(fig)
+```
+
+**Interpretation:** role is by far the strongest factor. Compared with an average posting (about $199K),
+an ML Engineer title is associated with about **$43K more** and a Data Scientist title with about **$25K
+more**, while a Data Analyst title is associated with about **$57K less** and a Data / Analytics Engineer
+title with about $12K less. Those ranges do not cross zero, so the role gaps are reliable even in a small
+sample. Location matters less: New York is associated with about $21K more and California with about $13K
+more, while Virginia is about $18K lower. A senior title adds about $17K compared with other titles. The
+remote estimate (about $12K lower) has a range that crosses zero and rests on only 14 remote postings, so
+the data does not show that remote work pays more or less. For a job seeker, the clearest signal is that
+**moving from a Data Analyst title toward a Data Scientist or ML Engineer title is associated with a larger
+pay difference than any location choice**.
+
+```{python}
+#| label: actual-vs-predicted
+oof = cross_val_predict(pipe(Ridge(alpha=3.0)), X, y, cv=KFold(5, shuffle=True, random_state=0))
+role_colors = {"Data Analyst": PALETTE[0], "Data / Analytics Engineer": PALETTE[1],
+               "Data Scientist": PALETTE[3], "ML Engineer": PALETTE[4]}
+
+fig = go.Figure()
+for role, color in role_colors.items():
+    mask = (sal["role"] == role).values
+    fig.add_trace(go.Scatter(
+        x=oof[mask], y=y[mask], mode="markers", name=f"{role} (n={mask.sum()})",
+        marker=dict(size=8, color=color, opacity=0.75),
+        customdata=sal.loc[mask, "title"],
+        hovertemplate="<b>%{customdata}</b><br>Predicted: $%{x:,.0f}<br>Actual: $%{y:,.0f}<extra></extra>"))
+lims = [float(min(oof.min(), y.min())) - 10000, float(max(oof.max(), y.max())) + 10000]
+fig.add_trace(go.Scatter(x=lims, y=lims, mode="lines", line=dict(dash="dash", color="#6b7280"),
+                         name="Perfect prediction", hoverinfo="skip"))
+fig.update_xaxes(title="Predicted salary (USD, from postings the model had not seen)", tickprefix="$", tickformat=",.0f")
+fig.update_yaxes(title="Actual midpoint salary (USD)", tickprefix="$", tickformat=",.0f")
+style(fig, "Predicted vs. Actual Salary",
+      f"Cross-validated ridge predictions | correlation {np.corrcoef(oof, y)[0, 1]:.2f}", height=520, legend=True)
+show(fig)
+```
+
+**Interpretation:** the points follow the dashed line only loosely (correlation about 0.42). The model gets
+the direction right: ML Engineer and Data Scientist postings are predicted higher than Data Analyst
+postings, and they are higher in reality. But within each role the actual pay varies widely, from about
+$70K to $420K across the whole sample, and the four features cannot explain that spread. Employer, scope of
+the job, and skills that are not in the model are likely drivers. This is why we describe the model as a
+guide to relative differences and not as a calculator of someone's likely salary.
+
+## Part 2: Role Opportunity Scorecard (Career Evaluation Logic)
+
+**What was scored.** Each of the four pathway roles receives a 0 to 1 score on three criteria, combined into
+one opportunity score.
+
+**Why it matters for a job seeker.** Pay is only one part of a good opportunity. A role that pays well but
+asks for senior titles and graduate degrees may not be reachable, and a role that does not match your skills
+needs more preparation. The scorecard puts the three trade-offs in one table.
+
+**Variables and definitions.**
+
+| Criterion | Weight | How it is measured | Why this weight |
+|---|---|---|---|
+| **Pay** | 40% | Median disclosed salary for the role, divided by the highest role median | Pay is the main reason to move along the pathway and is the best-measured of the three |
+| **Accessibility** | 30% | Average of two shares: postings whose title is **not** senior, and postings (with text) that do **not** require or prefer a Master's or PhD | Shows how realistic entry is for a student or early-career job seeker |
+| **Fit with our team** | 30% | Our team's average self-rating on the six skill areas, weighted by how often the role's postings name each area, divided by 5 | Connects the market to the skills we actually have; see [Skill Gap Analysis](skill_gap_analysis.qmd) |
+
+The weights are our judgment, not estimated from data, so we test how much the ranking depends on them.
+
+**How it was evaluated.** A scorecard has no accuracy metric. Instead we check **sensitivity**: we re-rank
+the roles under three other sets of weights and report whether the order changes. Each criterion also shows
+its sample size, because the roles have between 16 and 74 postings with a salary.
+
+```{python}
+#| label: scorecard
+team = pd.DataFrame({
+    "Python": [5, 3, 4], "SQL": [5, 4, 3], "Machine Learning": [3, 3, 5],
+    "Cloud/AWS": [4, 5, 3], "Data Visualization": [4, 3, 5], "Statistics": [2, 4, 3],
+}, index=["Manan Patel", "Richard Park", "Michael Phillips"])
+team_avg = team.mean()
+skill_areas = list(team_avg.index)
+roles = ["Data Analyst", "Data / Analytics Engineer", "Data Scientist", "ML Engineer"]
+
+text_posts = mp[mp["has_text"]]
+rows = []
+for role in roles:
+    g, tg = mp[mp["role"] == role], text_posts[text_posts["role"] == role]
+    demand = {s: tg["skill_" + s].astype(bool).mean() for s in skill_areas}
+    rows.append({
+        "Role": role,
+        "Postings": len(g), "With salary": int(g["salary_mid"].notna().sum()), "With text": len(tg),
+        "Median salary": g["salary_mid"].median(),
+        "Not a senior title": (g["level"] == "Other title").mean(),
+        "No graduate degree named as required or preferred":
+            1 - (tg["degree_Master"].isin(["required", "preferred"]) | tg["degree_PhD"].isin(["required", "preferred"])).mean(),
+        "Fit": sum(demand[s] * team_avg[s] for s in skill_areas) / sum(demand.values()) / 5,
+    })
+sc = pd.DataFrame(rows).set_index("Role")
+sc["Pay score"] = sc["Median salary"] / sc["Median salary"].max()
+sc["Accessibility score"] = (sc["Not a senior title"] + sc["No graduate degree named as required or preferred"]) / 2
+sc["Fit score"] = sc["Fit"]
+
+WEIGHTS = {"Pay score": 0.4, "Accessibility score": 0.3, "Fit score": 0.3}
+for k, w in WEIGHTS.items():
+    sc["w_" + k] = w * sc[k]
+sc["Opportunity score"] = sum(sc["w_" + k] for k in WEIGHTS)
+sc = sc.sort_values("Opportunity score", ascending=False)
+
+table = sc[["Postings", "With salary", "With text", "Median salary", "Pay score", "Accessibility score",
+            "Fit score", "Opportunity score"]].copy()
+table["Median salary"] = table["Median salary"].map("${:,.0f}".format)
+table.round(3)
+```
+
+```{python}
+#| label: scorecard-chart
+order = sc.index.tolist()[::-1]
+fig = go.Figure()
+for key, color in [("Pay score", PALETTE[3]), ("Accessibility score", PALETTE[1]), ("Fit score", PALETTE[0])]:
+    fig.add_trace(go.Bar(
+        y=order, x=[sc.loc[r, "w_" + key] for r in order], orientation="h",
+        name=f"{key.replace(' score', '')} ({WEIGHTS[key]:.0%})", marker_color=color,
+        customdata=[sc.loc[r, key] for r in order],
+        hovertemplate="<b>%{y}</b><br>" + key + ": %{customdata:.2f} (weighted %{x:.2f})<extra></extra>"))
+for r in order:
+    fig.add_annotation(x=sc.loc[r, "Opportunity score"], y=r, text=f"<b>{sc.loc[r, 'Opportunity score']:.3f}</b>",
+                       showarrow=False, xanchor="left", xshift=6)
+fig.update_layout(barmode="stack")
+fig.update_xaxes(title="Opportunity score (weighted sum of three criteria, maximum 1.0)", range=[0, 0.95])
+style(fig, "Role Opportunity Scorecard", "Weights: pay 40%, accessibility 30%, fit with our team 30%", height=470, legend=True)
+fig.update_layout(legend=dict(orientation="h", x=0.5, xanchor="center", y=-0.28, yanchor="top"), margin=dict(b=120))
+show(fig)
+```
+
+```{python}
+#### sensitivity of the ranking to the weights
+scenarios = {
+    "Base (40 / 30 / 30)": (0.4, 0.3, 0.3),
+    "Equal weights": (1 / 3, 1 / 3, 1 / 3),
+    "Pay-heavy (60 / 20 / 20)": (0.6, 0.2, 0.2),
+    "Access and fit-heavy (20 / 40 / 40)": (0.2, 0.4, 0.4),
+}
+ranks = pd.DataFrame({
+    name: (w[0] * sc["Pay score"] + w[1] * sc["Accessibility score"] + w[2] * sc["Fit score"])
+    .rank(ascending=False).astype(int)
+    for name, w in scenarios.items()
+}).loc[sc.index]
+ranks.index.name = "Role (rank 1 = best)"
+ranks
+```
+
+**Interpretation:** Data Scientist and ML Engineer are the strongest opportunities, ahead of Data / Analytics
+Engineer and Data Analyst. ML Engineer scores 0.803 and Data Scientist 0.795, a gap too small to matter: the
+two swap places when the weights change (Data Scientist ranks first under equal weights and when accessibility
+and fit count more, ML Engineer ranks first when pay counts more), while the bottom two roles keep their
+positions in every scenario. The scores show a clear trade-off. **ML Engineer** has the highest median salary
+(about $247K) but the lowest accessibility (32% of its postings carry a non-senior title, and 17% name a
+Master's or PhD as required or preferred). **Data Analyst** has the lowest pay (about $121K) but the highest
+accessibility (51% non-senior titles and no graduate degree named in the posting text we have), which fits a
+student's first step. **Data Scientist** sits between them on both. Fit with our team is similar across roles
+(0.75 to 0.79) because our self-ratings are fairly even across the six skills, so fit does not separate the
+roles; the scorecard's ranking is driven mostly by pay and accessibility.
+
+**What this means for a job seeker.** Treat the roles as steps on one path: a Data Analyst role is the most
+reachable entry point, and the Data Scientist role is the best balance of pay and access once you have
+the experience for it. An ML Engineer role pays the most but is the hardest to enter, so it is a longer-term
+target. This supports the recommendations in the [Skill Gap Analysis](skill_gap_analysis.qmd) page, which
+identify Machine Learning and Python as the bridge between the first two steps.
+
+## Limitations
+
+- **Small samples.** The regression uses 176 postings with a salary, and the Data Analyst and ML Engineer
+  groups have only 16 each. Differences between close roles, such as ML Engineer and Data Scientist, are not
+  reliable, which is why we report ranges and test the weights.
+- **The model explains little of the variation in pay** (R² about 0.17). It shows which factors are
+  associated with pay, not what causes it, and it leaves out experience, employer, and skills.
+- **Remote and state estimates are weak.** Only 14 postings are remote, and several states have very few
+  postings, so these effects have wide ranges.
+- **The scorecard weights are judgments.** The sensitivity check shows which conclusions hold under other
+  weights and which do not.
+- **Title-based labels.** Role and seniority come from job titles, and a title can overstate or understate
+  the real level of the job. Posting text is available for only 173 of the 350 postings, so accessibility
+  rests on fewer postings than pay.
+- **Self-ratings.** The fit score depends on three people's self-ratings, which are subjective.
