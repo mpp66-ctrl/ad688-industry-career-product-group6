@@ -222,24 +222,6 @@ show(fig)
 
 **Interpretation:** California ($225K) leads on average disclosed pay, followed by Massachusetts ($213K), New Jersey ($204K), Washington ($203K), and New York ($200K). California and New York also carry by far the most salary postings (85 and 76), so their averages are the most reliable; the other states in the chart rest on 3 to 12 salary postings. Because these averages pool all pathway roles, a state's average also reflects its mix of higher- and lower-paying roles.
 
-### Top 10 Companies by Average Salary
-
-```{python}
-#| label: salary-by-company
-co_sal_df = sal_df[~sal_df["company_name_clean"].str.startswith("Unknown")]
-co_sal = co_sal_df.groupby("company_name_clean")["salary_mid"].agg(["mean", "count"])
-co_sal = co_sal[co_sal["count"] >= 2].sort_values("mean", ascending=False).head(10).iloc[::-1]
-
-fig = hbar(co_sal.index, co_sal["mean"].round(0), "Average estimated annual salary (USD)",
-           "Top 10 Companies by Average Salary",
-           f"Roles pooled | {len(co_sal_df)} salary-disclosed postings with a named company, companies with 2+",
-           texts=[f"${v:,.0f}" for v in co_sal["mean"]], custom=co_sal["count"], money=True,
-           hover="<b>%{y}</b><br>Average: $%{x:,.0f}<br>Postings with salary: %{customdata}<extra></extra>")
-show(fig)
-```
-
-**Interpretation:** only 46 of the 174 companies with a salary-disclosed posting have two or more, so this is a small-sample view, not a robust employer-level benchmark. The top payers with the largest samples are Roblox ($281K across 12 postings), Roku ($267K across 13), and Zoox ($267K across 10); others, such as Zeta Global ($350K) and Anthropic ($349K across 3), rest on two or three postings. Read it as a directional signal that AI and consumer-technology companies pay at the top, rather than a confident ranking. The averages also pool different roles at each company.
-
 ## Location Patterns
 
 ```{python}
@@ -274,7 +256,7 @@ show(fig)
 
 ## Education Requirements
 
-**How we count.** Here each posting is counted once, under the highest degree level its posting text names (PhD, then Master's, then Bachelor's), and a posting whose text names none counts as *Not specified*. The 195 postings without posting text are left out of these two charts. How the posting words the degree (required or preferred) is not considered in these two charts; the third chart separates it. Nothing is inferred.
+**How we count.** Here each posting is counted once, under the highest degree level its posting text names (PhD, then Master's, then Bachelor's), and a posting whose text names none counts as *Not specified*. The 195 postings without posting text are left out. How the posting words the degree (required or preferred) is not considered in this chart; the chart below separates it. Nothing is inferred.
 
 ### Postings by Highest Degree Named
 
@@ -297,24 +279,9 @@ show(fig)
 
 **Interpretation:** Of the 570 postings with text, 183 (32%) name a degree. A Bachelor's is the highest degree named in 78 of them (14% of all 570), a PhD in 71 (12%), and a Master's in 34 (6%), while 387 (68%) name no degree at all. Each posting is counted once under the highest level it names, so a posting that lists "Bachelor's or Master's" counts as Master's. So in this industry slice, **34 postings have a Master's as their highest named degree and 71 a PhD**; the wording chart below shows how many of those actually state it as a requirement. Because most postings are silent on degrees, the counts show how employers phrase postings more than what the whole market demands.
 
-### Average Salary by Highest Degree Named
-
-```{python}
-#| label: education-salary
-edu_sal = sal_df[sal_df["has_text"]]
-edu_stats = edu_sal.groupby("education_level")["salary_mid"].agg(["mean", "median", "count"]).reindex(edu_order)
-
-fig = salary_bars(edu_stats, edu_order, {k: k for k in edu_order}, edu_colors,
-                  "Average Salary by Highest Degree Named",
-                  f"{SCOPE} | {len(edu_sal)} salary-disclosed postings with text")
-show(fig)
-```
-
-**Interpretation:** Postings whose highest named degree is a PhD have the highest average disclosed salary ($221K, n=36), about $51K above Bachelor's ($169K, n=36) and well above Master's ($174K, n=15). Postings that name no degree average $195K (n=71). The Master's median ($195K) sits above its average, so a few low-paying postings pull that bar down, and groups of 15 to 71 postings mean the Bachelor's and Master's differences are within the noise. The PhD gap is large enough to be worth noting, but it largely reflects the Data Scientist and ML roles that ask for PhDs, and it should be treated as directional.
-
 ### Degree Wording in the Posting Text
 
-The charts above count a degree whenever the posting text names it. Here we separate how the posting words it, using the full text of the 570 postings that have it (see [Data Preparation](data_preparation.qmd)). A degree counts as **required** only when a sentence naming it also says *require*, *minimum*, *must*, or *mandatory* and has no preference word. A sentence with *prefer*, *a plus*, or *nice to have* counts as **preferred**, and a degree that is named with neither is **named, no requirement wording**. Nothing is inferred: a posting that names only a Master's counts under Master's alone, and a sentence such as "Master's or PhD required" counts as required for both levels it names.
+The chart above counts a degree whenever the posting text names it. Here we separate how the posting words it, using the full text of the 570 postings that have it (see [Data Preparation](data_preparation.qmd)). A degree counts as **required** only when a sentence naming it also says *require*, *minimum*, *must*, or *mandatory* and has no preference word. A sentence with *prefer*, *a plus*, or *nice to have* counts as **preferred**, and a degree that is named with neither is **named, no requirement wording**. Nothing is inferred: a posting that names only a Master's counts under Master's alone, and a sentence such as "Master's or PhD required" counts as required for both levels it names.
 
 ```{python}
 #| label: degree-wording
@@ -377,23 +344,6 @@ show(fig)
 ```
 
 **Interpretation:** Among postings that state a work arrangement, hybrid roles have the highest average disclosed salary ($193K), ahead of remote ($184K, median $200K), with onsite far behind ($136K), but the onsite group has only 10 postings, so that gap should be read with caution. Postings that do not state an arrangement average $199K (n=238); that group is the largest and mixes many roles and employers, so it says more about who omits the policy than about pay for any one arrangement. The [Predictive Modeling](predictive_modeling.qmd) page tests these differences after accounting for role and state.
-
-### Top 10 States by Hybrid Role Volume
-
-```{python}
-#| label: hybrid-states
-hybrid_df = df[(df["remote_status"] == "hybrid") & (df["state_clean"] != "Unknown")]
-hybrid_states = hybrid_df["state_clean"].value_counts().head(10).sort_values()
-total_hybrid = (df["remote_status"] == "hybrid").sum()
-
-fig = hbar(hybrid_states.index, hybrid_states.values, "Number of hybrid postings",
-           "Top 10 States by Hybrid Role Volume",
-           f"Hybrid postings only ({total_hybrid}) | {SCOPE}",
-           color=ARRANGEMENT_COLORS["hybrid"])
-show(fig)
-```
-
-**Interpretation:** New York (10 of 75 hybrid postings), California (8), and Texas (8) lead in hybrid postings, roughly tracking their overall job volume rather than showing a distinct hybrid-specific hotspot.
 
 ## Top Employers
 

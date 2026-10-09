@@ -38,3 +38,34 @@ the Salary Estimator on the Predictive Modeling page uses it. The columns are th
 
 `job_id`, `title`, `role`, `company_name`, `state`, `remote_status`, `employment_type`, `salary_min_annual`,
 `salary_max_annual`, `posted_at`, `has_text`, `experience_min_years`, `skill_<name>`, and `degree_<level>` are defined as above.
+
+
+---
+
+# Data Dictionary: benchmark tables
+
+Built by `python build_benchmark_tables.py ../Jobs_2026` from the same `Jobs_2026` folder
+(https://drive.google.com/drive/folders/1Tq5Uixwz5J-aG_NfUQdI6X9CIrNz9ZFS), using **all industries**. They are summary
+tables only: no posting text and no individual postings. A valid posting is not flagged as a duplicate, possible ghost
+listing, or internship; salary is the folder's normalized annual salary (midpoint of the range), $25,000 to $600,000.
+
+**benchmark_quantiles.csv** (4 rows): salary spread for AI-related and non-AI postings.
+
+| Column | Description |
+|---|---|
+| `scope` | "All jobs" or "Computer and business fields" (the ten named fields) |
+| `ai_related` | True when the title names AI or machine learning, or the text names a core AI term |
+| `n` | Postings with a usable annual salary |
+| `p05`, `p25`, `median`, `p75`, `p95`, `mean` | Salary percentiles and mean in USD |
+
+**benchmark_fields.csv** (11 rows): one row per occupation field, plus "All other occupations".
+
+| Column | Description |
+|---|---|
+| `field` | Occupation field assigned from the job title |
+| `postings` | Valid postings in the field (a measure of demand) |
+| `ai_share_postings` | Share of those postings that are AI-related |
+| `salary_postings`, `median`, `p25`, `p75` | Postings with a usable salary and their salary median and quartiles |
+| `n_ai`, `median_ai` | AI-related postings with a salary, and their median |
+| `n_nonai`, `median_nonai` | Non-AI postings with a salary, and their median |
+| `remote_share_stated`, `remote_or_hybrid_share_stated` | Share remote, and share remote or hybrid, among postings that state a work arrangement |

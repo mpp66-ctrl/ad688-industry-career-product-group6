@@ -37,6 +37,7 @@ Building on this rationale, our team carried out the work below. Each item links
 - **Established a market baseline.** Across the 765 postings, salary is disclosed on 40% with a median of $188K, experience requirements (stated in 27%) mostly fall in the 3-8 year range, and California and New York lead on location. See [Exploratory Analysis](eda.qmd).
 - **Compared team skills with the market.** Each team member rated six skills on a 1-5 scale, and we compared those ratings with how often Data Analyst and Data Scientist / ML postings name each skill in their text, then drafted an improvement plan. See [Skill Gap Analysis](skill_gap_analysis.qmd).
 - **Modeled pay and ranked roles.** A salary regression shows which factors are associated with higher pay, a scorecard ranks the four pathway roles on pay, accessibility, and fit with our skills, and a salary estimator lets a reader try their own combination. See [Predictive Modeling](predictive_modeling.qmd).
+- **Benchmarked the pathway against the whole job market.** Across all industries, we compared AI-related and non-AI pay, and our data fields against software engineering and other computer and business fields. See [Benchmark Analysis](benchmark_analysis.qmd).
 - **Still to come.** Final recommendations and the written report.
 
 ## Industry and Career Pathway Documentation

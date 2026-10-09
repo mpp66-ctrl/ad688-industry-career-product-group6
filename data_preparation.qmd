@@ -119,6 +119,24 @@ Of the 2,252 training postings, 155 are in NAICS 5182. Salaries under $30,000 or
 as implausible, and the estimator reads skills, degrees, and experience from the posting text exactly as above.
 The analysis on every other page uses only the NAICS 5182 file.
 
+## Benchmark Tables (All Industries)
+
+The [Benchmark Analysis](benchmark_analysis.qmd) page compares our pathway with the whole job market, so it uses
+**every industry** in the same `Jobs_2026` folder instead of only NAICS 5182. Because that is 815,193 postings, the
+script `build_benchmark_tables.py` reads the folder and saves only two small summary tables, with no posting text
+or individual rows: `benchmark_quantiles.csv` and `benchmark_fields.csv`.
+
+| Stage | Postings |
+|---|---|
+| All postings in the `Jobs_2026` files | 815,193 |
+| Valid: not a duplicate, possible ghost listing, or internship (using the folder's own flags) | 733,064 |
+| With a usable annual salary (the folder's normalized pay, $25,000 to $600,000) | 69,246 |
+| AI-related (title or text names a core AI term) | about 5% of valid postings |
+
+Occupation fields come from job-title keyword rules (ten computer and business fields, plus "All other
+occupations"), and a posting is AI-related when its title names AI or machine learning or its text names a core AI
+term. The rules are listed in the script.
+
 ## Summary
 
 | Stage | Rows | Notes |

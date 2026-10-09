@@ -13,6 +13,8 @@ website:
         text: Data Preparation
       - href: eda.qmd
         text: Exploratory Analysis
+      - href: benchmark_analysis.qmd
+        text: Benchmark Analysis
       - href: skill_gap_analysis.qmd
         text: Skill Gap Analysis
       - href: predictive_modeling.qmd

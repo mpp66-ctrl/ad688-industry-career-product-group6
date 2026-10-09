@@ -1,0 +1,241 @@
+---
+title: "Benchmark Analysis"
+subtitle: "How Do AI-Related Roles and Our Pathway Compare With the Whole Job Market?"
+format:
+  html:
+    toc: true
+execute:
+  echo: true
+  warning: false
+---
+
+## Overview
+
+The other pages study one pathway in one industry (NAICS 5182). This page steps back and benchmarks it against
+the **whole job market in the same data**: every industry and every job type in the course `Jobs_2026` files. It
+answers three questions a job seeker would ask before committing to the Data Analyst to Data Scientist path:
+
+1. **Does AI exposure change pay?** How do salaries differ between AI-related and non-AI postings?
+2. **How do data careers compare with neighboring ones?** Where do data roles sit against software engineering,
+   IT, cybersecurity, and business fields?
+3. **Which fields combine strong pay with many openings?** Where do data careers sit on demand and pay?
+
+**What is in the data.** The files hold 815,193 postings. After removing duplicates, possible ghost listings, and
+internships, **733,064 valid postings** remain, and **69,246** of them state a salary we can convert to an annual
+figure (the folder's own normalization of annual, hourly, weekly, and biweekly pay, kept between $25,000 and
+$600,000). All pay figures on this page use those 69,246 postings. The script is `build_benchmark_tables.py`, which
+saves only small summary tables.
+
+**How we define the groups.**
+
+- **AI-related posting:** the job title names AI or machine learning, or the posting text names at least one core AI
+  term (machine learning, artificial intelligence, deep learning, neural networks, natural language processing, large
+  language models, generative AI, computer vision, PyTorch, or TensorFlow). About 5% of postings meet this rule. A
+  posting that merely mentions AI in passing counts, so this measures AI exposure and not only dedicated AI jobs.
+- **Occupation field:** assigned from the job title with transparent keyword rules (listed in the script) into ten
+  computer and business fields: Data Science & ML, Data Engineering, Data Analytics & BI, Software Engineering,
+  IT & Cloud Infrastructure, Cybersecurity, Product & Project Management, Business Analysis & Consulting, Finance &
+  Accounting, and Marketing & Sales. Everything else is "All other occupations."
+
+```{python}
+#| label: benchmark-setup
+import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+
+PALETTE = ["#457b9d", "#2a9d8f", "#e9c46a", "#e76f51", "#6d597a", "#f4a261"]
+GRAY = "#b8bec6"
+
+
+def style(fig, title, subtitle, height=480, legend=False):
+    fig.update_layout(
+        title=dict(text=f"<b>{title}</b><br><span style='font-size:12px;color:gray'>{subtitle}</span>",
+                   x=0, xanchor="left"),
+        template="simple_white", height=height, showlegend=legend,
+        font=dict(family="Segoe UI, Helvetica, Arial, sans-serif", size=13),
+        margin=dict(l=10, r=20, t=95, b=50), hoverlabel=dict(bgcolor="white", font_size=13),
+        legend=dict(orientation="h", x=0.5, xanchor="center", y=-0.15, yanchor="top"))
+    fig.update_xaxes(gridcolor="#eceff3")
+    fig.update_yaxes(gridcolor="#eceff3")
+    return fig
+
+
+def show(fig):
+    fig.show(config={"displaylogo": False, "responsive": True, "modeBarButtonsToRemove": ["lasso2d", "select2d"]})
+
+
+quant = pd.read_csv("data/processed/benchmark_quantiles.csv")
+fields = pd.read_csv("data/processed/benchmark_fields.csv")
+print(f"{int(fields['postings'].sum()):,} valid postings, {int(fields['salary_postings'].sum()):,} with a usable annual salary")
+```
+
+## Salary Differences Between AI-Related and Non-AI Postings
+
+### How do salaries differ across AI-related and non-AI postings?
+
+A raw comparison would mislead, because most non-AI postings are lower-paid jobs such as retail and healthcare
+support. So the chart shows two views: **all jobs**, and **only the computer and business fields**, where the
+comparison is closer to like with like. Each box covers the middle half of salaries (25th to 75th percentile), the
+line inside is the median, and the whiskers reach the 5th and 95th percentiles.
+
+```{python}
+#| label: ai-vs-nonai
+scopes = ["All jobs", "Computer and business fields"]
+counts = quant.pivot(index="scope", columns="ai_related", values="n").loc[scopes]
+x_labels = [f"{sc_}<br>({int(counts.loc[sc_, False]):,} non-AI | {int(counts.loc[sc_, True]):,} AI-related)" for sc_ in scopes]
+fig = go.Figure()
+for ai, color, label in [(False, GRAY, "Non-AI postings"), (True, PALETTE[3], "AI-related postings")]:
+    sub = quant[quant["ai_related"] == ai].set_index("scope").loc[scopes]
+    fig.add_trace(go.Box(
+        x=x_labels,
+        q1=list(sub["p25"]), median=list(sub["median"]), q3=list(sub["p75"]),
+        lowerfence=list(sub["p05"]), upperfence=list(sub["p95"]), mean=list(sub["mean"]),
+        name=label, marker_color=color, boxpoints=False,
+        hovertemplate="<b>%{x}</b><br>Median: $%{median:,.0f}<br>Middle half: $%{q1:,.0f} to $%{q3:,.0f}<br>5th to 95th percentile: $%{lowerfence:,.0f} to $%{upperfence:,.0f}<extra>" + label + "</extra>"))
+fig.update_layout(boxmode="group")
+fig.update_yaxes(title="Annual salary (USD)", tickprefix="$", tickformat=",.0f", range=[0, 320000])
+style(fig, "Salary Spread: AI-Related vs. Non-AI Postings",
+      "All industries, 69,246 postings with a usable annual salary | box = middle half, line = median, whiskers = 5th to 95th percentile",
+      height=520, legend=True)
+show(fig)
+```
+
+**Interpretation:** AI-related postings pay clearly more. Across all jobs, the median is **$139.5K against
+$54.1K** (about 2.6 times). That gap is inflated by job mix, so the fairer comparison is within the computer and
+business fields: **$172K against $97.5K**, which is **$75K or 77% more**, and the middle half of AI-related postings
+($123K to $215K) sits mostly above the middle half of non-AI postings ($52K to $150K). The top end is
+higher too (95th percentile $300K against $227K). This is an association in job postings, not proof that adding AI
+skills raises anyone's pay, because AI-related roles also tend to be more senior and more technical.
+
+## Data Careers vs. Neighboring Fields
+
+### How does pay in data fields compare with software engineering and other computer and business fields?
+
+The bars show each field's median salary and the diamond shows the median for its AI-related postings (only where there
+are at least 20 of them). The line through each bar covers the middle half of the field's salaries. The gray bar is
+"All other occupations," the baseline for the rest of the job market.
+
+```{python}
+#| label: field-salaries
+family = {
+    "Data Science & ML": "Data fields", "Data Engineering": "Data fields", "Data Analytics & BI": "Data fields",
+    "Software Engineering": "Software engineering", "IT & Cloud Infrastructure": "IT and security",
+    "Cybersecurity": "IT and security", "Product & Project Management": "Business fields",
+    "Business Analysis & Consulting": "Business fields", "Finance & Accounting": "Business fields",
+    "Marketing & Sales": "Business fields", "All other occupations": "All other occupations",
+}
+family_color = {"Data fields": PALETTE[1], "Software engineering": PALETTE[0], "IT and security": PALETTE[4],
+                "Business fields": PALETTE[2], "All other occupations": GRAY}
+fq = fields.sort_values("median").reset_index(drop=True)
+
+fig = go.Figure()
+for fam, color in family_color.items():
+    sub = fq[fq["field"].map(family) == fam]
+    fig.add_trace(go.Bar(
+        x=sub["median"], y=sub["field"], orientation="h", name=fam, marker_color=color,
+        error_x=dict(type="data", symmetric=False, array=list(sub["p75"] - sub["median"]),
+                     arrayminus=list(sub["median"] - sub["p25"]), color="#374151", thickness=1.3, width=4),
+        customdata=np.stack([sub["salary_postings"], sub["p25"], sub["p75"], sub["postings"]], axis=1),
+        text=[f"${v / 1000:,.0f}K" for v in sub["median"]], textposition="inside", insidetextanchor="start",
+        textfont=dict(color="#1d2733"),
+        hovertemplate="<b>%{y}</b><br>Median: $%{x:,.0f}<br>Middle half: $%{customdata[1]:,.0f} to $%{customdata[2]:,.0f}<br>Postings with salary: %{customdata[0]:,.0f} (of %{customdata[3]:,.0f} postings)<extra></extra>"))
+ai_pts = fq[fq["n_ai"] >= 20]
+fig.add_trace(go.Scatter(
+    x=ai_pts["median_ai"], y=ai_pts["field"], mode="markers", name="Median of AI-related postings",
+    marker=dict(symbol="diamond", size=12, color=PALETTE[3], line=dict(color="white", width=1)),
+    customdata=ai_pts["n_ai"],
+    hovertemplate="<b>%{y}</b><br>AI-related median: $%{x:,.0f}<br>AI-related postings with salary: %{customdata:,.0f}<extra></extra>"))
+fig.update_layout(barmode="overlay")
+fig.update_yaxes(categoryorder="array", categoryarray=list(fq["field"]))
+fig.update_xaxes(title="Median annual salary (USD)", tickprefix="$", tickformat=",.0f", range=[0, 330000])
+style(fig, "Median Salary by Occupation Field",
+      "All industries | bars = field median, lines = middle half, diamonds = AI-related postings", height=600, legend=True)
+fig.update_layout(legend=dict(orientation="h", x=0.5, xanchor="center", y=-0.12, yanchor="top"), margin=dict(b=120))
+show(fig)
+```
+
+**Interpretation:** the data fields are not all equal. **Data Science & ML** pays the most of any field ($187K median),
+about $50K above **Software Engineering** ($137.5K), while **Data Engineering** ($160K) also beats software engineering.
+**Data Analytics & BI** sits lower at $120K, below software engineering and the IT, cybersecurity, and
+product-management fields ($132K to $143K), though still above business analysis ($109K) and finance ($107.5K). For our
+pathway, that means moving from Data Analyst toward Data Scientist is the biggest pay step in this set of fields,
+roughly $67K at the median. The diamonds show where AI exposure adds the most inside a field: **Software Engineering**
+($200K against $128K for non-AI postings, +56%), **Cybersecurity** (+44%), and **Product & Project Management** (+31%).
+In the data fields the gap is small or zero because almost every Data Science & ML posting (91%) is AI-related to begin
+with, and Data Engineering shows no premium. (Marketing & Sales also shows a large gap, but its AI-related postings are
+likely technology sales roles, so treat that one with caution.)
+
+## Our Own View: Demand vs. Pay
+
+### Which fields combine strong pay with a lot of openings?
+
+Pay alone can hide how hard a field is to enter. This chart puts **demand** (number of postings, on a log scale) against
+**pay** (median salary) for every field, with bubble size showing how AI-related the field's postings are. Fields toward
+the top are the best paid, fields to the right have the most openings, and the upper-right corner combines both.
+
+```{python}
+#| label: demand-vs-pay
+fields_b = fields.copy()
+fields_b["family"] = fields_b["field"].map(family)
+short = {"Data Science & ML": "Data Science & ML", "Data Engineering": "Data Engineering",
+         "Data Analytics & BI": "Data Analytics & BI", "Software Engineering": "Software Eng.",
+         "IT & Cloud Infrastructure": "IT & Cloud", "Cybersecurity": "Cybersecurity",
+         "Product & Project Management": "Product & Project Mgmt", "Business Analysis & Consulting": "Business Analysis",
+         "Finance & Accounting": "Finance & Accounting", "Marketing & Sales": "Marketing & Sales",
+         "All other occupations": "All other occupations"}
+
+label_pos = {"Business Analysis & Consulting": "middle left", "Finance & Accounting": "bottom center",
+             "Software Engineering": "bottom center", "Data Analytics & BI": "bottom center",
+             "Cybersecurity": "middle left"}
+fig = go.Figure()
+for fam, color in family_color.items():
+    sub = fields_b[fields_b["family"] == fam]
+    fig.add_trace(go.Scatter(
+        x=sub["postings"], y=sub["median"], mode="markers+text", name=fam,
+        text=sub["field"].map(short), textposition=[label_pos.get(f_, "top center") for f_ in sub["field"]],
+        textfont=dict(size=11),
+        marker=dict(color=color, opacity=0.85, size=14 + 70 * np.sqrt(sub["ai_share_postings"]), line=dict(color="white", width=1.5)),
+        customdata=np.stack([sub["ai_share_postings"] * 100, sub["salary_postings"], sub["remote_or_hybrid_share_stated"] * 100], axis=1),
+        hovertemplate="<b>%{text}</b><br>Postings: %{x:,.0f}<br>Median salary: $%{y:,.0f}<br>AI-related share: %{customdata[0]:.0f}%<br>Remote or hybrid (of those that state it): %{customdata[2]:.0f}%<extra></extra>"))
+fig.update_xaxes(title="Valid postings (log scale)", type="log", range=[np.log10(1800), np.log10(1000000)],
+                 tickvals=[2000, 5000, 10000, 20000, 50000, 100000, 500000],
+                 ticktext=["2,000", "5,000", "10,000", "20,000", "50,000", "100,000", "500,000"])
+fig.update_yaxes(title="Median annual salary (USD)", tickprefix="$", tickformat=",.0f", range=[20000, 230000])
+style(fig, "Demand vs. Pay by Occupation Field",
+      "Bubble size = AI-related share of postings | top = better paid, right = more openings", height=620, legend=True)
+fig.update_layout(legend=dict(orientation="h", x=0.5, xanchor="center", y=-0.14, yanchor="top"), margin=dict(b=120))
+show(fig)
+```
+
+**Interpretation:** the chart separates fields that are well paid but crowded from fields that are well paid and
+less crowded. **Software Engineering** has the most openings of the high-pay fields (20,355 postings at $137.5K), and
+**Product & Project Management** (18,590 at $142.5K) and **Data Science & ML** (13,603 at $187K) follow.
+**Data Science & ML** is the standout: the highest pay of any field, a large volume of postings, and by far the biggest
+bubble (91% AI-related), so it is the field where AI exposure is the norm and not an add-on. **Data Engineering**
+(3,720 postings at $160K) and **Cybersecurity** (3,607 at $132K) are smaller but well paid. **Data Analytics & BI**
+(5,652 postings at $120K) is a mid-sized, mid-paid field, which fits its role as the entry step of our pathway. The
+two big low-pay blocks, **Marketing & Sales** (56,905 postings at $56K) and all other occupations (567,145 at $52K),
+show how far the computer and data fields sit above the rest of the market. Roughly 72% to 84% of the postings in the
+data, software, and IT fields that state a work arrangement are remote or hybrid, against 41% for all other
+occupations, so flexibility is part of what these fields offer.
+
+## What This Means for Our Pathway
+
+- **Moving up the pathway pays.** The jump from Data Analytics & BI ($120K) to Data Science & ML ($187K) is the
+  largest step among the data and software fields, and Data Engineering ($160K) is a second route to the same level.
+- **AI exposure is associated with higher pay almost everywhere**, most strongly in software engineering,
+  cybersecurity, and product management, and least in fields that are already almost entirely AI-related.
+
+These are patterns across job postings, and they feed the career evaluation on the
+[Predictive Modeling](predictive_modeling.qmd) page.
+
+## Limitations
+
+- **Salary is stated in only about 9% of postings** (69,246 of 733,064), and posting pay ranges are not the same as what
+  people are paid. Postings that disclose pay may differ from those that do not.
+- **Fields come from job-title keywords**, so some postings land in the wrong field and a title can hide the real job.
+  The Marketing & Sales and "All other occupations" groups are broad and mix very different jobs.
+- **"AI-related" means the posting names AI terms**, which includes passing mentions. It measures AI exposure and not
+  whether a job is a dedicated AI role.
+- **This is one dataset**, the MET job postings for 2026, and its mix of occupations is not a representative sample of all
+  US jobs.
