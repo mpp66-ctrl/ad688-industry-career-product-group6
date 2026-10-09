@@ -17,6 +17,8 @@ job seeker on the **Data Analyst to Data Scientist** pathway in NAICS 5182. It h
 1. **A salary regression** (Part 1) that asks which factors are associated with higher disclosed pay.
 2. **A role opportunity scorecard** (Part 2) that ranks the four pathway roles on pay, how accessible
    they are, and how well they fit our team's current skills.
+3. **A salary estimator** (Part 3) where you enter a posting's details and the model estimates the salary and
+   explains what drives it. It is trained on a broader file than Parts 1 and 2, as Part 3 explains.
 
 Both use the **MET Career Compass 2026 job postings** (the course `Jobs_2026` folder) described in
 [Data Preparation](data_preparation.qmd): 765 pathway postings in NAICS 518, of which 303 disclose a salary
@@ -368,143 +370,304 @@ identify Machine Learning and Python as the bridge between the first two steps.
 
 ## Part 3: Salary Estimator
 
-Use the estimator to see what the Part 1 regression predicts for a posting with the characteristics you choose.
-It runs the fitted ridge model directly in your browser, so the estimate changes as you change the selections,
-and it also shows the postings in our sample that are most like your choice, the role's scorecard result, and
-the skills that role's postings name most often.
+Use the estimator to enter the details of a posting, such as the role, location, experience, degree, and skills,
+and see what the model predicts. Unlike Parts 1 and 2, it also **analyzes** your inputs: it shows what is
+pushing the estimate up or down, which of those drivers are statistically reliable, and which single changes
+are associated with a higher salary. The analysis runs in your browser from the fitted model below. No outside
+AI service is used, so nothing you enter leaves the page.
 
-**How to read it.** The estimate is the model's best guess of the midpoint of a posted salary range. The
-range shown is where 80% of the model's cross-validated errors fell (never below the lowest salary in our
-sample), so it is the honest spread to expect, not a promise. The model uses only role, senior title, state, and work arrangement. **Skills do not change the
-estimate** because skills are known for only about half of the postings with a salary (158 of 303); they
-are shown below the estimate for context only.
+**Why a broader training set.** Only 303 postings in NAICS 5182 disclose a salary, which is too few to learn
+from this many inputs (adding skills, degrees, and experience to the Part 1 model barely helped there). So the
+estimator is trained on **all Data Analyst, Data Scientist, ML Engineer, and Data / Analytics Engineer postings
+from 2026 that disclose a salary, in any industry**, from the same `Jobs_2026` files. Industry is one of the
+inputs ("In NAICS 5182" or "Other industry"), so you can see whether our industry pays differently. Posting
+text is needed to read skills, degrees, and experience, which leaves **2,252 training postings** (155 of them in
+NAICS 5182). The main analysis on every other page stays limited to NAICS 5182.
 
 ```{python}
-#| label: salary-estimator
+#| label: estimator-model
+sm = pd.read_csv("data/processed/met_salary_model_panel.csv")
+sm = sm[sm["has_text"]].copy()
+sm["salary_mid"] = (sm["salary_min_annual"] + sm["salary_max_annual"]) / 2
+# drop a handful of implausible salaries (monthly or typo values)
+sm = sm[sm["salary_mid"].between(30000, 500000) & (sm["salary_min_annual"] >= 20000)].copy()
+
+sm["level"] = np.where(sm["title"].str.lower().str.contains(SENIOR), "Senior title", "Other title")
+state = sm["state"].fillna("")
+top_states = [s for s in state.value_counts().index[:10] if s]
+sm["state_group"] = np.where(state.isin(top_states), state, np.where(state == "", "State not given", "Other states"))
+sm["remote"] = sm["remote_status"].fillna("Unknown").replace({"Unknown": "Not stated"})
+emp = sm["employment_type"].fillna("").str.lower().str.replace(r"[_\-]", " ", regex=True)
+sm["emp"] = np.select([emp.str.contains("full"), emp.str.contains("contract"), emp.str.contains("part"), emp == ""],
+                      ["Full time", "Contract", "Part time", "Not stated"], "Other")
+sm["industry"] = np.where(sm["naics_5182"], "In NAICS 5182", "Other industry")
+
+
+def highest_degree(row):
+    for col, label in [("degree_PhD", "PhD"), ("degree_Master", "Master's"), ("degree_Bachelor", "Bachelor's")]:
+        if row[col] in ("required", "preferred", "mentioned"):
+            return label
+    return "No degree named"
+
+
+sm["degree"] = sm.apply(highest_degree, axis=1)
+sm["exp_known"] = sm["experience_min_years"].notna().astype(int)
+sm["exp_years"] = sm["experience_min_years"].fillna(0)
+EST_SKILLS = [c[len("skill_"):] for c in sm.columns if c.startswith("skill_")]
+for sk_name in EST_SKILLS:
+    sm["s_" + sk_name] = sm["skill_" + sk_name].map({True: 1, False: 0, "True": 1, "False": 0}).fillna(0).astype(int)
+
+EST_CATS = ["role", "level", "state_group", "remote", "emp", "industry", "degree"]
+EST_NUMS = ["exp_years", "exp_known"] + ["s_" + s_ for s_ in EST_SKILLS]
+Xe, ye = sm[EST_CATS + EST_NUMS], sm["salary_mid"].values
+
+
+def est_pipe(model):
+    pre = ColumnTransformer([("cat", OneHotEncoder(handle_unknown="ignore"), EST_CATS), ("num", "passthrough", EST_NUMS)])
+    return Pipeline([("prep", pre), ("model", model)])
+
+
+rows = []
+for name, model in {"Baseline (median)": DummyRegressor(strategy="median"),
+                    "Ridge regression (all inputs)": Ridge(alpha=10.0)}.items():
+    r = cross_validate(est_pipe(model), Xe, ye, cv=RepeatedKFold(n_splits=5, n_repeats=3, random_state=0),
+                       scoring=("neg_root_mean_squared_error", "neg_mean_absolute_error", "r2"))
+    rows.append({"Model": name, "RMSE (USD)": -r["test_neg_root_mean_squared_error"].mean(),
+                 "MAE (USD)": -r["test_neg_mean_absolute_error"].mean(), "R2": r["test_r2"].mean()})
+est_results = pd.DataFrame(rows).set_index("Model")
+print(f"{len(sm)} training postings, {int(sm['naics_5182'].sum())} of them in NAICS 5182")
+est_results.round({"RMSE (USD)": 0, "MAE (USD)": 0, "R2": 2})
+```
+
+**How well it works.** Tested on postings the model had not seen, the estimator's typical error (MAE) is about
+$32K and its R² is 0.56, against a typical error of $51K and an R² near zero for guessing the median salary.
+That is a clear improvement over the Part 1 model (R² 0.31), because it learns from about eight times as
+many salaries. It is still an estimate: individual postings vary by employer and job scope in ways the inputs
+cannot capture, so the range shown is wide on purpose.
+
+```{python}
+#| label: estimator-widget
 #| echo: false
 import json
 from IPython.display import HTML, display
 
-prefixes = ["role", "level", "state_group", "remote"]
-weights = {p: {} for p in prefixes}
-for name, value in coef.items():
-    clean = name.replace("cat__", "")
-    for p in prefixes:
-        if clean.startswith(p + "_"):
-            weights[p][clean[len(p) + 1:]] = round(float(value), 2)
+est_final = est_pipe(Ridge(alpha=10.0)).fit(Xe, ye)
+feat_names = [n.replace("cat__", "").replace("num__", "") for n in est_final.named_steps["prep"].get_feature_names_out()]
+coef_vec = est_final.named_steps["model"].coef_
+intercept = float(est_final.named_steps["model"].intercept_)
 
-resid = y - oof
-options = {
-    "role": ["Data Analyst", "Data Scientist", "ML Engineer", "Data / Analytics Engineer"],
-    "level": ["Senior title", "Other title"],
-    "state_group": ["California", "New York", "Virginia", "District of Columbia", "Other states", "State not given"],
-    "remote": ["Not stated", "Remote", "Hybrid", "Onsite"],
-}
-labels = {
-    "role": "Role", "level": "Job title level", "state_group": "State", "remote": "Work arrangement",
-}
-role_info = {}
-for role in options["role"]:
-    tg = text_posts[text_posts["role"] == role]
-    role_info[role] = {
-        "score": round(float(sc.loc[role, "Opportunity score"]), 3),
-        "pay": round(float(sc.loc[role, "Pay score"]), 3),
-        "access": round(float(sc.loc[role, "Accessibility score"]), 3),
-        "fit": round(float(sc.loc[role, "Fit score"]), 3),
-        "rank": int(sc.index.get_loc(role)) + 1,
-        "skills": {s: round(float(tg["skill_" + s].astype(bool).mean()), 3) for s in skill_areas},
-    }
+# 150 bootstrap refits show how much each effect would move with a different sample of postings
+rng = np.random.default_rng(1)
+boot_c, boot_i = [], []
+for _ in range(150):
+    idx_b = rng.integers(0, len(sm), len(sm))
+    m_b = est_pipe(Ridge(alpha=10.0)).fit(Xe.iloc[idx_b], ye[idx_b])
+    names_b = [n.replace("cat__", "").replace("num__", "") for n in m_b.named_steps["prep"].get_feature_names_out()]
+    c_b = pd.Series(m_b.named_steps["model"].coef_, index=names_b).reindex(feat_names).fillna(0).values
+    boot_c.append([round(float(v)) for v in c_b])
+    boot_i.append(round(float(m_b.named_steps["model"].intercept_)))
+
+oof_e = cross_val_predict(est_pipe(Ridge(alpha=10.0)), Xe, ye, cv=KFold(5, shuffle=True, random_state=0))
+resid_e = ye - oof_e
+
+groups = {g: sorted(sm[g].unique().tolist()) for g in EST_CATS}
+groups["role"] = ["Data Analyst", "Data Scientist", "ML Engineer", "Data / Analytics Engineer"]
+groups["degree"] = ["No degree named", "Bachelor's", "Master's", "PhD"]
+groups["remote"] = ["Not stated", "Remote", "Hybrid", "Onsite"]
+groups["emp"] = ["Full time", "Contract", "Part time", "Other", "Not stated"]
+groups["industry"] = ["Other industry", "In NAICS 5182"]
+groups["level"] = ["Other title", "Senior title"]
+groups["state_group"] = ([s for s in groups["state_group"] if s not in ("Other states", "State not given")]
+                         + ["Other states", "State not given"])
+freq = {g: {o: round(float((sm[g] == o).mean()), 4) for o in groups[g]} for g in EST_CATS}
+role_level = sm.groupby(["role", "level"])["salary_mid"].agg(["count", "median"])
+
 payload = {
-    "intercept": round(float(final.named_steps["model"].intercept_), 2),
-    "weights": weights,
-    "options": options,
-    "labels": labels,
-    "low": round(float(np.quantile(resid, 0.10)), 0),
-    "high": round(float(np.quantile(resid, 0.90)), 0),
-    "mae": round(float(results.loc["Ridge regression", "MAE (USD)"]), 0),
-    "r2pct": round(float(results.loc["Ridge regression", "R2"]) * 100),
-    "min_salary": round(float(y.min()), 0),
-    "overall_median": round(float(np.median(y)), 0),
-    "rows": [[r, l, s, m, round(float(v))] for r, l, s, m, v in
-             zip(sal["role"], sal["level"], sal["state_group"], sal["remote"], y)],
-    "roles": role_info,
-    "team": {s: round(float(team_avg[s]), 2) for s in skill_areas},
+    "features": feat_names,
+    "coef": [round(float(v), 1) for v in coef_vec],
+    "intercept": round(intercept, 1),
+    "boot": boot_c,
+    "bootIntercept": boot_i,
+    "groups": groups,
+    "freq": freq,
+    "labels": {"role": "Role", "level": "Job title level", "state_group": "State", "remote": "Work arrangement",
+               "emp": "Employment type", "industry": "Industry", "degree": "Highest degree named in the posting"},
+    "skills": EST_SKILLS,
+    "skillMean": {s_: round(float(sm["s_" + s_].mean()), 4) for s_ in EST_SKILLS},
+    "expMean": round(float(sm["exp_years"].mean()), 3),
+    "expKnownMean": round(float(sm["exp_known"].mean()), 4),
+    "resLow": round(float(np.quantile(resid_e, 0.10))),
+    "resHigh": round(float(np.quantile(resid_e, 0.90))),
+    "mae": round(float(est_results.loc["Ridge regression (all inputs)", "MAE (USD)"])),
+    "r2pct": round(float(est_results.loc["Ridge regression (all inputs)", "R2"]) * 100),
+    "median": round(float(np.median(ye))),
+    "quantiles": [round(float(np.quantile(ye, q / 100))) for q in range(0, 101)],
+    "n": int(len(sm)),
+    "nNaics": int(sm["naics_5182"].sum()),
+    "support": {f"{r_}|{l_}": [int(v["count"]), round(float(v["median"]))] for (r_, l_), v in role_level.iterrows()},
 }
 
 page = """
 <style>
-#se-box {border:1px solid #d5dbe3; border-radius:10px; padding:18px; background:#fafbfc; margin:12px 0 20px 0;}
-#se-box h3 {margin:0 0 4px 0; font-size:1.25rem; color:#2a7f7a;}
-#se-grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px; margin:12px 0;}
-#se-grid label {display:block; font-size:0.85rem; color:#556; margin-bottom:3px;}
-#se-grid select {width:100%; padding:7px; border:1px solid #9aa5b1; border-radius:6px; font-size:0.95rem; background:#fff;}
-#se-result {display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin-top:8px;}
-.se-card {background:#fff; border:1px solid #e1e6ec; border-radius:8px; padding:12px 14px;}
-.se-card .big {font-size:1.9rem; font-weight:700; color:#1d3557;}
-.se-card .sub {color:#667; font-size:0.85rem;}
-.se-card h4 {margin:0 0 6px 0; font-size:0.95rem; color:#2a7f7a;}
-.se-bar {height:9px; background:#e8edf2; border-radius:5px; margin:2px 0 7px 0; position:relative;}
-.se-bar span {display:block; height:9px; border-radius:5px; background:#457b9d;}
-.se-small {font-size:0.82rem; color:#556;}
-#se-note {font-size:0.82rem; color:#8a5a00; margin-top:10px;}
+#se2 {border:1px solid #d5dbe3; border-radius:10px; padding:18px; background:#fafbfc; margin:12px 0 20px 0;}
+#se2 h3 {margin:0 0 4px 0; font-size:1.25rem; color:#2a7f7a;}
+.se2-small {font-size:0.82rem; color:#556;}
+#se2-grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin:12px 0;}
+#se2-grid label, .se2-lab {display:block; font-size:0.85rem; color:#556; margin-bottom:3px;}
+#se2-grid select, #se2-grid input[type=number] {width:100%; padding:7px; border:1px solid #9aa5b1; border-radius:6px; font-size:0.95rem; background:#fff; box-sizing:border-box;}
+#se2-skills {display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:4px 14px; margin:6px 0 4px 0;}
+#se2-skills label {font-size:0.9rem; color:#223; cursor:pointer;}
+#se2-summary {background:#eef6f5; border-left:4px solid #2a9d8f; padding:10px 14px; margin:14px 0 4px 0; font-size:0.95rem; color:#12343b;}
+#se2-result {display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:14px; margin-top:10px;}
+.se2-card {background:#fff; border:1px solid #e1e6ec; border-radius:8px; padding:12px 14px;}
+.se2-card h4 {margin:0 0 6px 0; font-size:0.95rem; color:#2a7f7a;}
+.se2-big {font-size:2rem; font-weight:700; color:#1d3557;}
+.se2-row {display:flex; align-items:center; gap:8px; margin:3px 0; font-size:0.85rem;}
+.se2-name {flex:0 0 46%; color:#223;}
+.se2-barwrap {flex:1; background:#f0f2f5; border-radius:4px; height:12px; position:relative;}
+.se2-bar {position:absolute; top:0; height:12px; border-radius:4px;}
+.se2-val {flex:0 0 24%; text-align:right; color:#334; font-variant-numeric:tabular-nums;}
+.se2-tag {font-size:0.72rem; color:#667; margin-left:3px;}
+#se2-note {font-size:0.82rem; color:#8a5a00; margin-top:12px;}
 </style>
-<div id="se-box">
-  <h3>Salary Estimator (ridge regression)</h3>
-  <div class="se-small">Pick the characteristics of a posting. Estimates update instantly.</div>
-  <div id="se-grid"></div>
-  <div id="se-result"></div>
-  <div id="se-note"></div>
+<div id="se2">
+  <h3>Salary Estimator and Analyzer</h3>
+  <div class="se2-small">Set the details of a posting. The estimate and the analysis update instantly.</div>
+  <div id="se2-grid"></div>
+  <div class="se2-lab">Skills named in the posting</div>
+  <div id="se2-skills"></div>
+  <div id="se2-summary"></div>
+  <div id="se2-result"></div>
+  <div id="se2-note"></div>
 </div>
 <script>
 (function () {
   var D = __DATA__;
-  var order = ["role", "level", "state_group", "remote"];
-  var grid = document.getElementById("se-grid");
-  order.forEach(function (k) {
+  var P = D.features.length, B = D.boot.length;
+  var idx = {}; D.features.forEach(function (f, i) { idx[f] = i; });
+  var order = ["role", "level", "state_group", "industry", "remote", "emp", "degree"];
+  var grid = document.getElementById("se2-grid");
+  var sel = { role: "Data Scientist", level: "Other title", state_group: "California", industry: "Other industry",
+              remote: "Not stated", emp: "Full time", degree: "Bachelor's", expKnown: true, exp: 3, skills: {} };
+  function addSelect(g) {
     var wrap = document.createElement("div");
-    var lab = document.createElement("label"); lab.textContent = D.labels[k]; lab.setAttribute("for", "se-" + k);
-    var sel = document.createElement("select"); sel.id = "se-" + k;
-    D.options[k].forEach(function (o) { var op = document.createElement("option"); op.value = o; op.textContent = o; sel.appendChild(op); });
-    sel.addEventListener("change", update);
-    wrap.appendChild(lab); wrap.appendChild(sel); grid.appendChild(wrap);
+    var lab = document.createElement("label"); lab.textContent = D.labels[g]; lab.setAttribute("for", "se2-" + g);
+    var s = document.createElement("select"); s.id = "se2-" + g;
+    D.groups[g].forEach(function (o) { var op = document.createElement("option"); op.value = o; op.textContent = o; s.appendChild(op); });
+    s.value = sel[g];
+    s.addEventListener("change", function () { sel[g] = s.value; update(); });
+    wrap.appendChild(lab); wrap.appendChild(s); grid.appendChild(wrap);
+  }
+  order.forEach(addSelect);
+  var ew = document.createElement("div");
+  ew.innerHTML = '<label for="se2-exp">Years of experience the posting asks for</label>' +
+    '<input type="number" id="se2-exp" min="1" max="20" step="1" value="3">' +
+    '<label class="se2-small" style="margin-top:4px"><input type="checkbox" id="se2-expunk"> Posting does not state experience</label>';
+  grid.appendChild(ew);
+  document.getElementById("se2-exp").addEventListener("input", function () { sel.exp = Math.max(1, Math.min(20, parseFloat(this.value) || 1)); update(); });
+  document.getElementById("se2-expunk").addEventListener("change", function () {
+    sel.expKnown = !this.checked; document.getElementById("se2-exp").disabled = this.checked; update(); });
+  var sk = document.getElementById("se2-skills");
+  D.skills.forEach(function (s) {
+    var l = document.createElement("label"); var c = document.createElement("input"); c.type = "checkbox";
+    c.addEventListener("change", function () { sel.skills[s] = c.checked; update(); });
+    l.appendChild(c); l.appendChild(document.createTextNode(" " + s)); sk.appendChild(l);
   });
-  document.getElementById("se-role").value = "Data Scientist";
+
+  function vec(s) {
+    var x = new Array(P).fill(0);
+    order.forEach(function (g) { x[idx[g + "_" + s[g]]] = 1; });
+    x[idx.exp_years] = s.expKnown ? s.exp : 0; x[idx.exp_known] = s.expKnown ? 1 : 0;
+    D.skills.forEach(function (n) { x[idx["s_" + n]] = s.skills[n] ? 1 : 0; });
+    return x;
+  }
+  function dot(c, b0, x) { var t = b0; for (var i = 0; i < P; i++) { t += c[i] * x[i]; } return t; }
+  function clone(s) { var o = JSON.parse(JSON.stringify(s)); return o; }
+  function pct(arr, q) { var a = arr.slice().sort(function (p, r) { return p - r; }); var k = (a.length - 1) * q, f = Math.floor(k), r = k - f; return a[f] + (a[Math.min(f + 1, a.length - 1)] - a[f]) * r; }
   function money(v) { return "$" + Math.round(v).toLocaleString("en-US"); }
-  function median(a) { var s = a.slice().sort(function (x, y) { return x - y; }); var m = Math.floor(s.length / 2); return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; }
-  function update() {
-    var v = {}; order.forEach(function (k) { v[k] = document.getElementById("se-" + k).value; });
-    var pred = D.intercept; order.forEach(function (k) { pred += D.weights[k][v[k]] || 0; });
-    pred = Math.max(pred, 0);
-    var lo = Math.max(pred + D.low, D.min_salary), hi = pred + D.high;
-    var same = D.rows.filter(function (r) { return r[0] === v.role && r[1] === v.level; });
-    var sameAll = D.rows.filter(function (r) { return r[0] === v.role; });
-    var info = D.roles[v.role];
-    var diff = pred - D.overall_median;
-    var html = "";
-    html += '<div class="se-card"><h4>Estimated salary</h4><div class="big">' + money(pred) + '</div>' +
-      '<div class="sub">Typical range: ' + money(lo) + ' to ' + money(hi) + '</div>' +
-      '<div class="sub">' + (diff >= 0 ? "+" : "-") + money(Math.abs(diff)).replace("$", "$") + ' vs. the median posting in our sample (' + money(D.overall_median) + ')</div></div>';
-    html += '<div class="se-card"><h4>Similar postings in our sample</h4>';
-    if (same.length) {
-      var sv = same.map(function (r) { return r[4]; });
-      html += '<div class="big">' + same.length + '</div><div class="sub">postings with this role and title level (with salary)</div>' +
-        '<div class="sub">Median ' + money(median(sv)) + '; range ' + money(Math.min.apply(null, sv)) + ' to ' + money(Math.max.apply(null, sv)) + '</div>';
-    } else {
-      html += '<div class="big">0</div><div class="sub">No postings match this role and title level.</div>';
-    }
-    html += '<div class="sub">All ' + sameAll.length + ' ' + v.role + ' postings with salary: median ' + money(median(sameAll.map(function (r) { return r[4]; }))) + '</div></div>';
-    html += '<div class="se-card"><h4>Role scorecard</h4><div class="big">' + info.score.toFixed(3) + '</div>' +
-      '<div class="sub">Rank ' + info.rank + ' of 4 roles</div>' +
-      '<div class="sub">Pay ' + info.pay.toFixed(2) + ' | Accessibility ' + info.access.toFixed(2) + ' | Fit ' + info.fit.toFixed(2) + '</div></div>';
-    html += '<div class="se-card"><h4>Skills named in this role&#39;s postings</h4>';
-    Object.keys(info.skills).forEach(function (s) {
-      html += '<div class="se-small">' + s + ': ' + Math.round(info.skills[s] * 100) + '% of postings | team average rating ' + D.team[s].toFixed(1) + '</div>' +
-        '<div class="se-bar"><span style="width:' + Math.round(info.skills[s] * 100) + '%"></span></div>';
+  function signed(v) { return (v >= 0 ? "+" : "-") + money(Math.abs(v)); }
+
+  function contribs(c, s, x) {
+    var out = [];
+    order.forEach(function (g) {
+      var base = 0; D.groups[g].forEach(function (o) { base += D.freq[g][o] * c[idx[g + "_" + o]]; });
+      out.push({ name: D.labels[g] + ": " + s[g], v: c[idx[g + "_" + s[g]]] - base });
     });
-    html += '</div>';
-    document.getElementById("se-result").innerHTML = html;
-    var warn = same.length < 10 ? "Only " + same.length + " matching postings, so treat the similar-postings figures as rough. " : "";
-    document.getElementById("se-note").textContent = warn + "The model explains about " + D.r2pct + "% of pay differences and is typically " + money(D.mae) + " off, so use it to compare options, not to predict an offer. Some state and work-arrangement groups are small.";
+    out.push({ name: "Experience: " + (s.expKnown ? s.exp + " years" : "not stated"),
+      v: c[idx.exp_years] * (x[idx.exp_years] - D.expMean) + c[idx.exp_known] * (x[idx.exp_known] - D.expKnownMean) });
+    D.skills.forEach(function (n) { out.push({ name: "Skill: " + n + (s.skills[n] ? " (named)" : " (not named)"), v: c[idx["s_" + n]] * (x[idx["s_" + n]] - D.skillMean[n]) }); });
+    return out;
+  }
+  function variants(s) {
+    var v = [];
+    D.groups.role.forEach(function (o) { if (o !== s.role) { var t = clone(s); t.role = o; v.push({ label: "Role: " + o, s: t }); } });
+    if (s.level !== "Senior title") { var t1 = clone(s); t1.level = "Senior title"; v.push({ label: "A senior-level title", s: t1 }); }
+    D.groups.state_group.forEach(function (o) { if (o !== s.state_group && o !== "State not given") { var t = clone(s); t.state_group = o; v.push({ label: "Location: " + o, s: t }); } });
+    D.groups.degree.forEach(function (o) { if (o !== s.degree && o !== "No degree named") { var t = clone(s); t.degree = o; v.push({ label: "Degree named: " + o, s: t }); } });
+    D.groups.remote.forEach(function (o) { if (o !== s.remote) { var t = clone(s); t.remote = o; v.push({ label: "Work arrangement: " + o, s: t }); } });
+    if (s.industry !== "In NAICS 5182") { var t2 = clone(s); t2.industry = "In NAICS 5182"; v.push({ label: "Industry: NAICS 5182", s: t2 }); }
+    if (s.expKnown && s.exp < 18) { var t3 = clone(s); t3.exp = s.exp + 3; v.push({ label: "3 more years of experience asked", s: t3 }); }
+    D.skills.forEach(function (n) { if (!s.skills[n]) { var t = clone(s); t.skills[n] = true; v.push({ label: "Add skill: " + n, s: t }); } });
+    return v;
+  }
+  function row(name, v, lo, hi, scale, tag) {
+    var w = Math.min(50, Math.abs(v) / scale * 50), left = v >= 0 ? 50 : 50 - w, col = v >= 0 ? "#2a9d8f" : "#e76f51";
+    return '<div class="se2-row"><div class="se2-name">' + name + '<span class="se2-tag">' + tag + '</span></div>' +
+      '<div class="se2-barwrap"><div style="position:absolute;left:50%;top:-1px;width:1px;height:14px;background:#9aa5b1"></div>' +
+      '<div class="se2-bar" style="left:' + left + '%;width:' + w + '%;background:' + col + '"></div></div>' +
+      '<div class="se2-val">' + signed(v) + '</div></div>';
+  }
+
+  function update() {
+    var x = vec(sel);
+    var pred = Math.max(dot(D.coef, D.intercept, x), 30000);
+    var lo = Math.max(pred + D.resLow, 30000), hi = pred + D.resHigh;
+    var q = D.quantiles, rank = 0; for (var i = 0; i < q.length; i++) { if (pred >= q[i]) { rank = i; } }
+    var verdict = rank >= 70 ? "above typical" : (rank <= 30 ? "below typical" : "typical");
+    var bp = D.boot.map(function (c, b) { return dot(c, D.bootIntercept[b], x); });
+    var cb = contribs(D.coef, sel, x);
+    var cbBoot = D.boot.map(function (c) { return contribs(c, sel, x); });
+    cb.forEach(function (o, k) { var arr = cbBoot.map(function (r) { return r[k].v; }); o.lo = pct(arr, 0.05); o.hi = pct(arr, 0.95); o.rel = (o.lo > 0 || o.hi < 0); });
+    var rel = cb.filter(function (o) { return o.rel; }).sort(function (a, b) { return Math.abs(b.v) - Math.abs(a.v); });
+    var unclear = cb.filter(function (o) { return !o.rel; }).length;
+    var scale = Math.max.apply(null, cb.map(function (o) { return Math.abs(o.v); }).concat([1]));
+    var ups = rel.filter(function (o) { return o.v > 0; }), downs = rel.filter(function (o) { return o.v < 0; });
+
+    var vs = variants(sel).map(function (it) {
+      var x2 = vec(it.s); var d0 = dot(D.coef, D.intercept, x2) - dot(D.coef, D.intercept, x);
+      var db = D.boot.map(function (c, b) { return dot(c, D.bootIntercept[b], x2) - dot(c, D.bootIntercept[b], x); });
+      return { label: it.label, d: d0, lo: pct(db, 0.05), hi: pct(db, 0.95) };
+    });
+    var gains = vs.filter(function (o) { return o.d > 0 && o.lo > 0; }).sort(function (a, b) { return b.d - a.d; }).slice(0, 6);
+
+    var sup = D.support[sel.role + "|" + sel.level] || [0, 0];
+    document.getElementById("se2-summary").innerHTML = "<b>Analysis:</b> this profile is estimated at <b>" + money(pred) + "</b>, " + verdict +
+      " for the pathway (higher than about " + rank + "% of the " + D.n.toLocaleString("en-US") + " postings the model learned from). " +
+      (ups.length ? "Strongest reliable pushes up: " + ups.slice(0, 2).map(function (o) { return o.name; }).join("; ") + ". " : "") +
+      (downs.length ? "Strongest reliable pushes down: " + downs.slice(0, 2).map(function (o) { return o.name; }).join("; ") + "." : "");
+
+    var h = "";
+    h += '<div class="se2-card"><h4>Estimated salary</h4><div class="se2-big">' + money(pred) + '</div>' +
+      '<div class="se2-small">Typical range for one posting: ' + money(lo) + ' to ' + money(hi) + '</div>' +
+      '<div class="se2-small">Model range from resampling: ' + money(pct(bp, 0.05)) + ' to ' + money(pct(bp, 0.95)) + '</div>' +
+      '<div class="se2-small">' + signed(pred - D.median) + ' vs. the median posting (' + money(D.median) + ')</div>' +
+      '<div class="se2-small">Percentile among training postings: ' + rank + '</div></div>';
+    h += '<div class="se2-card"><h4>What is driving this estimate</h4>' +
+      '<div class="se2-small" style="margin-bottom:4px">Compared with an average posting. Only reliable drivers are shown (their 90% range excludes zero).</div>' +
+      (rel.slice(0, 7).map(function (o) { return row(o.name, o.v, o.lo, o.hi, scale, ""); }).join("") || '<div class="se2-small">No single input is a reliable driver here.</div>') +
+      '<div class="se2-small" style="margin-top:4px">' + unclear + ' other inputs have no clear effect and are left out.</div></div>';
+    h += '<div class="se2-card"><h4>Changes associated with a higher salary</h4>' +
+      '<div class="se2-small" style="margin-bottom:4px">One change at a time, holding the rest fixed. Shown only when the gain is reliable.</div>' +
+      (gains.map(function (o) { return row(o.label, o.d, o.lo, o.hi, Math.max(gains[0].d, 1), ""); }).join("") ||
+        '<div class="se2-small">No single change shows a reliable gain for this profile.</div>') +
+      '<div class="se2-small" style="margin-top:4px">These are associations in job postings, not guarantees that making the change would raise anyone&#39;s pay.</div></div>';
+    h += '<div class="se2-card"><h4>How much data supports this</h4>' +
+      '<div class="se2-small">' + sup[0] + ' training postings share this role and title level' + (sup[0] ? ' (median ' + money(sup[1]) + ')' : '') + '.</div>' +
+      '<div class="se2-small">' + D.nNaics + ' of the ' + D.n.toLocaleString("en-US") + ' training postings are in NAICS 5182.</div>' +
+      '<div class="se2-small">Typical error of the model: about ' + money(D.mae) + '. It explains about ' + D.r2pct + '% of pay differences.</div>' +
+      (sup[0] < 15 ? '<div class="se2-small" style="color:#8a5a00">Few similar postings, so treat this estimate as rough.</div>' : "") + '</div>';
+    document.getElementById("se2-result").innerHTML = h;
+    document.getElementById("se2-note").textContent = "Estimates come from a ridge regression fitted on pathway postings from any industry. They describe pay in job postings and are not a prediction of any offer.";
   }
   update();
 })();
@@ -512,6 +675,17 @@ page = """
 """
 display(HTML(page.replace("__DATA__", json.dumps(payload))))
 ```
+
+**How to read the analysis.** The summary line tells you where the estimate falls among all postings the model
+learned from. "What is driving this estimate" lists the inputs that move it the most compared with an average
+posting, and keeps only those whose effect stayed clearly above or below zero across 150 resampled refits of the
+model, so noisy inputs are not presented as findings. "Changes associated with a higher salary" tries one change
+at a time (another role, a senior title, a different location, a degree, an added skill, or more experience) and
+lists only the ones whose gain is reliable. These are patterns in postings, so a skill or degree that is
+associated with higher pay is not guaranteed to raise any one person's pay. Some effects look counterintuitive. For example, naming
+Cloud/AWS is associated with slightly lower pay once the role and location are fixed, because skills overlap
+heavily with roles (an ML Engineer posting almost always names several of them). Read each skill's effect as
+"what is left after the role is known", not as that skill's value on its own.
 
 ## Limitations
 
@@ -528,3 +702,7 @@ display(HTML(page.replace("__DATA__", json.dumps(payload))))
   the real level of the job. Posting text is available for 570 of the 765 postings, so accessibility
   rests on fewer postings than pay.
 - **Self-ratings.** The fit score depends on three people's self-ratings, which are subjective.
+- **The estimator uses a broader dataset.** Part 3 is trained on pathway postings from any industry (2,252
+  postings, 155 of them in NAICS 5182) so that it can use more inputs. Its estimates describe pay in job
+  postings in general, and the industry input shows only how NAICS 5182 compares in that data. The skill, degree,
+  and experience inputs are read from posting text by keyword rules, so they undercount what a posting really asks.

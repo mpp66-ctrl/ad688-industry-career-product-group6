@@ -98,6 +98,27 @@ Dice"). Known domains are mapped to the real employer, and job-board listings ar
 employer". In total, 27 postings (4%) have no attributable employer name; they are excluded from employer
 rankings but kept in the data since their role, salary, and location are still valid.
 
+## Extended Dataset for the Salary Estimator
+
+The NAICS 5182 slice has only 303 postings with a disclosed salary, which is too few to train a model with many
+inputs. For the Salary Estimator on the [Predictive Modeling](predictive_modeling.qmd) page we therefore build a
+second file from the same `Jobs_2026` folder with `python build_met_text_panel.py ../Jobs_2026 --all-industries`:
+[`data/processed/met_salary_model_panel.csv`](data/processed/met_salary_model_panel.csv). It keeps the same role
+keywords, the same repeat-listing removal, and the same salary and text rules, but it **keeps pathway postings
+from any industry** and only those that disclose a salary, and it adds a flag for whether the posting is in
+NAICS 5182.
+
+| Stage | Rows |
+|---|---|
+| Pathway job-title keywords, any industry | 14,372 |
+| One row per distinct posting | 10,713 |
+| With a disclosed salary | 2,607 |
+| With posting text (used by the estimator) | 2,252 after removing implausible salaries |
+
+Of the 2,252 training postings, 155 are in NAICS 5182. Salaries under $30,000 or above $500,000 are dropped
+as implausible, and the estimator reads skills, degrees, and experience from the posting text exactly as above.
+The analysis on every other page uses only the NAICS 5182 file.
+
 ## Summary
 
 | Stage | Rows | Notes |

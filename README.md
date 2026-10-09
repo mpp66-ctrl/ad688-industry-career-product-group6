@@ -25,6 +25,8 @@ A career evaluation product helping analytics/data-science job seekers understan
 - **MET Career Compass 2026 job files** (the `Jobs_2026` Google Drive folder confirmed by our instructor,
   https://drive.google.com/drive/folders/1Tq5Uixwz5J-aG_NfUQdI6X9CIrNz9ZFS?usp=sharing, not stored in the repo):
   `data/processed/met_text_panel.csv`, 765 postings, used for every analysis page.
+- `data/processed/met_salary_model_panel.csv`: pathway postings from any industry that disclose a salary
+  (2,607), built from the same folder with `--all-industries`; used only by the Salary Estimator.
 
 ## Team
 

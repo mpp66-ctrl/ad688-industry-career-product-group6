@@ -20,3 +20,21 @@ licensed company-industry columns of the source folder are not copied.
 
 Known limits: the source `SKILLS_NAME` field is truncated and `EDUCATION_LEVELS_NAME` is a modeled level, so
 neither is used. Text-based flags undercount when a posting words a skill or requirement differently.
+
+
+---
+
+# Data Dictionary: met_salary_model_panel.csv
+
+Built by `python build_met_text_panel.py ../Jobs_2026 --all-industries` from the same `Jobs_2026` folder
+(https://drive.google.com/drive/folders/1Tq5Uixwz5J-aG_NfUQdI6X9CIrNz9ZFS). It holds Data Analyst, Data Scientist,
+ML Engineer, and Data / Analytics Engineer postings from **any industry** that disclose a salary (2,607 rows). Only
+the Salary Estimator on the Predictive Modeling page uses it. The columns are the same as in
+`met_text_panel.csv` above, plus one more:
+
+| Column | Description |
+|---|---|
+| `naics_5182` | True when the posting is in our industry, NAICS 5182 (299 rows) |
+
+`job_id`, `title`, `role`, `company_name`, `state`, `remote_status`, `employment_type`, `salary_min_annual`,
+`salary_max_annual`, `posted_at`, `has_text`, `experience_min_years`, `skill_<name>`, and `degree_<level>` are defined as above.

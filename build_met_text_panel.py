@@ -12,7 +12,13 @@ Skill and education flags are read from the posting text (BODY), because the SKI
 this folder is truncated (about 3 skills per posting, alphabetical) and EDUCATION_LEVELS_NAME is a
 modeled level that the posting does not state.
 
-Usage: python build_met_text_panel.py [path/to/Jobs_2026]
+Two modes:
+  python build_met_text_panel.py [path/to/Jobs_2026]
+      -> data/processed/met_text_panel.csv: our NAICS 5182 analysis dataset (all postings in the industry).
+  python build_met_text_panel.py [path/to/Jobs_2026] --all-industries
+      -> data/processed/met_salary_model_panel.csv: pathway postings from ANY industry that disclose a salary,
+         with an `naics_5182` flag. Only the Salary Estimator on the Predictive Modeling page uses it, because
+         the NAICS 5182 slice alone has too few salaries to train a model with this many inputs.
 """
 import glob
 import re
@@ -20,8 +26,10 @@ import sys
 
 import pandas as pd
 
-DATA_DIR = sys.argv[1] if len(sys.argv) > 1 else "../Jobs_2026"
-OUT = "data/processed/met_text_panel.csv"
+ALL_INDUSTRIES = "--all-industries" in sys.argv
+_args = [a for a in sys.argv[1:] if not a.startswith("--")]
+DATA_DIR = _args[0] if _args else "../Jobs_2026"
+OUT = "data/processed/met_salary_model_panel.csv" if ALL_INDUSTRIES else "data/processed/met_text_panel.csv"
 
 KEYWORDS = [
     "data scientist", "data engineer", "machine learning engineer", "ml engineer", "data analyst",
@@ -172,14 +180,20 @@ def degree_wording(body, pattern):
     return found
 
 
-frames = [pd.read_parquet(f, columns=COLS) for f in sorted(glob.glob(f"{DATA_DIR}/jobs_2026_part_*.parquet"))]
+frames, total_rows, in_industry = [], 0, 0
+for path in sorted(glob.glob(f"{DATA_DIR}/jobs_2026_part_*.parquet")):
+    part = pd.read_parquet(path, columns=COLS)
+    total_rows += len(part)
+    in_518 = part["NAICS_2022_3"].astype(str) == "518"
+    in_industry += int(in_518.sum())
+    if not ALL_INDUSTRIES:
+        part = part[in_518]
+    part_title = part["TITLE_CLEAN"].fillna("").str.lower()
+    frames.append(part[part_title.apply(lambda t: any(k in t for k in KEYWORDS))])  # filter early to save memory
 df = pd.concat(frames, ignore_index=True)
-print("rows in folder:", len(df))
-
-df = df[df["NAICS_2022_3"].astype(str) == "518"]
-print("after NAICS 518:", len(df))
-title = df["TITLE_CLEAN"].fillna("").str.lower()
-df = df[title.apply(lambda t: any(k in t for k in KEYWORDS))]
+print("rows in folder:", total_rows)
+if not ALL_INDUSTRIES:
+    print("after NAICS 518:", in_industry)
 print("after role keywords:", len(df))
 df = df[df["POSTED"].astype(str).str[:4] == "2026"]
 print("after keeping 2026 postings:", len(df))
@@ -204,6 +218,9 @@ for c in ["SALARY_FROM", "SALARY_TO"]:
     df.loc[intern, c] = float("nan")
 df["REMOTE_TYPE_NAME"] = df["REMOTE_TYPE_NAME"].replace({"On-site": "Onsite"})
 df["role"] = df["TITLE_CLEAN"].apply(classify_role)
+if ALL_INDUSTRIES:
+    df = df[df["SALARY_FROM"].notna() & df["SALARY_TO"].notna()].copy()
+    print("after keeping postings that disclose a salary:", len(df))
 
 body = df["BODY"].fillna("")
 has_text = body.str.strip().str.len() > 0
@@ -221,6 +238,8 @@ out = pd.DataFrame({
     "posted_at": df["POSTED"],
     "has_text": has_text,
 })
+if ALL_INDUSTRIES:
+    out["naics_5182"] = (df["NAICS_2022_3"].astype(str) == "518").values
 # minimum years of experience: the structured field when it is above zero, otherwise read from the text
 field_years = pd.to_numeric(df["MIN_YEARS_EXPERIENCE"].replace("", None), errors="coerce")
 field_years = field_years.where((field_years > 0) & (field_years <= 20))
