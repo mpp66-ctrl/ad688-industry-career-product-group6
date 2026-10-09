@@ -136,6 +136,7 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#data-dictionary-met_text_panel.csv" id="toc-data-dictionary-met_text_panel.csv" class="nav-link active" data-scroll-target="#data-dictionary-met_text_panel.csv">Data Dictionary: met_text_panel.csv</a></li>
+  <li><a href="#data-dictionary-met_salary_model_panel.csv" id="toc-data-dictionary-met_salary_model_panel.csv" class="nav-link" data-scroll-target="#data-dictionary-met_salary_model_panel.csv">Data Dictionary: met_salary_model_panel.csv</a></li>
   </ul>
 </nav>
     </div>
@@ -199,6 +200,30 @@ ul.task-list li input[type="checkbox"] {
 </tbody>
 </table>
 <p>Known limits: the source <code>SKILLS_NAME</code> field is truncated and <code>EDUCATION_LEVELS_NAME</code> is a modeled level, so neither is used. Text-based flags undercount when a posting words a skill or requirement differently.</p>
+<hr>
+</section>
+<section id="data-dictionary-met_salary_model_panel.csv" class="level1">
+<h1>Data Dictionary: met_salary_model_panel.csv</h1>
+<p>Built by <code>python build_met_text_panel.py ../Jobs_2026 --all-industries</code> from the same <code>Jobs_2026</code> folder (https://drive.google.com/drive/folders/1Tq5Uixwz5J-aG_NfUQdI6X9CIrNz9ZFS). It holds Data Analyst, Data Scientist, ML Engineer, and Data / Analytics Engineer postings from <strong>any industry</strong> that disclose a salary (2,607 rows). Only the Salary Estimator on the Predictive Modeling page uses it. The columns are the same as in <code>met_text_panel.csv</code> above, plus one more:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>naics_5182</code></td>
+<td>True when the posting is in our industry, NAICS 5182 (299 rows)</td>
+</tr>
+</tbody>
+</table>
+<p><code>job_id</code>, <code>title</code>, <code>role</code>, <code>company_name</code>, <code>state</code>, <code>remote_status</code>, <code>employment_type</code>, <code>salary_min_annual</code>, <code>salary_max_annual</code>, <code>posted_at</code>, <code>has_text</code>, <code>experience_min_years</code>, <code>skill_&lt;name&gt;</code>, and <code>degree_&lt;level&gt;</code> are defined as above.</p>
 
 
 </section>

@@ -150,6 +150,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#work-arrangement" id="toc-work-arrangement" class="nav-link" data-scroll-target="#work-arrangement">Work Arrangement</a></li>
   <li><a href="#company-names" id="toc-company-names" class="nav-link" data-scroll-target="#company-names">Company Names</a></li>
   </ul></li>
+  <li><a href="#extended-dataset-for-the-salary-estimator" id="toc-extended-dataset-for-the-salary-estimator" class="nav-link" data-scroll-target="#extended-dataset-for-the-salary-estimator">Extended Dataset for the Salary Estimator</a></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   </ul>
 </nav>
@@ -229,6 +230,41 @@ ul.task-list li input[type="checkbox"] {
 <h3 class="anchored" data-anchor-id="company-names">Company Names</h3>
 <p>Some employer names are really a web domain (for example, <code>careers.pnc.com</code>) or a job board (“Jobs via Dice”). Known domains are mapped to the real employer, and job-board listings are labeled “Unknown employer”. In total, 27 postings (4%) have no attributable employer name; they are excluded from employer rankings but kept in the data since their role, salary, and location are still valid.</p>
 </section>
+</section>
+<section id="extended-dataset-for-the-salary-estimator" class="level2">
+<h2 class="anchored" data-anchor-id="extended-dataset-for-the-salary-estimator">Extended Dataset for the Salary Estimator</h2>
+<p>The NAICS 5182 slice has only 303 postings with a disclosed salary, which is too few to train a model with many inputs. For the Salary Estimator on the <a href="./predictive_modeling.html">Predictive Modeling</a> page we therefore build a second file from the same <code>Jobs_2026</code> folder with <code>python build_met_text_panel.py ../Jobs_2026 --all-industries</code>: <a href="data/processed/met_salary_model_panel.csv"><code>data/processed/met_salary_model_panel.csv</code></a>. It keeps the same role keywords, the same repeat-listing removal, and the same salary and text rules, but it <strong>keeps pathway postings from any industry</strong> and only those that disclose a salary, and it adds a flag for whether the posting is in NAICS 5182.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Stage</th>
+<th>Rows</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Pathway job-title keywords, any industry</td>
+<td>14,372</td>
+</tr>
+<tr class="even">
+<td>One row per distinct posting</td>
+<td>10,713</td>
+</tr>
+<tr class="odd">
+<td>With a disclosed salary</td>
+<td>2,607</td>
+</tr>
+<tr class="even">
+<td>With posting text (used by the estimator)</td>
+<td>2,252 after removing implausible salaries</td>
+</tr>
+</tbody>
+</table>
+<p>Of the 2,252 training postings, 155 are in NAICS 5182. Salaries under $30,000 or above $500,000 are dropped as implausible, and the estimator reads skills, degrees, and experience from the posting text exactly as above. The analysis on every other page uses only the NAICS 5182 file.</p>
 </section>
 <section id="summary" class="level2">
 <h2 class="anchored" data-anchor-id="summary">Summary</h2>
