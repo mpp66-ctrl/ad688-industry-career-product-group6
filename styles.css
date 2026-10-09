@@ -1,1 +1,230 @@
-/* css styles */
+/* Group 6 site theme: a light touch on top of Quarto's Cosmo theme.
+   Colors match the charts: navy #1d3557, teal #2a9d8f, blue #457b9d. */
+
+:root {
+  --g6-navy: #1d3557;
+  --g6-teal: #2a9d8f;
+  --g6-teal-dark: #1f7a70;
+  --g6-link: #1b6f8a;
+  --g6-link-hover: #12495c;
+  --g6-soft: #eef4f7;
+  --g6-line: #dbe6ec;
+  --g6-text: #25303d;
+}
+
+body {
+  color: var(--g6-text);
+  line-height: 1.65;
+}
+
+/* Navigation bar: navy with a teal accent under the current page */
+.navbar,
+.navbar.bg-light,
+.navbar.navbar-light {
+  background-color: var(--g6-navy) !important;
+  box-shadow: 0 2px 8px rgba(29, 53, 87, 0.18);
+}
+
+.navbar .navbar-brand,
+.navbar .navbar-title,
+.navbar .nav-link,
+.navbar .menu-text {
+  color: #e8f0f6 !important;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+  color: #ffffff !important;
+}
+
+.navbar .nav-link.active,
+.navbar .nav-link.active .menu-text {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.navbar .nav-link.active {
+  box-shadow: inset 0 -3px 0 var(--g6-teal);
+}
+
+
+.navbar .navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.navbar .navbar-toggler-icon {
+  filter: invert(1) brightness(1.4);
+}
+
+.navbar .quarto-search-icon,
+.navbar .aa-DetachedSearchButtonIcon,
+.navbar .aa-DetachedSearchButtonIcon svg,
+.navbar #quarto-search .bi {
+  color: #e8f0f6 !important;
+  fill: currentColor;
+}
+
+/* Give the site title room so it is not cut off */
+.navbar .navbar-brand-container {
+  max-width: none;
+  flex-shrink: 0;
+}
+
+.navbar .navbar-title {
+  white-space: nowrap;
+  font-size: 1.05rem;
+}
+
+/* Menu items: same order as in the site configuration, kept tidy at every screen width */
+@media (min-width: 992px) {
+  .navbar .navbar-nav {
+    flex-wrap: nowrap;
+    align-items: stretch;
+  }
+
+  .navbar .navbar-nav .nav-item {
+    display: flex;
+  }
+
+  .navbar .navbar-nav .nav-link {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    line-height: 1.2;
+  }
+}
+
+/* Wide screens: one line per item */
+@media (min-width: 1400px) {
+  .navbar .navbar-nav .nav-link {
+    white-space: nowrap;
+    font-size: 0.95rem;
+    padding: 0.9rem 0.8rem;
+  }
+
+  .navbar .navbar-title {
+    font-size: 1.05rem;
+  }
+}
+
+/* Laptop screens: slightly smaller so all seven items still fit on one line */
+@media (min-width: 1240px) and (max-width: 1399px) {
+  .navbar .navbar-nav .nav-link {
+    white-space: nowrap;
+    font-size: 0.86rem;
+    padding: 0.9rem 0.5rem;
+  }
+
+  .navbar .navbar-title {
+    font-size: 0.95rem;
+  }
+}
+
+/* Narrower screens: two tidy lines per item, equal widths */
+@media (min-width: 992px) and (max-width: 1239px) {
+  .navbar .navbar-nav .nav-link {
+    white-space: normal;
+    font-size: 0.85rem;
+    padding: 0.5rem 0.5rem;
+    max-width: 6.8rem;
+    justify-content: center;
+  }
+
+  .navbar .navbar-title {
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+}
+
+/* Titles and headings */
+h1.title,
+h1,
+h2,
+h3,
+h4 {
+  color: var(--g6-navy);
+}
+
+h2 {
+  border-bottom: 2px solid var(--g6-line);
+  padding-bottom: 0.25rem;
+}
+
+.quarto-title-block .subtitle,
+.subtitle {
+  color: #5b6b7b;
+}
+
+/* Links */
+main a:not(.nav-link):not(.btn),
+#quarto-document-content a:not(.nav-link):not(.btn) {
+  color: var(--g6-link);
+  text-underline-offset: 2px;
+}
+
+main a:not(.nav-link):not(.btn):hover,
+#quarto-document-content a:not(.nav-link):not(.btn):hover {
+  color: var(--g6-link-hover);
+}
+
+/* Table of contents (right-hand side) */
+#TOC .nav-link.active,
+nav[role="doc-toc"] a.active,
+.sidebar nav[role="doc-toc"] ul > li > a.active {
+  color: var(--g6-teal-dark) !important;
+  border-left-color: var(--g6-teal) !important;
+  font-weight: 600;
+}
+
+#TOC .nav-link:hover,
+nav[role="doc-toc"] a:hover {
+  color: var(--g6-teal-dark);
+}
+
+/* Code and tables */
+code {
+  color: var(--g6-navy);
+  background-color: var(--g6-soft);
+  border-radius: 4px;
+}
+
+div.sourceCode,
+pre.sourceCode {
+  border-radius: 8px;
+}
+
+div.sourceCode {
+  background-color: #f6f9fb;
+  border: 1px solid var(--g6-line);
+}
+
+pre code {
+  background-color: transparent;
+}
+
+table thead th {
+  background-color: var(--g6-soft);
+  color: var(--g6-navy);
+  border-bottom: 2px solid var(--g6-line);
+}
+
+table tbody tr:hover {
+  background-color: #f6fafb;
+}
+
+/* Charts get a little breathing room */
+.js-plotly-plot,
+.plotly-graph-div {
+  margin-top: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+blockquote {
+  border-left: 4px solid var(--g6-teal);
+  color: #3b4a5a;
+}
+
+/* Footer */
+.nav-footer {
+  border-top: 1px solid var(--g6-line);
+}
