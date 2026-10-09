@@ -86,15 +86,15 @@ Richard meets the Advanced level; Manan and Michael fall below it.
 ## What the Market Asks For
 
 To ground the comparison in real postings, we used the **MET Career Compass 2026 jobs data** shared with
-the course, the same files used in our assignments (165,386 postings, January to July 2026). We
-filtered it with the same rules as our main dataset: NAICS 518, then pathway job titles, giving **350
-postings** (see [Data Preparation](data_preparation.qmd)). The script is `build_met_text_panel.py`.
+the course (the `Jobs_2026` folder from our assignments, 815,193 postings). We filtered it to our industry
+and pathway: NAICS 518, then pathway job titles, then one row per distinct posting, giving **765 postings**
+(see [Data Preparation](data_preparation.qmd)). The script is `build_met_text_panel.py`.
 
 The `skills` field in these files is truncated (about three skills per posting, listed alphabetically),
 so it cannot rank skills. Instead we **searched the full posting text** for each skill. That text is
-available for **173 of the 350 postings**, and those 173 are the base for everything on this page. We
-grouped postings by role from the job title: Data Analyst (26 postings), Data Scientist or ML Engineer
-(72, pooled because both are the target of our pathway), and Data / Analytics Engineer (75). A posting
+available for **570 of the 765 postings**, and those 570 are the base for everything on this page. We
+grouped postings by role from the job title: Data Analyst (85 postings), Data Scientist or ML Engineer
+(239, pooled because both are the target of our pathway), and Data / Analytics Engineer (246). A posting
 counts for a skill when its text matches the skill's name patterns, which are listed in the build script.
 
 ```{python}
@@ -123,17 +123,18 @@ fig = go.Figure(go.Heatmap(
     text=heat.values, texttemplate="%{text:.0%}", textfont=dict(size=15), xgap=3, ygap=3, showscale=False,
     hovertemplate="<b>%{y}</b> in %{x}<br>Named in %{z:.0%} of postings<extra></extra>"))
 fig.update_yaxes(autorange="reversed")
-style(fig, "Skill Demand by Role", "Share of postings whose text names each skill area | 173 postings with text", height=420)
+style(fig, "Skill Demand by Role", "Share of postings whose text names each skill area | 570 postings with text", height=420)
 show(fig)
 ```
 
 **Interpretation:** the two roles ask for clearly different things. Data Scientist and ML Engineer
-postings (n=72) name Machine Learning most often (65%), followed by Python (43%) and Cloud/AWS (36%).
-Data Analyst postings (n=26) lean on SQL (38%) and Data Visualization (35%), and name Machine Learning in
-only 8% of cases. Data / Analytics Engineer postings (n=75) emphasize SQL (49%), Python (48%), and Cloud/AWS
-(44%). These shares are low overall because posting text is often short and a skill may be written in
-other words, so read them as relative differences between roles, not as exact requirements. The Data
-Analyst group is small (26 postings), so its percentages move a lot with a few postings.
+postings (n=239) name Machine Learning most often (68%), followed by Python (54%), Cloud/AWS (28%), and
+Statistics (26%). Data Analyst postings (n=85) lean on SQL (31%), Data Visualization (21%), and Statistics
+(21%), and name Machine Learning in only 11% of cases. Data / Analytics Engineer postings (n=246) emphasize
+Cloud/AWS (55%), Python (45%), and SQL (43%). These shares are modest overall because posting text is often
+short and a skill may be written in other words, so read them as relative differences between roles, not as
+exact requirements. The Data Analyst group (85 postings) is the smallest, so its percentages move more
+with a few postings.
 
 ```{python}
 #| label: analyst-vs-scientist
@@ -153,17 +154,17 @@ fig.update_layout(barmode="group")
 fig.update_xaxes(title="Share of postings whose text names the skill", tickformat=".0%", range=[0, 0.8],
                  gridcolor="#eceff3")
 style(fig, "Skills Requested: Analyst vs. Scientist / ML",
-      "Bold = a skill area our team rated | 173 postings with text", height=640)
+      "Bold = a skill area our team rated | 570 postings with text", height=640)
 fig.update_layout(legend=dict(orientation="h", x=0.5, xanchor="center", y=-0.12, yanchor="top"), margin=dict(b=110))
 show(fig)
 ```
 
 **Interpretation:** the chart is sorted from the skills most tied to Data Scientist / ML postings (top) to
 those most tied to Data Analyst postings (bottom). Moving along the pathway swaps a visualization and
-spreadsheet toolkit (Data Visualization 35%, Dashboards 31%, Excel 27% for analysts, against 10%, 4%, and
-1% for scientists) for a modeling and engineering toolkit (Machine Learning 65%, Python 43%, Cloud/AWS 36%,
-Deep Learning 31%, ETL 24%). SQL is the exception: it is the most-named skill for analysts (38%) and stays
-common for scientists (22%).
+spreadsheet toolkit (Data Visualization 21%, Dashboards 16%, Excel 18% for analysts, against 8%, 5%, and
+1% for scientists) for a modeling and engineering toolkit (Machine Learning 68%, Python 54%, Cloud/AWS 28%,
+Deep Learning 41%, ETL 20%). SQL is the shared skill: it is the most-named technical skill for analysts
+(31%) and remains common for scientists (24%).
 
 ## Comparing Team Skills to Market Demand
 
@@ -220,14 +221,15 @@ style(fig, "Team Average vs. Target by Skill", "Sorted by Data Scientist / ML de
 show(fig)
 ```
 
-**Interpretation:** Machine Learning is the most-requested skill for Data Scientist / ML postings (65%)
+**Interpretation:** Machine Learning is the most-requested skill for Data Scientist / ML postings (68%)
 and one of the team's weaker areas: the team averages 3.7, and Manan and Richard each rate 3, so it is the
-clearest gap for our pathway. Python (43% of Data Scientist / ML postings) and Cloud/AWS (36%) are in the
-moderate tier; the team averages 4.0 in both, but Richard rates Python 3 and Michael rates Cloud/AWS 3.
-SQL (38% of Data Analyst postings) and Data Visualization (35%) matter most for the analyst step; the team
-averages 4.0 in both, with Michael at 3 in SQL and Richard at 3 in Data Visualization. Statistics is the
-team's lowest average (3.0, with Manan at 2 and Michael at 3), but it appears in only 23% of Data Analyst
-and 18% of Data Scientist / ML postings, so it ranks lower than the market data alone would suggest.
+clearest gap for our pathway. Python (54% of Data Scientist / ML postings) is also in the high-demand tier;
+the team averages 4.0, but Richard rates it 3. Cloud/AWS (28%) is in the moderate tier, with the team at 4.0
+and Michael at 3. SQL (31% of Data Analyst postings) and Statistics matter for the analyst step; the team
+averages 4.0 in SQL, with Michael at 3. Statistics is the team's lowest average (3.0, with Manan at 2 and
+Michael at 3), and it appears in 26% of Data Scientist / ML and 21% of Data Analyst postings, so it is a real
+gap and not only a self-rating quirk. Data Visualization is named in only 8% of Data Scientist / ML postings
+(21% of Data Analyst postings), so it matters mostly for the first step of the path.
 
 ## Improvement Plan
 
@@ -237,9 +239,9 @@ work, not completed contributions.
 
 | Member | Priority (self-rating; share of Data Scientist / ML or Data Analyst postings) | Proposed action | Suggested resource | Timeframe and evidence |
 |---|---|---|---|---|
-| Manan Patel | Machine Learning (3; 65% of Data Scientist / ML), then Statistics (2) | Pair with Michael on a small supervised-learning project; practice hypothesis testing and regression with Richard's review. | "Machine Learning Specialization" (Coursera, DeepLearning.AI); Khan Academy, "Statistics and Probability" (free) | Within two weeks: one reproducible notebook explaining assumptions, results, and limitations. |
-| Richard Park | Machine Learning (3; 65%), Python (3; 43%), Data Visualization (3; 35% of Data Analyst) | Pair with Michael on Machine Learning and visualization and with Manan on Python. | "Python for Everybody" (Coursera, University of Michigan); Tableau Public free training videos | Within two weeks: one Python analysis with two labeled charts and written interpretations. |
-| Michael Phillips | SQL (3; 38% of Data Analyst), then Cloud/AWS (3; 36%) and Statistics (3) | Start with SQL aggregation practice, then a small AWS analysis because of the industry scope. | Mode, "SQL Tutorial" (free); "AWS Cloud Practitioner Essentials" (AWS Skill Builder) | Within two weeks: SQL aggregation queries with written results; within four weeks: a small analysis run on AWS, documenting setup, outputs, and resource cleanup. |
+| Manan Patel | Machine Learning (3; 68% of Data Scientist / ML), then Statistics (2; 26%) | Pair with Michael on a small supervised-learning project; practice hypothesis testing and regression with Richard's review. | "Machine Learning Specialization" (Coursera, DeepLearning.AI); Khan Academy, "Statistics and Probability" (free) | Within two weeks: one reproducible notebook explaining assumptions, results, and limitations. |
+| Richard Park | Machine Learning (3; 68%), Python (3; 54%), Data Visualization (3; 21% of Data Analyst) | Pair with Michael on Machine Learning and visualization and with Manan on Python. | "Python for Everybody" (Coursera, University of Michigan); Tableau Public free training videos | Within two weeks: one Python analysis with two labeled charts and written interpretations. |
+| Michael Phillips | SQL (3; 31% of Data Analyst), then Cloud/AWS (3; 28% of Data Scientist / ML) and Statistics (3; 26%) | Start with SQL aggregation practice, then a small AWS analysis because of the industry scope. | Mode, "SQL Tutorial" (free); "AWS Cloud Practitioner Essentials" (AWS Skill Builder) | Within two weeks: SQL aggregation queries with written results; within four weeks: a small analysis run on AWS, documenting setup, outputs, and resource cleanup. |
 
 **Shared priority:** Machine Learning is the most-requested skill for the role our pathway leads to, and
 Michael (rating 5) can coach Manan and Richard. Richard and Michael can also teach each other's weaker
@@ -252,30 +254,31 @@ peer-review its interpretation.
 These draft recommendations for job seekers come from the Exploratory Analysis page and the market
 comparison above. They describe the Data Analyst to Data Scientist pathway in NAICS 5182.
 
-1. **Learn the analyst toolkit first, then add modeling.** Data Analyst postings most often name SQL (38%)
-   and Data Visualization (35%), with Dashboards and Excel close behind. Build portfolio dashboards backed
-   by SQL queries before moving on.
+1. **Learn the analyst toolkit first, then add modeling.** Data Analyst postings most often name SQL (31%)
+   and Data Visualization (21%), with Excel (18%) and Dashboards (16%) close behind. Build portfolio
+   dashboards backed by SQL queries before moving on.
 2. **Make Machine Learning and Python the bridge to Data Scientist roles.** Data Scientist / ML postings
-   name Machine Learning in 65% of cases and Python in 43%, compared with 8% and 27% for Data Analyst postings.
-3. **Add Cloud/AWS and data-pipeline skills.** They appear in 36% and 24% of Data Scientist / ML postings
-   and far more often in engineering roles, which fits an industry built around cloud and data hosting.
+   name Machine Learning in 68% of cases and Python in 54%, compared with 11% and 20% for Data Analyst postings.
+3. **Add Cloud/AWS and data-pipeline skills.** They appear in 28% and 20% of Data Scientist / ML postings
+   and far more often in engineering roles (55% and 68%), which fits an industry built around cloud and data
+   hosting.
 4. **Expect a mid-level market and build experience early.** Where experience is stated, requirements
    mostly fall in the 3-8 year range, so projects, internships, and certifications can help offset
    limited work history.
-5. **Look at California and New York for volume, and Texas for pay.** California and New York have the
-   most postings, and Texas leads on average disclosed pay in the 2026 data.
-6. **Weigh the pay gain.** Average disclosed pay for Data Scientist and ML Engineer postings is about 1.7
-   times that of Data Analyst postings in the course job data and about 2.3 times in our API data. The
-   direction is the same in both; the size depends on the sample.
+5. **Look at California and New York for volume, and California for pay.** California and New York have the
+   most postings (141 and 113), and California leads on average disclosed pay ($225K across 85 salary postings).
+6. **Weigh the pay gain.** Average disclosed pay for Data Scientist and ML Engineer postings is about 1.8
+   times that of Data Analyst postings (about $219K against $125K). The Predictive Modeling page finds role to
+   be the strongest pay factor.
 7. **Do not assume a degree is stated.** Only a minority of postings name a degree; see the education
    section of the Exploratory Analysis page for how many state it as required.
 
 ## Limitations and Next Steps
 
-- Posting text is available for 173 of the 350 postings, and some of that text is short, so skill shares are
+- Posting text is available for 570 of the 765 postings, and some of that text is short, so skill shares are
   understated and should be compared across roles, not read as exact requirements.
-- The Data Analyst group is small (26 postings with text, and only 16 of all 55 Data Analyst postings
-  disclose a salary), so role comparisons are directional.
+- The Data Analyst group is the smallest (85 postings with text, and only 30 of all 116 Data Analyst
+  postings disclose a salary), so role comparisons are directional.
 - Skills are matched by name patterns (listed in `build_met_text_panel.py`), so a posting that names a
   skill in another way is missed, and a pattern can match unrelated uses of a word.
 - The target level (Advanced, 4) is a team choice, not a figure taken from postings.

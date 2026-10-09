@@ -18,9 +18,9 @@ job seeker on the **Data Analyst to Data Scientist** pathway in NAICS 5182. It h
 2. **A role opportunity scorecard** (Part 2) that ranks the four pathway roles on pay, how accessible
    they are, and how well they fit our team's current skills.
 
-Both use the **MET Career Compass 2026 job postings** described in [Data Preparation](data_preparation.qmd):
-350 pathway postings in NAICS 518, of which 176 disclose a salary and 173 include posting text. The build
-script is `build_met_text_panel.py`. Each part states what was modeled, why it matters, which variables
+Both use the **MET Career Compass 2026 job postings** (the course `Jobs_2026` folder) described in
+[Data Preparation](data_preparation.qmd): 765 pathway postings in NAICS 518, of which 303 disclose a salary
+and 570 include posting text. The build script is `build_met_text_panel.py`. Each part states what was modeled, why it matters, which variables
 were used, how it was evaluated, and what the result means in practical terms.
 
 ```{python}
@@ -69,7 +69,7 @@ mp["level"] = np.where(mp["title"].str.lower().str.contains(SENIOR), "Senior tit
 state = mp["state"].fillna("")
 mp["state_group"] = np.where(state.isin(["California", "New York", "Virginia", "District of Columbia"]), state,
                              np.where(state == "", "State not given", "Other states"))
-mp["remote"] = np.where(mp["remote_status"] == "Remote", "Remote", "Not remote or not stated")
+mp["remote"] = mp["remote_status"].fillna("Unknown").replace({"Unknown": "Not stated"})
 print(f"{len(mp)} postings, {mp['salary_mid'].notna().sum()} with a salary, {int(mp['has_text'].sum())} with posting text")
 ```
 
@@ -84,9 +84,9 @@ example whether a New York posting pays more than a California one for the same 
 **Variables used.** Four features, all read from the posting: the **role** (Data Analyst, Data / Analytics
 Engineer, Data Scientist, or ML Engineer, from the job title), whether the title signals a **senior** level
 (senior, staff, principal, lead, manager, director, head of, or architect), the **state group**
-(California, New York, Virginia, District of Columbia, other states, or no state given), and whether the
-posting is **remote**. Experience is not in these files, and skills are available for only about half the
-postings, so they are not used here.
+(California, New York, Virginia, District of Columbia, other states, or no state given), and the **work
+arrangement** (remote, hybrid, onsite, or not stated). Experience is not in these files, and skills are
+available for only about half of the postings with a salary (158 of 303), so they are not used here.
 
 **How it was evaluated.** We compared three models with repeated 5-fold cross-validation (5 repeats), so
 every score comes from postings the model had not seen: a **baseline** that always guesses the median
@@ -141,13 +141,14 @@ style(fig, "How Well Each Model Predicts Salary",
 show(fig)
 ```
 
-**Interpretation:** the ridge regression is the best of the three. Its typical error (RMSE) is about
-$58.7K against $67.6K for the baseline, its mean absolute error is $44.5K against $51.8K, and its R² is
-0.17 against -0.08 for the baseline. The random forest did not beat it (RMSE $61.1K, R² 0.09), so we keep the
-simpler, more explainable ridge model. In practical terms, role, seniority, state, and remote status together
-explain only about 17% of the differences in pay between postings. The model is useful for comparing
-factors, but a typical estimate is still about $44K away from the real figure, so it should not be used to
-predict a specific offer.
+**Interpretation:** the ridge regression and the random forest are essentially tied, and both clearly beat
+the baseline. Ridge's typical error (RMSE) is about $50.3K against $61.8K for the baseline, its mean absolute
+error is $37.9K against $48.2K, and its R² is 0.31 against -0.04 for the baseline. The random forest scores
+almost the same (RMSE $49.8K, R² 0.32), a difference too small to matter, so we use the simpler, more
+explainable ridge model, whose coefficients we can read and plot. In practical terms, role, seniority, state,
+and work arrangement together explain about 31% of the differences in pay between postings. The model is
+useful for comparing factors, but a typical estimate is still about $38K away from the real figure, so it
+should not be used to predict a specific offer.
 
 ```{python}
 #| label: salary-factors
@@ -179,6 +180,8 @@ show_rows = {
     "state_group_Virginia": "State: Virginia",
     "level_Senior title": "Senior title",
     "remote_Remote": "Remote posting",
+    "remote_Hybrid": "Hybrid posting",
+    "remote_Onsite": "Onsite posting",
 }
 plot = eff.loc[list(show_rows)].rename(index=show_rows).sort_values("effect")
 group_color = [PALETTE[3] if i.startswith("Role") else PALETTE[0] if i.startswith("State")
@@ -198,16 +201,19 @@ style(fig, "What Is Associated With Higher or Lower Pay",
 show(fig)
 ```
 
-**Interpretation:** role is by far the strongest factor. Compared with an average posting (about $199K),
-an ML Engineer title is associated with about **$43K more** and a Data Scientist title with about **$25K
-more**, while a Data Analyst title is associated with about **$57K less** and a Data / Analytics Engineer
-title with about $12K less. Those ranges do not cross zero, so the role gaps are reliable even in a small
-sample. Location matters less: New York is associated with about $21K more and California with about $13K
-more, while Virginia is about $18K lower. A senior title adds about $17K compared with other titles. The
-remote estimate (about $12K lower) has a range that crosses zero and rests on only 14 remote postings, so
-the data does not show that remote work pays more or less. For a job seeker, the clearest signal is that
-**moving from a Data Analyst title toward a Data Scientist or ML Engineer title is associated with a larger
-pay difference than any location choice**.
+**Interpretation:** role is by far the strongest factor. Compared with an average posting (about $195K),
+an ML Engineer title is associated with about **$31K more** and a Data Scientist title with about **$21K
+more**, while a Data Analyst title is associated with about **$51K less**. A Data / Analytics Engineer title
+is about the same as average, because its range crosses zero. Location matters too: California is associated
+with about $25K more and New York with about $15K more, while Virginia is about $24K lower and the District
+of Columbia about $12K lower; the other state groups cross zero. A senior title adds about $14K relative to
+an average posting, or about $28K more than other titles. Work arrangement is mixed: hybrid postings are about
+$15K above average with a range that stays above zero, though they rest on only 25 salary postings; remote
+postings are about the same as average, because their range crosses zero; and onsite postings are about $27K
+below average, but only 10 postings are onsite, so that estimate is fragile. For a job seeker, the clearest
+signal is that **moving from a Data Analyst title toward a Data Scientist or ML Engineer title is associated
+with a pay difference of roughly $72K to $82K, larger than any location choice** (California against Virginia
+is about $49K).
 
 ```{python}
 #| label: actual-vs-predicted
@@ -233,10 +239,10 @@ style(fig, "Predicted vs. Actual Salary",
 show(fig)
 ```
 
-**Interpretation:** the points follow the dashed line only loosely (correlation about 0.42). The model gets
+**Interpretation:** the points follow the dashed line only loosely (correlation about 0.56). The model gets
 the direction right: ML Engineer and Data Scientist postings are predicted higher than Data Analyst
 postings, and they are higher in reality. But within each role the actual pay varies widely, from about
-$70K to $420K across the whole sample, and the four features cannot explain that spread. Employer, scope of
+$50K to $363K across the whole sample, and the four features cannot explain that spread. Employer, scope of
 the job, and skills that are not in the model are likely drivers. This is why we describe the model as a
 guide to relative differences and not as a calculator of someone's likely salary.
 
@@ -261,7 +267,7 @@ The weights are our judgment, not estimated from data, so we test how much the r
 
 **How it was evaluated.** A scorecard has no accuracy metric. Instead we check **sensitivity**: we re-rank
 the roles under three other sets of weights and report whether the order changes. Each criterion also shows
-its sample size, because the roles have between 16 and 74 postings with a salary.
+its sample size, because the roles have between 30 and 123 postings with a salary.
 
 ```{python}
 #| label: scorecard
@@ -341,22 +347,23 @@ ranks.index.name = "Role (rank 1 = best)"
 ranks
 ```
 
-**Interpretation:** Data Scientist and ML Engineer are the strongest opportunities, ahead of Data / Analytics
-Engineer and Data Analyst. ML Engineer scores 0.803 and Data Scientist 0.795, a gap too small to matter: the
-two swap places when the weights change (Data Scientist ranks first under equal weights and when accessibility
-and fit count more, ML Engineer ranks first when pay counts more), while the bottom two roles keep their
-positions in every scenario. The scores show a clear trade-off. **ML Engineer** has the highest median salary
-(about $247K) but the lowest accessibility (32% of its postings carry a non-senior title, and 17% name a
-Master's or PhD as required or preferred). **Data Analyst** has the lowest pay (about $121K) but the highest
-accessibility (51% non-senior titles and no graduate degree named in the posting text we have), which fits a
-student's first step. **Data Scientist** sits between them on both. Fit with our team is similar across roles
-(0.75 to 0.79) because our self-ratings are fairly even across the six skills, so fit does not separate the
-roles; the scorecard's ranking is driven mostly by pay and accessibility.
+**Interpretation:** ML Engineer (0.822) and Data Scientist (0.803) are the strongest opportunities, ahead of
+Data / Analytics Engineer (0.755) and Data Analyst (0.672). The order is the same under all four weightings in
+the table, so the ranking does not depend on our choice of weights, although the gap between the top two
+(0.019) is small and should not be over-read. The scores show a clear trade-off. **ML Engineer** has the
+highest median salary (about $220K) and the lowest accessibility (0.65: 38% of its postings carry a non-senior
+title, and 9% name a Master's or PhD as required or preferred). **Data Analyst** has the lowest median pay
+(about $115K) but the highest accessibility (0.79: 65% non-senior titles, and 7% name a graduate degree), which
+fits a student's first step. **Data / Analytics Engineer** sits in the middle on both (median about $175K,
+accessibility 0.67). **Data Scientist** is close to ML Engineer on pay (about $205K) with slightly better
+accessibility (0.69, with 47% non-senior titles). Fit with our team is similar across roles (0.75 to 0.79)
+because our self-ratings are fairly even across the six skills, so fit does not separate the roles; the
+scorecard's ranking is driven mostly by pay and accessibility.
 
 **What this means for a job seeker.** Treat the roles as steps on one path: a Data Analyst role is the most
-reachable entry point, and the Data Scientist role is the best balance of pay and access once you have
-the experience for it. An ML Engineer role pays the most but is the hardest to enter, so it is a longer-term
-target. This supports the recommendations in the [Skill Gap Analysis](skill_gap_analysis.qmd) page, which
+reachable entry point, and the Data Scientist and ML Engineer roles pay nearly twice as much (a median of
+about $205K to $220K against $115K for analysts) once you have the experience for them. Both are less
+accessible than the analyst role, so they are the goal of the path, not its starting point. This supports the recommendations in the [Skill Gap Analysis](skill_gap_analysis.qmd) page, which
 identify Machine Learning and Python as the bridge between the first two steps.
 
 ## Part 3: Salary Estimator
@@ -368,8 +375,8 @@ the skills that role's postings name most often.
 
 **How to read it.** The estimate is the model's best guess of the midpoint of a posted salary range. The
 range shown is where 80% of the model's cross-validated errors fell (never below the lowest salary in our
-sample), so it is the honest spread to expect, not a promise. The model uses only role, senior title, state, and remote status. **Skills do not change the
-estimate** because the salary data does not include enough postings with skill information to model them; they
+sample), so it is the honest spread to expect, not a promise. The model uses only role, senior title, state, and work arrangement. **Skills do not change the
+estimate** because skills are known for only about half of the postings with a salary (158 of 303); they
 are shown below the estimate for context only.
 
 ```{python}
@@ -391,7 +398,7 @@ options = {
     "role": ["Data Analyst", "Data Scientist", "ML Engineer", "Data / Analytics Engineer"],
     "level": ["Senior title", "Other title"],
     "state_group": ["California", "New York", "Virginia", "District of Columbia", "Other states", "State not given"],
-    "remote": ["Not remote or not stated", "Remote"],
+    "remote": ["Not stated", "Remote", "Hybrid", "Onsite"],
 }
 labels = {
     "role": "Role", "level": "Job title level", "state_group": "State", "remote": "Work arrangement",
@@ -415,6 +422,7 @@ payload = {
     "low": round(float(np.quantile(resid, 0.10)), 0),
     "high": round(float(np.quantile(resid, 0.90)), 0),
     "mae": round(float(results.loc["Ridge regression", "MAE (USD)"]), 0),
+    "r2pct": round(float(results.loc["Ridge regression", "R2"]) * 100),
     "min_salary": round(float(y.min()), 0),
     "overall_median": round(float(np.median(y)), 0),
     "rows": [[r, l, s, m, round(float(v))] for r, l, s, m, v in
@@ -496,7 +504,7 @@ page = """
     html += '</div>';
     document.getElementById("se-result").innerHTML = html;
     var warn = same.length < 10 ? "Only " + same.length + " matching postings, so treat the similar-postings figures as rough. " : "";
-    document.getElementById("se-note").textContent = warn + "The model explains about 17% of pay differences and is typically " + money(D.mae) + " off, so use it to compare options, not to predict an offer. State and remote effects rest on few postings.";
+    document.getElementById("se-note").textContent = warn + "The model explains about " + D.r2pct + "% of pay differences and is typically " + money(D.mae) + " off, so use it to compare options, not to predict an offer. Some state and work-arrangement groups are small.";
   }
   update();
 })();
@@ -507,16 +515,16 @@ display(HTML(page.replace("__DATA__", json.dumps(payload))))
 
 ## Limitations
 
-- **Small samples.** The regression uses 176 postings with a salary, and the Data Analyst and ML Engineer
-  groups have only 16 each. Differences between close roles, such as ML Engineer and Data Scientist, are not
+- **Moderate samples.** The regression uses 303 postings with a salary, but only 30 are Data Analyst postings
+  (and 58 are ML Engineer). Differences between close roles, such as ML Engineer and Data Scientist, are not
   reliable, which is why we report ranges and test the weights.
-- **The model explains little of the variation in pay** (R² about 0.17). It shows which factors are
+- **The model explains only part of the variation in pay** (R² about 0.31). It shows which factors are
   associated with pay, not what causes it, and it leaves out experience, employer, and skills.
-- **Remote and state estimates are weak.** Only 14 postings are remote, and several states have very few
-  postings, so these effects have wide ranges.
+- **Work arrangement and state estimates are weak.** Only 30 postings with a salary are remote, 25 hybrid,
+  and 10 onsite, and several states have few postings, so these effects have wide ranges.
 - **The scorecard weights are judgments.** The sensitivity check shows which conclusions hold under other
   weights and which do not.
 - **Title-based labels.** Role and seniority come from job titles, and a title can overstate or understate
-  the real level of the job. Posting text is available for only 173 of the 350 postings, so accessibility
+  the real level of the job. Posting text is available for 570 of the 765 postings, so accessibility
   rests on fewer postings than pay.
 - **Self-ratings.** The fit score depends on three people's self-ratings, which are subjective.

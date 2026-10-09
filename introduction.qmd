@@ -33,21 +33,22 @@ A review of recent industry and labor-market sources points to a few consistent 
 
 Building on this rationale, our team carried out the work below. Each item links to the page with the details:
 
-- **Filtered and cleaned the data.** We isolated Data Analyst / Data Scientist pathway roles within the Data Processing, Hosting, and Related Services industry (NAICS 5182): 4,309 postings in the industry, 2,469 in the US, and 258 role-matched, deduplicated postings. See [Data Preparation](data_preparation.qmd).
-- **Established a market baseline.** Across the 258 postings, salary is disclosed on 34% and clusters at $120K-$210K, experience requirements mostly fall in the 3-8 year range, and California and New York lead on location. See [Exploratory Analysis](eda.qmd).
-- **Compared team skills with a planning benchmark.** Each team member rated six skills on a 1-5 scale against a team-selected target of Advanced (4), and we drafted an improvement plan. This benchmark is preliminary: the skill list has not yet been validated against posting-level skill evidence. See [Skill Gap Analysis](skill_gap_analysis.qmd).
-- **Still to come in Module 5.** Market-based skill requirements for each target role, and a scorecard that helps a job seeker evaluate which roles best fit their profile.
+- **Filtered and cleaned the data.** We isolated Data Analyst / Data Scientist pathway roles within the Data Processing, Hosting, and Related Services industry (NAICS 5182) in the course `Jobs_2026` job files: 6,964 postings in the industry, 1,232 with pathway titles, and 765 distinct postings. See [Data Preparation](data_preparation.qmd).
+- **Established a market baseline.** Across the 765 postings, salary is disclosed on 40% with a median of $188K, experience requirements (stated in 27%) mostly fall in the 3-8 year range, and California and New York lead on location. See [Exploratory Analysis](eda.qmd).
+- **Compared team skills with the market.** Each team member rated six skills on a 1-5 scale, and we compared those ratings with how often Data Analyst and Data Scientist / ML postings name each skill in their text, then drafted an improvement plan. See [Skill Gap Analysis](skill_gap_analysis.qmd).
+- **Modeled pay and ranked roles.** A salary regression shows which factors are associated with higher pay, a scorecard ranks the four pathway roles on pay, accessibility, and fit with our skills, and a salary estimator lets a reader try their own combination. See [Predictive Modeling](predictive_modeling.qmd).
+- **Still to come.** Final recommendations and the written report.
 
 ## Industry and Career Pathway Documentation
 
 - **Selected career pathway:** Data Analyst, with a growth trajectory toward Data Scientist / Analytics Engineer roles
 - **Selected industry code:** NAICS 5182 - Computing Infrastructure Providers, Data Processing, Web Hosting, and Related Services
 - **Industry label:** Data Processing, Hosting, and Related Services (part of NAICS 518 - Data Processing, Hosting, and Related Services, under NAICS 51 - Information)
-- **How the code appears in the data:** The MET Employability API stores this industry under two codes, `518000` and `518200`, with identical labels. A query on `5182` alone returned only 10 postings, so we filtered on the prefix `518` to capture both. All 4,309 postings in that filter carry the same industry label as NAICS 5182.
+- **How the code appears in the data:** In the course `Jobs_2026` job files, this industry is the three-digit code `518`, and all 6,964 postings with that code also carry the four-digit code `5182`, so filtering on `518` selects exactly our industry.
 - **Why this industry is relevant:** This industry's entire business model is built around storing, processing, and delivering data at scale-cloud platforms, data centers, and managed hosting providers all fall under this code. Analytics and data roles are not a support function here; they are central to how these companies operate, monitor infrastructure, and serve customers, making it a directly relevant and data-rich slice for a career evaluation product.
 
-## MET Employability Career Match Fields Used
+## Data Fields Used
 
-The analysis relies primarily on these fields from the MET Employability Career Match API: job title, industry/NAICS classification, salary range, years of experience required, location, and remote-work status. The API also provides a required-skills field, but in our extract it is truncated to the first few skills (alphabetically) for each posting, so we did not use it to rank skills. Column-by-column details are in the [data dictionary](data/processed/data_dictionary.md).
+The analysis uses these fields from the MET Career Compass 2026 job files (`Jobs_2026`): job title, industry/NAICS classification, salary range, location, work arrangement (remote, hybrid, or onsite), and the full posting text, from which we read required skills, degree wording, and years of experience. The files also provide a skills field, but it is truncated to the first few skills (alphabetically) for each posting, so we did not use it to rank skills. Column-by-column details are in the [data dictionary](data/processed/data_dictionary.md).
 
 ## References

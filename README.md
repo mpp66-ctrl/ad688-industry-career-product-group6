@@ -14,18 +14,19 @@ A career evaluation product helping analytics/data-science job seekers understan
 - `data_preparation.qmd` - how both datasets were filtered and cleaned
 - `eda.qmd` - Exploratory Analysis (interactive Plotly charts)
 - `skill_gap_analysis.qmd` - team skills vs. Data Analyst and Data Scientist / ML postings
-- `build_met_text_panel.py` - builds `data/processed/met_text_panel.csv` from the MET Career Compass 2026 job files
+- `build_met_text_panel.py` - builds `data/processed/met_text_panel.csv` from the course `Jobs_2026` job files
+- `predictive_modeling.qmd` - salary regression, role opportunity scorecard, and salary estimator
 - `data/` - raw, interim, and processed datasets (see `data/processed/data_dictionary.md`)
-- `figures/` - earlier exported chart images
 - `outputs/` - exported tables, CSVs, and other analysis outputs
 - `references.bib` - bibliography
 
 ## Data Sources
 
-- **MET Employability Career Match API (2026):** `data/processed/career_market_panel.csv`, 258 postings.
-- **MET Career Compass 2026 job files** (course Google Drive folder, not stored in the repo):
-  `data/processed/met_text_panel.csv`, 350 postings, used for skills and degree wording.
+- **MET Career Compass 2026 job files** (the `Jobs_2026` Google Drive folder confirmed by our instructor,
+  https://drive.google.com/drive/folders/1Tq5Uixwz5J-aG_NfUQdI6X9CIrNz9ZFS?usp=sharing, not stored in the repo):
+  `data/processed/met_text_panel.csv`, 765 postings, used for every analysis page.
 
 ## Team
 
 Group 6 - AD688
+
