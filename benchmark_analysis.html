@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Benchmark Analysis – Career Evaluation Product - Group 6</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-55617497126496852ff9f5a59253c640.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script>
+window.PlotlyConfig = {MathJaxConfig: 'local'};
+if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}
+</script>
+<script type="module">import "https://cdn.plot.ly/plotly-4.1.1.min"</script>
+
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Career Evaluation Product - Group 6</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./introduction.html"> 
+<span class="menu-text">Project Overview</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./data_preparation.html"> 
+<span class="menu-text">Data Preparation</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./eda.html"> 
+<span class="menu-text">Exploratory Analysis</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./benchmark_analysis.html" aria-current="page"> 
+<span class="menu-text">Benchmark Analysis</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./skill_gap_analysis.html"> 
+<span class="menu-text">Skill Gap Analysis</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./predictive_modeling.html"> 
+<span class="menu-text">Predictive Modeling</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#salary-differences-between-ai-related-and-non-ai-postings" id="toc-salary-differences-between-ai-related-and-non-ai-postings" class="nav-link" data-scroll-target="#salary-differences-between-ai-related-and-non-ai-postings">Salary Differences Between AI-Related and Non-AI Postings</a>
+  <ul class="collapse">
+  <li><a href="#how-do-salaries-differ-across-ai-related-and-non-ai-postings" id="toc-how-do-salaries-differ-across-ai-related-and-non-ai-postings" class="nav-link" data-scroll-target="#how-do-salaries-differ-across-ai-related-and-non-ai-postings">How do salaries differ across AI-related and non-AI postings?</a></li>
+  </ul></li>
+  <li><a href="#data-careers-vs.-neighboring-fields" id="toc-data-careers-vs.-neighboring-fields" class="nav-link" data-scroll-target="#data-careers-vs.-neighboring-fields">Data Careers vs.&nbsp;Neighboring Fields</a>
+  <ul class="collapse">
+  <li><a href="#how-does-pay-in-data-fields-compare-with-software-engineering-and-other-computer-and-business-fields" id="toc-how-does-pay-in-data-fields-compare-with-software-engineering-and-other-computer-and-business-fields" class="nav-link" data-scroll-target="#how-does-pay-in-data-fields-compare-with-software-engineering-and-other-computer-and-business-fields">How does pay in data fields compare with software engineering and other computer and business fields?</a></li>
+  </ul></li>
+  <li><a href="#our-own-view-demand-vs.-pay" id="toc-our-own-view-demand-vs.-pay" class="nav-link" data-scroll-target="#our-own-view-demand-vs.-pay">Our Own View: Demand vs.&nbsp;Pay</a>
+  <ul class="collapse">
+  <li><a href="#which-fields-combine-strong-pay-with-a-lot-of-openings" id="toc-which-fields-combine-strong-pay-with-a-lot-of-openings" class="nav-link" data-scroll-target="#which-fields-combine-strong-pay-with-a-lot-of-openings">Which fields combine strong pay with a lot of openings?</a></li>
+  </ul></li>
+  <li><a href="#what-this-means-for-our-pathway" id="toc-what-this-means-for-our-pathway" class="nav-link" data-scroll-target="#what-this-means-for-our-pathway">What This Means for Our Pathway</a></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations">Limitations</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Benchmark Analysis</h1>
+<p class="subtitle lead">How Do AI-Related Roles and Our Pathway Compare With the Whole Job Market?</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>The other pages study one pathway in one industry (NAICS 5182). This page steps back and benchmarks it against the <strong>whole job market in the same data</strong>: every industry and every job type in the course <code>Jobs_2026</code> files. It answers three questions a job seeker would ask before committing to the Data Analyst to Data Scientist path:</p>
+<ol type="1">
+<li><strong>Does AI exposure change pay?</strong> How do salaries differ between AI-related and non-AI postings?</li>
+<li><strong>How do data careers compare with neighboring ones?</strong> Where do data roles sit against software engineering, IT, cybersecurity, and business fields?</li>
+<li><strong>Which fields combine strong pay with many openings?</strong> Where do data careers sit on demand and pay?</li>
+</ol>
+<p><strong>What is in the data.</strong> The files hold 815,193 postings. After removing duplicates, possible ghost listings, and internships, <strong>733,064 valid postings</strong> remain, and <strong>69,246</strong> of them state a salary we can convert to an annual figure (the folder’s own normalization of annual, hourly, weekly, and biweekly pay, kept between $25,000 and $600,000). All pay figures on this page use those 69,246 postings. The script is <code>build_benchmark_tables.py</code>, which saves only small summary tables.</p>
+<p><strong>How we define the groups.</strong></p>
+<ul>
+<li><strong>AI-related posting:</strong> the job title names AI or machine learning, or the posting text names at least one core AI term (machine learning, artificial intelligence, deep learning, neural networks, natural language processing, large language models, generative AI, computer vision, PyTorch, or TensorFlow). About 5% of postings meet this rule. A posting that merely mentions AI in passing counts, so this measures AI exposure and not only dedicated AI jobs.</li>
+<li><strong>Occupation field:</strong> assigned from the job title with transparent keyword rules (listed in the script) into ten computer and business fields: Data Science &amp; ML, Data Engineering, Data Analytics &amp; BI, Software Engineering, IT &amp; Cloud Infrastructure, Cybersecurity, Product &amp; Project Management, Business Analysis &amp; Consulting, Finance &amp; Accounting, and Marketing &amp; Sales. Everything else is “All other occupations.”</li>
+</ul>
+<div id="benchmark-setup" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>PALETTE <span class="op">=</span> [<span class="st">"#457b9d"</span>, <span class="st">"#2a9d8f"</span>, <span class="st">"#e9c46a"</span>, <span class="st">"#e76f51"</span>, <span class="st">"#6d597a"</span>, <span class="st">"#f4a261"</span>]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>GRAY <span class="op">=</span> <span class="st">"#b8bec6"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> style(fig, title, subtitle, height<span class="op">=</span><span class="dv">480</span>, legend<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    fig.update_layout(</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        title<span class="op">=</span><span class="bu">dict</span>(text<span class="op">=</span><span class="ss">f"&lt;b&gt;</span><span class="sc">{</span>title<span class="sc">}</span><span class="ss">&lt;/b&gt;&lt;br&gt;&lt;span style='font-size:12px;color:gray'&gt;</span><span class="sc">{</span>subtitle<span class="sc">}</span><span class="ss">&lt;/span&gt;"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                   x<span class="op">=</span><span class="dv">0</span>, xanchor<span class="op">=</span><span class="st">"left"</span>),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        template<span class="op">=</span><span class="st">"simple_white"</span>, height<span class="op">=</span>height, showlegend<span class="op">=</span>legend,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        font<span class="op">=</span><span class="bu">dict</span>(family<span class="op">=</span><span class="st">"Segoe UI, Helvetica, Arial, sans-serif"</span>, size<span class="op">=</span><span class="dv">13</span>),</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        margin<span class="op">=</span><span class="bu">dict</span>(l<span class="op">=</span><span class="dv">10</span>, r<span class="op">=</span><span class="dv">20</span>, t<span class="op">=</span><span class="dv">95</span>, b<span class="op">=</span><span class="dv">50</span>), hoverlabel<span class="op">=</span><span class="bu">dict</span>(bgcolor<span class="op">=</span><span class="st">"white"</span>, font_size<span class="op">=</span><span class="dv">13</span>),</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        legend<span class="op">=</span><span class="bu">dict</span>(orientation<span class="op">=</span><span class="st">"h"</span>, x<span class="op">=</span><span class="fl">0.5</span>, xanchor<span class="op">=</span><span class="st">"center"</span>, y<span class="op">=-</span><span class="fl">0.15</span>, yanchor<span class="op">=</span><span class="st">"top"</span>))</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    fig.update_xaxes(gridcolor<span class="op">=</span><span class="st">"#eceff3"</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    fig.update_yaxes(gridcolor<span class="op">=</span><span class="st">"#eceff3"</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> fig</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show(fig):</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    fig.show(config<span class="op">=</span>{<span class="st">"displaylogo"</span>: <span class="va">False</span>, <span class="st">"responsive"</span>: <span class="va">True</span>, <span class="st">"modeBarButtonsToRemove"</span>: [<span class="st">"lasso2d"</span>, <span class="st">"select2d"</span>]})</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>quant <span class="op">=</span> pd.read_csv(<span class="st">"data/processed/benchmark_quantiles.csv"</span>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>fields <span class="op">=</span> pd.read_csv(<span class="st">"data/processed/benchmark_fields.csv"</span>)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">int</span>(fields[<span class="st">'postings'</span>].<span class="bu">sum</span>())<span class="sc">:,}</span><span class="ss"> valid postings, </span><span class="sc">{</span><span class="bu">int</span>(fields[<span class="st">'salary_postings'</span>].<span class="bu">sum</span>())<span class="sc">:,}</span><span class="ss"> with a usable annual salary"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>733,064 valid postings, 69,246 with a usable annual salary</code></pre>
+</div>
+</div>
+</section>
+<section id="salary-differences-between-ai-related-and-non-ai-postings" class="level2">
+<h2 class="anchored" data-anchor-id="salary-differences-between-ai-related-and-non-ai-postings">Salary Differences Between AI-Related and Non-AI Postings</h2>
+<section id="how-do-salaries-differ-across-ai-related-and-non-ai-postings" class="level3">
+<h3 class="anchored" data-anchor-id="how-do-salaries-differ-across-ai-related-and-non-ai-postings">How do salaries differ across AI-related and non-AI postings?</h3>
+<p>A raw comparison would mislead, because most non-AI postings are lower-paid jobs such as retail and healthcare support. So the chart shows two views: <strong>all jobs</strong>, and <strong>only the computer and business fields</strong>, where the comparison is closer to like with like. Each box covers the middle half of salaries (25th to 75th percentile), the line inside is the median, and the whiskers reach the 5th and 95th percentiles.</p>
+<div id="cell-ai-vs-nonai" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>scopes <span class="op">=</span> [<span class="st">"All jobs"</span>, <span class="st">"Computer and business fields"</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>counts <span class="op">=</span> quant.pivot(index<span class="op">=</span><span class="st">"scope"</span>, columns<span class="op">=</span><span class="st">"ai_related"</span>, values<span class="op">=</span><span class="st">"n"</span>).loc[scopes]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>x_labels <span class="op">=</span> [<span class="ss">f"</span><span class="sc">{</span>sc_<span class="sc">}</span><span class="ss">&lt;br&gt;(</span><span class="sc">{</span><span class="bu">int</span>(counts.loc[sc_, <span class="va">False</span>])<span class="sc">:,}</span><span class="ss"> non-AI | </span><span class="sc">{</span><span class="bu">int</span>(counts.loc[sc_, <span class="va">True</span>])<span class="sc">:,}</span><span class="ss"> AI-related)"</span> <span class="cf">for</span> sc_ <span class="kw">in</span> scopes]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure()</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ai, color, label <span class="kw">in</span> [(<span class="va">False</span>, GRAY, <span class="st">"Non-AI postings"</span>), (<span class="va">True</span>, PALETTE[<span class="dv">3</span>], <span class="st">"AI-related postings"</span>)]:</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    sub <span class="op">=</span> quant[quant[<span class="st">"ai_related"</span>] <span class="op">==</span> ai].set_index(<span class="st">"scope"</span>).loc[scopes]</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    fig.add_trace(go.Box(</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span>x_labels,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        q1<span class="op">=</span><span class="bu">list</span>(sub[<span class="st">"p25"</span>]), median<span class="op">=</span><span class="bu">list</span>(sub[<span class="st">"median"</span>]), q3<span class="op">=</span><span class="bu">list</span>(sub[<span class="st">"p75"</span>]),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        lowerfence<span class="op">=</span><span class="bu">list</span>(sub[<span class="st">"p05"</span>]), upperfence<span class="op">=</span><span class="bu">list</span>(sub[<span class="st">"p95"</span>]), mean<span class="op">=</span><span class="bu">list</span>(sub[<span class="st">"mean"</span>]),</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        name<span class="op">=</span>label, marker_color<span class="op">=</span>color, boxpoints<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        hovertemplate<span class="op">=</span><span class="st">"&lt;b&gt;%</span><span class="sc">{x}</span><span class="st">&lt;/b&gt;&lt;br&gt;Median: $%</span><span class="sc">{median:,.0f}</span><span class="st">&lt;br&gt;Middle half: $%</span><span class="sc">{q1:,.0f}</span><span class="st"> to $%</span><span class="sc">{q3:,.0f}</span><span class="st">&lt;br&gt;5th to 95th percentile: $%</span><span class="sc">{lowerfence:,.0f}</span><span class="st"> to $%</span><span class="sc">{upperfence:,.0f}</span><span class="st">&lt;extra&gt;"</span> <span class="op">+</span> label <span class="op">+</span> <span class="st">"&lt;/extra&gt;"</span>))</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>fig.update_layout(boxmode<span class="op">=</span><span class="st">"group"</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>fig.update_yaxes(title<span class="op">=</span><span class="st">"Annual salary (USD)"</span>, tickprefix<span class="op">=</span><span class="st">"$"</span>, tickformat<span class="op">=</span><span class="st">",.0f"</span>, <span class="bu">range</span><span class="op">=</span>[<span class="dv">0</span>, <span class="dv">320000</span>])</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>style(fig, <span class="st">"Salary Spread: AI-Related vs. Non-AI Postings"</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>      <span class="st">"All industries, 69,246 postings with a usable annual salary | box = middle half, line = median, whiskers = 5th to 95th percentile"</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>      height<span class="op">=</span><span class="dv">520</span>, legend<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>show(fig)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="ai-vs-nonai" class="cell-output cell-output-display">
+<div style="height:520px; width:100%;">            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script><script>if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="61731265-99d9-45e6-9def-d6011eaf3ff8" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("61731265-99d9-45e6-9def-d6011eaf3ff8")) {                    Plotly.newPlot(                        "61731265-99d9-45e6-9def-d6011eaf3ff8",                        [{"boxpoints":false,"hovertemplate":"\u003cb\u003e%{x}\u003c\u002fb\u003e\u003cbr\u003eMedian: $%{median:,.0f}\u003cbr\u003eMiddle half: $%{q1:,.0f} to $%{q3:,.0f}\u003cbr\u003e5th to 95th percentile: $%{lowerfence:,.0f} to $%{upperfence:,.0f}\u003cextra\u003eNon-AI postings\u003c\u002fextra\u003e","lowerfence":[32240.0,33280.0],"marker":{"color":"#b8bec6"},"mean":[73290.0,108514.0],"median":[54080.0,97500.0],"name":"Non-AI postings","q1":[40872.0,52000.0],"q3":[85953.0,150000.0],"upperfence":[179508.0,226820.0],"x":["All jobs\u003cbr\u003e(65,815 non-AI | 3,431 AI-related)","Computer and business fields\u003cbr\u003e(8,670 non-AI | 1,707 AI-related)"],"type":"box"},{"boxpoints":false,"hovertemplate":"\u003cb\u003e%{x}\u003c\u002fb\u003e\u003cbr\u003eMedian: $%{median:,.0f}\u003cbr\u003eMiddle half: $%{q1:,.0f} to $%{q3:,.0f}\u003cbr\u003e5th to 95th percentile: $%{lowerfence:,.0f} to $%{upperfence:,.0f}\u003cextra\u003eAI-related postings\u003c\u002fextra\u003e","lowerfence":[41600.0,59000.0],"marker":{"color":"#e76f51"},"mean":[143991.0,174915.0],"median":[139500.0,172250.0],"name":"AI-related postings","q1":[72800.0,123000.0],"q3":[196475.0,215000.0],"upperfence":[287500.0,300000.0],"x":["All jobs\u003cbr\u003e(65,815 non-AI | 3,431 AI-related)","Computer and business fields\u003cbr\u003e(8,670 non-AI | 1,707 AI-related)"],"type":"box"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"rgb(36,36,36)"},"error_y":{"color":"rgb(36,36,36)"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"rgb(36,36,36)","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"rgb(36,36,36)"},"baxis":{"endlinecolor":"rgb(36,36,36)","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"rgb(36,36,36)"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"histogram2d"}],"histogram":[{"marker":{"line":{"color":"white","width":0.6}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"rgb(237,237,237)"},"line":{"color":"white"}},"header":{"fill":{"color":"rgb(217,217,217)"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"colorscale":{"diverging":[[0.0,"rgb(103,0,31)"],[0.1,"rgb(178,24,43)"],[0.2,"rgb(214,96,77)"],[0.3,"rgb(244,165,130)"],[0.4,"rgb(253,219,199)"],[0.5,"rgb(247,247,247)"],[0.6,"rgb(209,229,240)"],[0.7,"rgb(146,197,222)"],[0.8,"rgb(67,147,195)"],[0.9,"rgb(33,102,172)"],[1.0,"rgb(5,48,97)"]],"sequential":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"sequentialminus":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]]},"colorway":["#1F77B4","#FF7F0E","#2CA02C","#D62728","#9467BD","#8C564B","#E377C2","#7F7F7F","#BCBD22","#17BECF"],"font":{"color":"rgb(36,36,36)"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"bgcolor":"white","radialaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"yaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"zaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"}},"shapedefaults":{"fillcolor":"black","line":{"width":0},"opacity":0.3},"ternary":{"aaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"baxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"bgcolor":"white","caxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside","title":{"standoff":15},"zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"yaxis":{"automargin":true,"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside","title":{"standoff":15},"zeroline":false,"zerolinecolor":"rgb(36,36,36)"}}},"boxmode":"group","yaxis":{"title":{"text":"Annual salary (USD)"},"tickprefix":"$","tickformat":",.0f","range":[0,320000],"gridcolor":"#eceff3"},"title":{"text":"\u003cb\u003eSalary Spread: AI-Related vs. Non-AI Postings\u003c\u002fb\u003e\u003cbr\u003e\u003cspan style='font-size:12px;color:gray'\u003eAll industries, 69,246 postings with a usable annual salary | box = middle half, line = median, whiskers = 5th to 95th percentile\u003c\u002fspan\u003e","x":0,"xanchor":"left"},"font":{"family":"Segoe UI, Helvetica, Arial, sans-serif","size":13},"margin":{"l":10,"r":20,"t":95,"b":50},"hoverlabel":{"font":{"size":13},"bgcolor":"white"},"legend":{"orientation":"h","x":0.5,"xanchor":"center","y":-0.15,"yanchor":"top"},"height":520,"showlegend":true,"xaxis":{"gridcolor":"#eceff3"}},                        {"displaylogo": false, "responsive": true, "modeBarButtonsToRemove": ["lasso2d", "select2d"]}                    ).then(function(){
+                            
+var gd = document.getElementById('61731265-99d9-45e6-9def-d6011eaf3ff8');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> AI-related postings pay clearly more. Across all jobs, the median is <strong>$139.5K against $54.1K</strong> (about 2.6 times). That gap is inflated by job mix, so the fairer comparison is within the computer and business fields: <strong>$172K against $97.5K</strong>, which is <strong>$75K or 77% more</strong>, and the middle half of AI-related postings ($123K to $215K) sits mostly above the middle half of non-AI postings ($52K to $150K). The top end is higher too (95th percentile $300K against $227K). This is an association in job postings, not proof that adding AI skills raises anyone’s pay, because AI-related roles also tend to be more senior and more technical.</p>
+</section>
+</section>
+<section id="data-careers-vs.-neighboring-fields" class="level2">
+<h2 class="anchored" data-anchor-id="data-careers-vs.-neighboring-fields">Data Careers vs.&nbsp;Neighboring Fields</h2>
+<section id="how-does-pay-in-data-fields-compare-with-software-engineering-and-other-computer-and-business-fields" class="level3">
+<h3 class="anchored" data-anchor-id="how-does-pay-in-data-fields-compare-with-software-engineering-and-other-computer-and-business-fields">How does pay in data fields compare with software engineering and other computer and business fields?</h3>
+<p>The bars show each field’s median salary and the diamond shows the median for its AI-related postings (only where there are at least 20 of them). The line through each bar covers the middle half of the field’s salaries. The gray bar is “All other occupations,” the baseline for the rest of the job market.</p>
+<div id="cell-field-salaries" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>family <span class="op">=</span> {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Data Science &amp; ML"</span>: <span class="st">"Data fields"</span>, <span class="st">"Data Engineering"</span>: <span class="st">"Data fields"</span>, <span class="st">"Data Analytics &amp; BI"</span>: <span class="st">"Data fields"</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Software Engineering"</span>: <span class="st">"Software engineering"</span>, <span class="st">"IT &amp; Cloud Infrastructure"</span>: <span class="st">"IT and security"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Cybersecurity"</span>: <span class="st">"IT and security"</span>, <span class="st">"Product &amp; Project Management"</span>: <span class="st">"Business fields"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Business Analysis &amp; Consulting"</span>: <span class="st">"Business fields"</span>, <span class="st">"Finance &amp; Accounting"</span>: <span class="st">"Business fields"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Marketing &amp; Sales"</span>: <span class="st">"Business fields"</span>, <span class="st">"All other occupations"</span>: <span class="st">"All other occupations"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>family_color <span class="op">=</span> {<span class="st">"Data fields"</span>: PALETTE[<span class="dv">1</span>], <span class="st">"Software engineering"</span>: PALETTE[<span class="dv">0</span>], <span class="st">"IT and security"</span>: PALETTE[<span class="dv">4</span>],</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Business fields"</span>: PALETTE[<span class="dv">2</span>], <span class="st">"All other occupations"</span>: GRAY}</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>fq <span class="op">=</span> fields.sort_values(<span class="st">"median"</span>).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure()</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fam, color <span class="kw">in</span> family_color.items():</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    sub <span class="op">=</span> fq[fq[<span class="st">"field"</span>].<span class="bu">map</span>(family) <span class="op">==</span> fam]</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    fig.add_trace(go.Bar(</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span>sub[<span class="st">"median"</span>], y<span class="op">=</span>sub[<span class="st">"field"</span>], orientation<span class="op">=</span><span class="st">"h"</span>, name<span class="op">=</span>fam, marker_color<span class="op">=</span>color,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        error_x<span class="op">=</span><span class="bu">dict</span>(<span class="bu">type</span><span class="op">=</span><span class="st">"data"</span>, symmetric<span class="op">=</span><span class="va">False</span>, array<span class="op">=</span><span class="bu">list</span>(sub[<span class="st">"p75"</span>] <span class="op">-</span> sub[<span class="st">"median"</span>]),</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>                     arrayminus<span class="op">=</span><span class="bu">list</span>(sub[<span class="st">"median"</span>] <span class="op">-</span> sub[<span class="st">"p25"</span>]), color<span class="op">=</span><span class="st">"#374151"</span>, thickness<span class="op">=</span><span class="fl">1.3</span>, width<span class="op">=</span><span class="dv">4</span>),</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        customdata<span class="op">=</span>np.stack([sub[<span class="st">"salary_postings"</span>], sub[<span class="st">"p25"</span>], sub[<span class="st">"p75"</span>], sub[<span class="st">"postings"</span>]], axis<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        text<span class="op">=</span>[<span class="ss">f"$</span><span class="sc">{</span>v <span class="op">/</span> <span class="dv">1000</span><span class="sc">:,.0f}</span><span class="ss">K"</span> <span class="cf">for</span> v <span class="kw">in</span> sub[<span class="st">"median"</span>]], textposition<span class="op">=</span><span class="st">"inside"</span>, insidetextanchor<span class="op">=</span><span class="st">"start"</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        textfont<span class="op">=</span><span class="bu">dict</span>(color<span class="op">=</span><span class="st">"#1d2733"</span>),</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        hovertemplate<span class="op">=</span><span class="st">"&lt;b&gt;%</span><span class="sc">{y}</span><span class="st">&lt;/b&gt;&lt;br&gt;Median: $%</span><span class="sc">{x:,.0f}</span><span class="st">&lt;br&gt;Middle half: $%</span><span class="sc">{customdata[1]:,.0f}</span><span class="st"> to $%</span><span class="sc">{customdata[2]:,.0f}</span><span class="st">&lt;br&gt;Postings with salary: %</span><span class="sc">{customdata[0]:,.0f}</span><span class="st"> (of %</span><span class="sc">{customdata[3]:,.0f}</span><span class="st"> postings)&lt;extra&gt;&lt;/extra&gt;"</span>))</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>ai_pts <span class="op">=</span> fq[fq[<span class="st">"n_ai"</span>] <span class="op">&gt;=</span> <span class="dv">20</span>]</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>fig.add_trace(go.Scatter(</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>ai_pts[<span class="st">"median_ai"</span>], y<span class="op">=</span>ai_pts[<span class="st">"field"</span>], mode<span class="op">=</span><span class="st">"markers"</span>, name<span class="op">=</span><span class="st">"Median of AI-related postings"</span>,</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    marker<span class="op">=</span><span class="bu">dict</span>(symbol<span class="op">=</span><span class="st">"diamond"</span>, size<span class="op">=</span><span class="dv">12</span>, color<span class="op">=</span>PALETTE[<span class="dv">3</span>], line<span class="op">=</span><span class="bu">dict</span>(color<span class="op">=</span><span class="st">"white"</span>, width<span class="op">=</span><span class="dv">1</span>)),</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    customdata<span class="op">=</span>ai_pts[<span class="st">"n_ai"</span>],</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    hovertemplate<span class="op">=</span><span class="st">"&lt;b&gt;%</span><span class="sc">{y}</span><span class="st">&lt;/b&gt;&lt;br&gt;AI-related median: $%</span><span class="sc">{x:,.0f}</span><span class="st">&lt;br&gt;AI-related postings with salary: %</span><span class="sc">{customdata:,.0f}</span><span class="st">&lt;extra&gt;&lt;/extra&gt;"</span>))</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>fig.update_layout(barmode<span class="op">=</span><span class="st">"overlay"</span>)</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>fig.update_yaxes(categoryorder<span class="op">=</span><span class="st">"array"</span>, categoryarray<span class="op">=</span><span class="bu">list</span>(fq[<span class="st">"field"</span>]))</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>fig.update_xaxes(title<span class="op">=</span><span class="st">"Median annual salary (USD)"</span>, tickprefix<span class="op">=</span><span class="st">"$"</span>, tickformat<span class="op">=</span><span class="st">",.0f"</span>, <span class="bu">range</span><span class="op">=</span>[<span class="dv">0</span>, <span class="dv">330000</span>])</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>style(fig, <span class="st">"Median Salary by Occupation Field"</span>,</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>      <span class="st">"All industries | bars = field median, lines = middle half, diamonds = AI-related postings"</span>, height<span class="op">=</span><span class="dv">600</span>, legend<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>fig.update_layout(legend<span class="op">=</span><span class="bu">dict</span>(orientation<span class="op">=</span><span class="st">"h"</span>, x<span class="op">=</span><span class="fl">0.5</span>, xanchor<span class="op">=</span><span class="st">"center"</span>, y<span class="op">=-</span><span class="fl">0.12</span>, yanchor<span class="op">=</span><span class="st">"top"</span>), margin<span class="op">=</span><span class="bu">dict</span>(b<span class="op">=</span><span class="dv">120</span>))</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>show(fig)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="field-salaries" class="cell-output cell-output-display">
+<div style="height:600px; width:100%;">            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script><script>if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="15159080-7ca0-47c8-8f37-b8032b81ee2b" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("15159080-7ca0-47c8-8f37-b8032b81ee2b")) {                    Plotly.newPlot(                        "15159080-7ca0-47c8-8f37-b8032b81ee2b",                        [{"customdata":{"dtype":"i4","bdata":"cgEAAOh6AQB4XQIAFBYAAMUAAADU8gEAEf8CAIgOAABmAwAAwDgCAHCCAwAjNQAA","shape":"3, 4"},"error_x":{"array":[35000,36369,42546],"arrayminus":[23000,32300,41854],"color":"#374151","symmetric":false,"thickness":1.3,"type":"data","width":4},"hovertemplate":"\u003cb\u003e%{y}\u003c\u002fb\u003e\u003cbr\u003eMedian: $%{x:,.0f}\u003cbr\u003eMiddle half: $%{customdata[1]:,.0f} to $%{customdata[2]:,.0f}\u003cbr\u003ePostings with salary: %{customdata[0]:,.0f} (of %{customdata[3]:,.0f} postings)\u003cextra\u003e\u003c\u002fextra\u003e","insidetextanchor":"start","marker":{"color":"#2a9d8f"},"name":"Data fields","orientation":"h","text":["$120K","$160K","$187K"],"textfont":{"color":"#1d2733"},"textposition":"inside","x":{"dtype":"i4","bdata":"wNQBAABxAgA+3AIA"},"y":["Data Analytics & BI","Data Engineering","Data Science & ML"],"type":"bar"},{"customdata":{"dtype":"i4","bdata":"xgQAAMDzAABADQMAg08AAA==","shape":"1, 4"},"error_x":{"array":[62500],"arrayminus":[75100],"color":"#374151","symmetric":false,"thickness":1.3,"type":"data","width":4},"hovertemplate":"\u003cb\u003e%{y}\u003c\u002fb\u003e\u003cbr\u003eMedian: $%{x:,.0f}\u003cbr\u003eMiddle half: $%{customdata[1]:,.0f} to $%{customdata[2]:,.0f}\u003cbr\u003ePostings with salary: %{customdata[0]:,.0f} (of %{customdata[3]:,.0f} postings)\u003cextra\u003e\u003c\u002fextra\u003e","insidetextanchor":"start","marker":{"color":"#457b9d"},"name":"Software engineering","orientation":"h","text":["$138K"],"textfont":{"color":"#1d2733"},"textposition":"inside","x":{"dtype":"i4","bdata":"HBkCAA=="},"y":["Software Engineering"],"type":"bar"},{"customdata":{"dtype":"i4","bdata":"uAAAACiaAQA6xQIAFw4AAPYBAABkkAEA5MgCACAoAAA=","shape":"2, 4"},"error_x":{"array":[49762,43500],"arrayminus":[26800,36500],"color":"#374151","symmetric":false,"thickness":1.3,"type":"data","width":4},"hovertemplate":"\u003cb\u003e%{y}\u003c\u002fb\u003e\u003cbr\u003eMedian: $%{x:,.0f}\u003cbr\u003eMiddle half: $%{customdata[1]:,.0f} to $%{customdata[2]:,.0f}\u003cbr\u003ePostings with salary: %{customdata[0]:,.0f} (of %{customdata[3]:,.0f} postings)\u003cextra\u003e\u003c\u002fextra\u003e","insidetextanchor":"start","marker":{"color":"#6d597a"},"name":"IT and security","orientation":"h","text":["$132K","$139K"],"textfont":{"color":"#1d2733"},"textposition":"inside","x":{"dtype":"i4","bdata":"2AICAPgeAgA="},"y":["Cybersecurity","IT & Cloud Infrastructure"],"type":"bar"},{"customdata":{"dtype":"i4","bdata":"HA8AAFCWAACwrQEASd4AAKUEAABAFAEAtFMCAOJMAABsAwAA5xIBAJA+AgDdNAAASwQAAHS3AQCMrQIAnkgAAA==","shape":"4, 4"},"error_x":{"array":[54000,45000,37888,33000],"arrayminus":[17520,36780,38825,30000],"color":"#374151","symmetric":false,"thickness":1.3,"type":"data","width":4},"hovertemplate":"\u003cb\u003e%{y}\u003c\u002fb\u003e\u003cbr\u003eMedian: $%{x:,.0f}\u003cbr\u003eMiddle half: $%{customdata[1]:,.0f} to $%{customdata[2]:,.0f}\u003cbr\u003ePostings with salary: %{customdata[0]:,.0f} (of %{customdata[3]:,.0f} postings)\u003cextra\u003e\u003c\u002fextra\u003e","insidetextanchor":"start","marker":{"color":"#e9c46a"},"name":"Business fields","orientation":"h","text":["$56K","$108K","$109K","$142K"],"textfont":{"color":"#1d2733"},"textposition":"inside","x":{"dtype":"i4","bdata":"wNoAAOyjAQCQqgEApCwCAA=="},"y":["Marketing & Sales","Finance & Accounting","Business Analysis & Consulting","Product & Project Management"],"type":"bar"},{"customdata":{"dtype":"i4","bdata":"9eUAAHCeAAD4MwEAaacIAA==","shape":"1, 4"},"error_x":{"array":[26840],"arrayminus":[11440],"color":"#374151","symmetric":false,"thickness":1.3,"type":"data","width":4},"hovertemplate":"\u003cb\u003e%{y}\u003c\u002fb\u003e\u003cbr\u003eMedian: $%{x:,.0f}\u003cbr\u003eMiddle half: $%{customdata[1]:,.0f} to $%{customdata[2]:,.0f}\u003cbr\u003ePostings with salary: %{customdata[0]:,.0f} (of %{customdata[3]:,.0f} postings)\u003cextra\u003e\u003c\u002fextra\u003e","insidetextanchor":"start","marker":{"color":"#b8bec6"},"name":"All other occupations","orientation":"h","text":["$52K"],"textfont":{"color":"#1d2733"},"textposition":"inside","x":{"dtype":"i4","bdata":"IMsAAA=="},"y":["All other occupations"],"type":"bar"},{"customdata":{"dtype":"i2","bdata":"vAazAGUAPwBOACIAkABEAIsARQBAAw=="},"hovertemplate":"\u003cb\u003e%{y}\u003c\u002fb\u003e\u003cbr\u003eAI-related median: $%{x:,.0f}\u003cbr\u003eAI-related postings with salary: %{customdata:,.0f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#e76f51","line":{"color":"white","width":1},"size":12,"symbol":"diamond"},"mode":"markers","name":"Median of AI-related postings","x":{"dtype":"i4","bdata":"5moBADsHAgCwrQEApvsBADoUAgAgvwIAQA0DAABxAgDkyAIAPGcCAGzcAgA="},"y":["All other occupations","Marketing & Sales","Finance & Accounting","Business Analysis & Consulting","Data Analytics & BI","Cybersecurity","Software Engineering","IT & Cloud Infrastructure","Product & Project Management","Data Engineering","Data Science & ML"],"type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"rgb(36,36,36)"},"error_y":{"color":"rgb(36,36,36)"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"rgb(36,36,36)","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"rgb(36,36,36)"},"baxis":{"endlinecolor":"rgb(36,36,36)","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"rgb(36,36,36)"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"histogram2d"}],"histogram":[{"marker":{"line":{"color":"white","width":0.6}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"rgb(237,237,237)"},"line":{"color":"white"}},"header":{"fill":{"color":"rgb(217,217,217)"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"colorscale":{"diverging":[[0.0,"rgb(103,0,31)"],[0.1,"rgb(178,24,43)"],[0.2,"rgb(214,96,77)"],[0.3,"rgb(244,165,130)"],[0.4,"rgb(253,219,199)"],[0.5,"rgb(247,247,247)"],[0.6,"rgb(209,229,240)"],[0.7,"rgb(146,197,222)"],[0.8,"rgb(67,147,195)"],[0.9,"rgb(33,102,172)"],[1.0,"rgb(5,48,97)"]],"sequential":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"sequentialminus":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]]},"colorway":["#1F77B4","#FF7F0E","#2CA02C","#D62728","#9467BD","#8C564B","#E377C2","#7F7F7F","#BCBD22","#17BECF"],"font":{"color":"rgb(36,36,36)"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"bgcolor":"white","radialaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"yaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"zaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"}},"shapedefaults":{"fillcolor":"black","line":{"width":0},"opacity":0.3},"ternary":{"aaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"baxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"bgcolor":"white","caxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside","title":{"standoff":15},"zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"yaxis":{"automargin":true,"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside","title":{"standoff":15},"zeroline":false,"zerolinecolor":"rgb(36,36,36)"}}},"barmode":"overlay","yaxis":{"categoryorder":"array","categoryarray":["All other occupations","Marketing & Sales","Finance & Accounting","Business Analysis & Consulting","Data Analytics & BI","Cybersecurity","Software Engineering","IT & Cloud Infrastructure","Product & Project Management","Data Engineering","Data Science & ML"],"gridcolor":"#eceff3"},"xaxis":{"title":{"text":"Median annual salary (USD)"},"tickprefix":"$","tickformat":",.0f","range":[0,330000],"gridcolor":"#eceff3"},"title":{"text":"\u003cb\u003eMedian Salary by Occupation Field\u003c\u002fb\u003e\u003cbr\u003e\u003cspan style='font-size:12px;color:gray'\u003eAll industries | bars = field median, lines = middle half, diamonds = AI-related postings\u003c\u002fspan\u003e","x":0,"xanchor":"left"},"font":{"family":"Segoe UI, Helvetica, Arial, sans-serif","size":13},"margin":{"l":10,"r":20,"t":95,"b":120},"hoverlabel":{"font":{"size":13},"bgcolor":"white"},"legend":{"orientation":"h","x":0.5,"xanchor":"center","y":-0.12,"yanchor":"top"},"height":600,"showlegend":true},                        {"displaylogo": false, "responsive": true, "modeBarButtonsToRemove": ["lasso2d", "select2d"]}                    ).then(function(){
+                            
+var gd = document.getElementById('15159080-7ca0-47c8-8f37-b8032b81ee2b');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> the data fields are not all equal. <strong>Data Science &amp; ML</strong> pays the most of any field ($187K median), about $50K above <strong>Software Engineering</strong> ($137.5K), while <strong>Data Engineering</strong> ($160K) also beats software engineering. <strong>Data Analytics &amp; BI</strong> sits lower at $120K, below software engineering and the IT, cybersecurity, and product-management fields ($132K to $143K), though still above business analysis ($109K) and finance ($107.5K). For our pathway, that means moving from Data Analyst toward Data Scientist is the biggest pay step in this set of fields, roughly $67K at the median. The diamonds show where AI exposure adds the most inside a field: <strong>Software Engineering</strong> ($200K against $128K for non-AI postings, +56%), <strong>Cybersecurity</strong> (+44%), and <strong>Product &amp; Project Management</strong> (+31%). In the data fields the gap is small or zero because almost every Data Science &amp; ML posting (91%) is AI-related to begin with, and Data Engineering shows no premium. (Marketing &amp; Sales also shows a large gap, but its AI-related postings are likely technology sales roles, so treat that one with caution.)</p>
+</section>
+</section>
+<section id="our-own-view-demand-vs.-pay" class="level2">
+<h2 class="anchored" data-anchor-id="our-own-view-demand-vs.-pay">Our Own View: Demand vs.&nbsp;Pay</h2>
+<section id="which-fields-combine-strong-pay-with-a-lot-of-openings" class="level3">
+<h3 class="anchored" data-anchor-id="which-fields-combine-strong-pay-with-a-lot-of-openings">Which fields combine strong pay with a lot of openings?</h3>
+<p>Pay alone can hide how hard a field is to enter. This chart puts <strong>demand</strong> (number of postings, on a log scale) against <strong>pay</strong> (median salary) for every field, with bubble size showing how AI-related the field’s postings are. Fields toward the top are the best paid, fields to the right have the most openings, and the upper-right corner combines both.</p>
+<div id="cell-demand-vs-pay" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fields_b <span class="op">=</span> fields.copy()</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>fields_b[<span class="st">"family"</span>] <span class="op">=</span> fields_b[<span class="st">"field"</span>].<span class="bu">map</span>(family)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>short <span class="op">=</span> {<span class="st">"Data Science &amp; ML"</span>: <span class="st">"Data Science &amp; ML"</span>, <span class="st">"Data Engineering"</span>: <span class="st">"Data Engineering"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Data Analytics &amp; BI"</span>: <span class="st">"Data Analytics &amp; BI"</span>, <span class="st">"Software Engineering"</span>: <span class="st">"Software Eng."</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>         <span class="st">"IT &amp; Cloud Infrastructure"</span>: <span class="st">"IT &amp; Cloud"</span>, <span class="st">"Cybersecurity"</span>: <span class="st">"Cybersecurity"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Product &amp; Project Management"</span>: <span class="st">"Product &amp; Project Mgmt"</span>, <span class="st">"Business Analysis &amp; Consulting"</span>: <span class="st">"Business Analysis"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Finance &amp; Accounting"</span>: <span class="st">"Finance &amp; Accounting"</span>, <span class="st">"Marketing &amp; Sales"</span>: <span class="st">"Marketing &amp; Sales"</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>         <span class="st">"All other occupations"</span>: <span class="st">"All other occupations"</span>}</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>label_pos <span class="op">=</span> {<span class="st">"Business Analysis &amp; Consulting"</span>: <span class="st">"middle left"</span>, <span class="st">"Finance &amp; Accounting"</span>: <span class="st">"bottom center"</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>             <span class="st">"Software Engineering"</span>: <span class="st">"bottom center"</span>, <span class="st">"Data Analytics &amp; BI"</span>: <span class="st">"bottom center"</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>             <span class="st">"Cybersecurity"</span>: <span class="st">"middle left"</span>}</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure()</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fam, color <span class="kw">in</span> family_color.items():</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    sub <span class="op">=</span> fields_b[fields_b[<span class="st">"family"</span>] <span class="op">==</span> fam]</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    fig.add_trace(go.Scatter(</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span>sub[<span class="st">"postings"</span>], y<span class="op">=</span>sub[<span class="st">"median"</span>], mode<span class="op">=</span><span class="st">"markers+text"</span>, name<span class="op">=</span>fam,</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        text<span class="op">=</span>sub[<span class="st">"field"</span>].<span class="bu">map</span>(short), textposition<span class="op">=</span>[label_pos.get(f_, <span class="st">"top center"</span>) <span class="cf">for</span> f_ <span class="kw">in</span> sub[<span class="st">"field"</span>]],</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        textfont<span class="op">=</span><span class="bu">dict</span>(size<span class="op">=</span><span class="dv">11</span>),</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        marker<span class="op">=</span><span class="bu">dict</span>(color<span class="op">=</span>color, opacity<span class="op">=</span><span class="fl">0.85</span>, size<span class="op">=</span><span class="dv">14</span> <span class="op">+</span> <span class="dv">70</span> <span class="op">*</span> np.sqrt(sub[<span class="st">"ai_share_postings"</span>]), line<span class="op">=</span><span class="bu">dict</span>(color<span class="op">=</span><span class="st">"white"</span>, width<span class="op">=</span><span class="fl">1.5</span>)),</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        customdata<span class="op">=</span>np.stack([sub[<span class="st">"ai_share_postings"</span>] <span class="op">*</span> <span class="dv">100</span>, sub[<span class="st">"salary_postings"</span>], sub[<span class="st">"remote_or_hybrid_share_stated"</span>] <span class="op">*</span> <span class="dv">100</span>], axis<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>        hovertemplate<span class="op">=</span><span class="st">"&lt;b&gt;%</span><span class="sc">{text}</span><span class="st">&lt;/b&gt;&lt;br&gt;Postings: %</span><span class="sc">{x:,.0f}</span><span class="st">&lt;br&gt;Median salary: $%</span><span class="sc">{y:,.0f}</span><span class="st">&lt;br&gt;AI-related share: %</span><span class="sc">{customdata[0]:.0f}</span><span class="st">%&lt;br&gt;Remote or hybrid (of those that state it): %</span><span class="sc">{customdata[2]:.0f}</span><span class="st">%&lt;extra&gt;&lt;/extra&gt;"</span>))</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>fig.update_xaxes(title<span class="op">=</span><span class="st">"Valid postings (log scale)"</span>, <span class="bu">type</span><span class="op">=</span><span class="st">"log"</span>, <span class="bu">range</span><span class="op">=</span>[np.log10(<span class="dv">1800</span>), np.log10(<span class="dv">1000000</span>)],</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>                 tickvals<span class="op">=</span>[<span class="dv">2000</span>, <span class="dv">5000</span>, <span class="dv">10000</span>, <span class="dv">20000</span>, <span class="dv">50000</span>, <span class="dv">100000</span>, <span class="dv">500000</span>],</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>                 ticktext<span class="op">=</span>[<span class="st">"2,000"</span>, <span class="st">"5,000"</span>, <span class="st">"10,000"</span>, <span class="st">"20,000"</span>, <span class="st">"50,000"</span>, <span class="st">"100,000"</span>, <span class="st">"500,000"</span>])</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>fig.update_yaxes(title<span class="op">=</span><span class="st">"Median annual salary (USD)"</span>, tickprefix<span class="op">=</span><span class="st">"$"</span>, tickformat<span class="op">=</span><span class="st">",.0f"</span>, <span class="bu">range</span><span class="op">=</span>[<span class="dv">20000</span>, <span class="dv">230000</span>])</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>style(fig, <span class="st">"Demand vs. Pay by Occupation Field"</span>,</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Bubble size = AI-related share of postings | top = better paid, right = more openings"</span>, height<span class="op">=</span><span class="dv">620</span>, legend<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>fig.update_layout(legend<span class="op">=</span><span class="bu">dict</span>(orientation<span class="op">=</span><span class="st">"h"</span>, x<span class="op">=</span><span class="fl">0.5</span>, xanchor<span class="op">=</span><span class="st">"center"</span>, y<span class="op">=-</span><span class="fl">0.14</span>, yanchor<span class="op">=</span><span class="st">"top"</span>), margin<span class="op">=</span><span class="bu">dict</span>(b<span class="op">=</span><span class="dv">120</span>))</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>show(fig)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="demand-vs-pay" class="cell-output cell-output-display">
+<div style="height:620px; width:100%;">            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script><script>if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>                <div id="3722e4a8-8a81-4427-b584-10ef85ae5673" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("3722e4a8-8a81-4427-b584-10ef85ae5673")) {                    Plotly.newPlot(                        "3722e4a8-8a81-4427-b584-10ef85ae5673",                        [{"customdata":{"dtype":"f8","bdata":"PQrXo3DdVkAAAAAAADCLQKRwPQrX81RAC9ejcD0KNkAAAAAAAKBoQF2PwvUo7FNAKlyPwvUoLUAAAAAAACB3QML1KFyPklRA","shape":"3, 3"},"hovertemplate":"\u003cb\u003e%{text}\u003c\u002fb\u003e\u003cbr\u003ePostings: %{x:,.0f}\u003cbr\u003eMedian salary: $%{y:,.0f}\u003cbr\u003eAI-related share: %{customdata[0]:.0f}%\u003cbr\u003eRemote or hybrid (of those that state it): %{customdata[2]:.0f}%\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#2a9d8f","line":{"color":"white","width":1.5},"opacity":0.85,"size":{"dtype":"f8","bdata":"NzMef288VEB59Hdsbm5HQB+MifRDXURA"}},"mode":"markers+text","name":"Data fields","text":["Data Science & ML","Data Engineering","Data Analytics & BI"],"textfont":{"size":11},"textposition":["top center","top center","bottom center"],"x":{"dtype":"i2","bdata":"IzWIDhQW"},"y":{"dtype":"i4","bdata":"PtwCAABxAgDA1AEA"},"type":"scatter"},{"customdata":{"dtype":"f8","bdata":"rkfhehQuK0AAAAAAABiTQBSuR+F65FFA","shape":"1, 3"},"hovertemplate":"\u003cb\u003e%{text}\u003c\u002fb\u003e\u003cbr\u003ePostings: %{x:,.0f}\u003cbr\u003eMedian salary: $%{y:,.0f}\u003cbr\u003eAI-related share: %{customdata[0]:.0f}%\u003cbr\u003eRemote or hybrid (of those that state it): %{customdata[2]:.0f}%\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#457b9d","line":{"color":"white","width":1.5},"opacity":0.85,"size":{"dtype":"f8","bdata":"UjDU1xHnQ0A="}},"mode":"markers+text","name":"Software engineering","text":["Software Eng."],"textfont":{"size":11},"textposition":["bottom center"],"x":{"dtype":"i2","bdata":"g08="},"y":{"dtype":"i4","bdata":"HBkCAA=="},"type":"scatter"},{"customdata":{"dtype":"f8","bdata":"SOF6FK5HJEAAAAAAAGB\u002fQK5H4XoULlNAj8L1KFwPJkAAAAAAAABnQFK4HoXrQVNA","shape":"2, 3"},"hovertemplate":"\u003cb\u003e%{text}\u003c\u002fb\u003e\u003cbr\u003ePostings: %{x:,.0f}\u003cbr\u003eMedian salary: $%{y:,.0f}\u003cbr\u003eAI-related share: %{customdata[0]:.0f}%\u003cbr\u003eRemote or hybrid (of those that state it): %{customdata[2]:.0f}%\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#6d597a","line":{"color":"white","width":1.5},"opacity":0.85,"size":{"dtype":"f8","bdata":"Ev4xaColQkBgKUXQvp9CQA=="}},"mode":"markers+text","name":"IT and security","text":["IT & Cloud","Cybersecurity"],"textfont":{"size":11},"textposition":["top center","middle left"],"x":{"dtype":"i2","bdata":"ICgXDg=="},"y":{"dtype":"i4","bdata":"+B4CANgCAgA="},"type":"scatter"},{"customdata":{"dtype":"f8","bdata":"R+F6FK5HIkAAAAAAACyRQArXo3A9ilFAXI\u002fC9ShcEEAAAAAAAGCLQHsUrkfh+lFASOF6FK5HEUAAAAAAAJSSQAvXo3A9qlJAmZmZmZmZB0AAAAAAADiuQFK4HoXrIVBA","shape":"4, 3"},"hovertemplate":"\u003cb\u003e%{text}\u003c\u002fb\u003e\u003cbr\u003ePostings: %{x:,.0f}\u003cbr\u003eMedian salary: $%{y:,.0f}\u003cbr\u003eAI-related share: %{customdata[0]:.0f}%\u003cbr\u003eRemote or hybrid (of those that state it): %{customdata[2]:.0f}%\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#e9c46a","line":{"color":"white","width":1.5},"opacity":0.85,"size":{"dtype":"f8","bdata":"3vIHdNOUQUCE8tqAGCg8QKaOYSCajDxAdHFxb9wFOkA="}},"mode":"markers+text","name":"Business fields","text":["Product & Project Mgmt","Business Analysis","Finance & Accounting","Marketing & Sales"],"textfont":{"size":11},"textposition":["top center","middle left","bottom center","top center"],"x":{"dtype":"i4","bdata":"nkgAAN00AADiTAAASd4AAA=="},"y":{"dtype":"i4","bdata":"pCwCAJCqAQDsowEAwNoAAA=="},"type":"scatter"},{"customdata":{"dtype":"f8","bdata":"pHA9CtejBEAAAAAAoL7sQGZmZmZmhkRA","shape":"1, 3"},"hovertemplate":"\u003cb\u003e%{text}\u003c\u002fb\u003e\u003cbr\u003ePostings: %{x:,.0f}\u003cbr\u003eMedian salary: $%{y:,.0f}\u003cbr\u003eAI-related share: %{customdata[0]:.0f}%\u003cbr\u003eRemote or hybrid (of those that state it): %{customdata[2]:.0f}%\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#b8bec6","line":{"color":"white","width":1.5},"opacity":0.85,"size":{"dtype":"f8","bdata":"JHBf0mA+OUA="}},"mode":"markers+text","name":"All other occupations","text":["All other occupations"],"textfont":{"size":11},"textposition":["top center"],"x":{"dtype":"i4","bdata":"aacIAA=="},"y":{"dtype":"i4","bdata":"IMsAAA=="},"type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"rgb(36,36,36)"},"error_y":{"color":"rgb(36,36,36)"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"rgb(36,36,36)","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"rgb(36,36,36)"},"baxis":{"endlinecolor":"rgb(36,36,36)","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"rgb(36,36,36)"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"histogram2d"}],"histogram":[{"marker":{"line":{"color":"white","width":0.6}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattergl"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"rgb(237,237,237)"},"line":{"color":"white"}},"header":{"fill":{"color":"rgb(217,217,217)"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"colorscale":{"diverging":[[0.0,"rgb(103,0,31)"],[0.1,"rgb(178,24,43)"],[0.2,"rgb(214,96,77)"],[0.3,"rgb(244,165,130)"],[0.4,"rgb(253,219,199)"],[0.5,"rgb(247,247,247)"],[0.6,"rgb(209,229,240)"],[0.7,"rgb(146,197,222)"],[0.8,"rgb(67,147,195)"],[0.9,"rgb(33,102,172)"],[1.0,"rgb(5,48,97)"]],"sequential":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"sequentialminus":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]]},"colorway":["#1F77B4","#FF7F0E","#2CA02C","#D62728","#9467BD","#8C564B","#E377C2","#7F7F7F","#BCBD22","#17BECF"],"font":{"color":"rgb(36,36,36)"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"bgcolor":"white","radialaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"yaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"zaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"}},"shapedefaults":{"fillcolor":"black","line":{"width":0},"opacity":0.3},"ternary":{"aaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"baxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"bgcolor":"white","caxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside","title":{"standoff":15},"zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"yaxis":{"automargin":true,"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside","title":{"standoff":15},"zeroline":false,"zerolinecolor":"rgb(36,36,36)"}}},"xaxis":{"title":{"text":"Valid postings (log scale)"},"type":"log","range":[3.255272505103306,6.0],"tickvals":[2000,5000,10000,20000,50000,100000,500000],"ticktext":["2,000","5,000","10,000","20,000","50,000","100,000","500,000"],"gridcolor":"#eceff3"},"yaxis":{"title":{"text":"Median annual salary (USD)"},"tickprefix":"$","tickformat":",.0f","range":[20000,230000],"gridcolor":"#eceff3"},"title":{"text":"\u003cb\u003eDemand vs. Pay by Occupation Field\u003c\u002fb\u003e\u003cbr\u003e\u003cspan style='font-size:12px;color:gray'\u003eBubble size = AI-related share of postings | top = better paid, right = more openings\u003c\u002fspan\u003e","x":0,"xanchor":"left"},"font":{"family":"Segoe UI, Helvetica, Arial, sans-serif","size":13},"margin":{"l":10,"r":20,"t":95,"b":120},"hoverlabel":{"font":{"size":13},"bgcolor":"white"},"legend":{"orientation":"h","x":0.5,"xanchor":"center","y":-0.14,"yanchor":"top"},"height":620,"showlegend":true},                        {"displaylogo": false, "responsive": true, "modeBarButtonsToRemove": ["lasso2d", "select2d"]}                    ).then(function(){
+                            
+var gd = document.getElementById('3722e4a8-8a81-4427-b584-10ef85ae5673');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+<p><strong>Interpretation:</strong> the chart separates fields that are well paid but crowded from fields that are well paid and less crowded. <strong>Software Engineering</strong> has the most openings of the high-pay fields (20,355 postings at $137.5K), and <strong>Product &amp; Project Management</strong> (18,590 at $142.5K) and <strong>Data Science &amp; ML</strong> (13,603 at $187K) follow. <strong>Data Science &amp; ML</strong> is the standout: the highest pay of any field, a large volume of postings, and by far the biggest bubble (91% AI-related), so it is the field where AI exposure is the norm and not an add-on. <strong>Data Engineering</strong> (3,720 postings at $160K) and <strong>Cybersecurity</strong> (3,607 at $132K) are smaller but well paid. <strong>Data Analytics &amp; BI</strong> (5,652 postings at $120K) is a mid-sized, mid-paid field, which fits its role as the entry step of our pathway. The two big low-pay blocks, <strong>Marketing &amp; Sales</strong> (56,905 postings at $56K) and all other occupations (567,145 at $52K), show how far the computer and data fields sit above the rest of the market. Roughly 72% to 84% of the postings in the data, software, and IT fields that state a work arrangement are remote or hybrid, against 41% for all other occupations, so flexibility is part of what these fields offer.</p>
+</section>
+</section>
+<section id="what-this-means-for-our-pathway" class="level2">
+<h2 class="anchored" data-anchor-id="what-this-means-for-our-pathway">What This Means for Our Pathway</h2>
+<ul>
+<li><strong>Moving up the pathway pays.</strong> The jump from Data Analytics &amp; BI ($120K) to Data Science &amp; ML ($187K) is the largest step among the data and software fields, and Data Engineering ($160K) is a second route to the same level.</li>
+<li><strong>AI exposure is associated with higher pay almost everywhere</strong>, most strongly in software engineering, cybersecurity, and product management, and least in fields that are already almost entirely AI-related.</li>
+</ul>
+<p>These are patterns across job postings, and they feed the career evaluation on the <a href="./predictive_modeling.html">Predictive Modeling</a> page.</p>
+</section>
+<section id="limitations" class="level2">
+<h2 class="anchored" data-anchor-id="limitations">Limitations</h2>
+<ul>
+<li><strong>Salary is stated in only about 9% of postings</strong> (69,246 of 733,064), and posting pay ranges are not the same as what people are paid. Postings that disclose pay may differ from those that do not.</li>
+<li><strong>Fields come from job-title keywords</strong>, so some postings land in the wrong field and a title can hide the real job. The Marketing &amp; Sales and “All other occupations” groups are broad and mix very different jobs.</li>
+<li><strong>“AI-related” means the posting names AI terms</strong>, which includes passing mentions. It measures AI exposure and not whether a job is a dedicated AI role.</li>
+<li><strong>This is one dataset</strong>, the MET job postings for 2026, and its mix of occupations is not a representative sample of all US jobs.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/mpp66-ctrl\.github\.io\/ad688-industry-career-product-group6\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

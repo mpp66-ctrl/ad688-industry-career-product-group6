@@ -112,6 +112,10 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Exploratory Analysis</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="./benchmark_analysis.html"> 
+<span class="menu-text">Benchmark Analysis</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="./skill_gap_analysis.html"> 
 <span class="menu-text">Skill Gap Analysis</span></a>
   </li>  
@@ -151,6 +155,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#company-names" id="toc-company-names" class="nav-link" data-scroll-target="#company-names">Company Names</a></li>
   </ul></li>
   <li><a href="#extended-dataset-for-the-salary-estimator" id="toc-extended-dataset-for-the-salary-estimator" class="nav-link" data-scroll-target="#extended-dataset-for-the-salary-estimator">Extended Dataset for the Salary Estimator</a></li>
+  <li><a href="#benchmark-tables-all-industries" id="toc-benchmark-tables-all-industries" class="nav-link" data-scroll-target="#benchmark-tables-all-industries">Benchmark Tables (All Industries)</a></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   </ul>
 </nav>
@@ -265,6 +270,41 @@ ul.task-list li input[type="checkbox"] {
 </tbody>
 </table>
 <p>Of the 2,252 training postings, 155 are in NAICS 5182. Salaries under $30,000 or above $500,000 are dropped as implausible, and the estimator reads skills, degrees, and experience from the posting text exactly as above. The analysis on every other page uses only the NAICS 5182 file.</p>
+</section>
+<section id="benchmark-tables-all-industries" class="level2">
+<h2 class="anchored" data-anchor-id="benchmark-tables-all-industries">Benchmark Tables (All Industries)</h2>
+<p>The <a href="./benchmark_analysis.html">Benchmark Analysis</a> page compares our pathway with the whole job market, so it uses <strong>every industry</strong> in the same <code>Jobs_2026</code> folder instead of only NAICS 5182. Because that is 815,193 postings, the script <code>build_benchmark_tables.py</code> reads the folder and saves only two small summary tables, with no posting text or individual rows: <code>benchmark_quantiles.csv</code> and <code>benchmark_fields.csv</code>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Stage</th>
+<th>Postings</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>All postings in the <code>Jobs_2026</code> files</td>
+<td>815,193</td>
+</tr>
+<tr class="even">
+<td>Valid: not a duplicate, possible ghost listing, or internship (using the folder’s own flags)</td>
+<td>733,064</td>
+</tr>
+<tr class="odd">
+<td>With a usable annual salary (the folder’s normalized pay, $25,000 to $600,000)</td>
+<td>69,246</td>
+</tr>
+<tr class="even">
+<td>AI-related (title or text names a core AI term)</td>
+<td>about 5% of valid postings</td>
+</tr>
+</tbody>
+</table>
+<p>Occupation fields come from job-title keyword rules (ten computer and business fields, plus “All other occupations”), and a posting is AI-related when its title names AI or machine learning or its text names a core AI term. The rules are listed in the script.</p>
 </section>
 <section id="summary" class="level2">
 <h2 class="anchored" data-anchor-id="summary">Summary</h2>

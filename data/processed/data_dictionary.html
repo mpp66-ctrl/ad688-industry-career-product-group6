@@ -112,6 +112,10 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Exploratory Analysis</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../../benchmark_analysis.html"> 
+<span class="menu-text">Benchmark Analysis</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../../skill_gap_analysis.html"> 
 <span class="menu-text">Skill Gap Analysis</span></a>
   </li>  
@@ -137,6 +141,7 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#data-dictionary-met_text_panel.csv" id="toc-data-dictionary-met_text_panel.csv" class="nav-link active" data-scroll-target="#data-dictionary-met_text_panel.csv">Data Dictionary: met_text_panel.csv</a></li>
   <li><a href="#data-dictionary-met_salary_model_panel.csv" id="toc-data-dictionary-met_salary_model_panel.csv" class="nav-link" data-scroll-target="#data-dictionary-met_salary_model_panel.csv">Data Dictionary: met_salary_model_panel.csv</a></li>
+  <li><a href="#data-dictionary-benchmark-tables" id="toc-data-dictionary-benchmark-tables" class="nav-link" data-scroll-target="#data-dictionary-benchmark-tables">Data Dictionary: benchmark tables</a></li>
   </ul>
 </nav>
     </div>
@@ -224,6 +229,85 @@ ul.task-list li input[type="checkbox"] {
 </tbody>
 </table>
 <p><code>job_id</code>, <code>title</code>, <code>role</code>, <code>company_name</code>, <code>state</code>, <code>remote_status</code>, <code>employment_type</code>, <code>salary_min_annual</code>, <code>salary_max_annual</code>, <code>posted_at</code>, <code>has_text</code>, <code>experience_min_years</code>, <code>skill_&lt;name&gt;</code>, and <code>degree_&lt;level&gt;</code> are defined as above.</p>
+<hr>
+</section>
+<section id="data-dictionary-benchmark-tables" class="level1">
+<h1>Data Dictionary: benchmark tables</h1>
+<p>Built by <code>python build_benchmark_tables.py ../Jobs_2026</code> from the same <code>Jobs_2026</code> folder (https://drive.google.com/drive/folders/1Tq5Uixwz5J-aG_NfUQdI6X9CIrNz9ZFS), using <strong>all industries</strong>. They are summary tables only: no posting text and no individual postings. A valid posting is not flagged as a duplicate, possible ghost listing, or internship; salary is the folder’s normalized annual salary (midpoint of the range), $25,000 to $600,000.</p>
+<p><strong>benchmark_quantiles.csv</strong> (4 rows): salary spread for AI-related and non-AI postings.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>scope</code></td>
+<td>“All jobs” or “Computer and business fields” (the ten named fields)</td>
+</tr>
+<tr class="even">
+<td><code>ai_related</code></td>
+<td>True when the title names AI or machine learning, or the text names a core AI term</td>
+</tr>
+<tr class="odd">
+<td><code>n</code></td>
+<td>Postings with a usable annual salary</td>
+</tr>
+<tr class="even">
+<td><code>p05</code>, <code>p25</code>, <code>median</code>, <code>p75</code>, <code>p95</code>, <code>mean</code></td>
+<td>Salary percentiles and mean in USD</td>
+</tr>
+</tbody>
+</table>
+<p><strong>benchmark_fields.csv</strong> (11 rows): one row per occupation field, plus “All other occupations”.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>field</code></td>
+<td>Occupation field assigned from the job title</td>
+</tr>
+<tr class="even">
+<td><code>postings</code></td>
+<td>Valid postings in the field (a measure of demand)</td>
+</tr>
+<tr class="odd">
+<td><code>ai_share_postings</code></td>
+<td>Share of those postings that are AI-related</td>
+</tr>
+<tr class="even">
+<td><code>salary_postings</code>, <code>median</code>, <code>p25</code>, <code>p75</code></td>
+<td>Postings with a usable salary and their salary median and quartiles</td>
+</tr>
+<tr class="odd">
+<td><code>n_ai</code>, <code>median_ai</code></td>
+<td>AI-related postings with a salary, and their median</td>
+</tr>
+<tr class="even">
+<td><code>n_nonai</code>, <code>median_nonai</code></td>
+<td>Non-AI postings with a salary, and their median</td>
+</tr>
+<tr class="odd">
+<td><code>remote_share_stated</code>, <code>remote_or_hybrid_share_stated</code></td>
+<td>Share remote, and share remote or hybrid, among postings that state a work arrangement</td>
+</tr>
+</tbody>
+</table>
 
 
 </section>
