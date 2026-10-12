@@ -204,6 +204,28 @@ show(fig)
 
 **Interpretation:** Machine Learning Engineer and Data Scientist roles command the highest average pay (about $224K to $234K for ML Engineer titles and $215K for Data Scientist), while Data Analyst and Business Analyst sit lowest (about $124K to $127K) -- a roughly 1.8x pay gap between Data Scientist / ML and Data Analyst roles across this pathway. The move from Data Analyst to Data Scientist averages about $91K more per year, and role is the strongest pay factor in our [Predictive Modeling](predictive_modeling.qmd) page, so this is the most concrete number for prioritizing upskilling. Roles with fewer than 10 salary postings (for example, ML Engineer with 5) are shown but rest on small samples.
 
+### Salary by Role Family
+
+```{python}
+#| label: salary-by-family
+# the four role families used on the Predictive Modeling page; box = middle half, whiskers = 5th to 95th percentile
+family = raw.loc[sal_df.index, "role"]
+fig = go.Figure()
+for r in ["Data Analyst", "Data / Analytics Engineer", "Data Scientist", "ML Engineer"]:
+    s = sal_df.loc[family == r, "salary_mid"]
+    fig.add_trace(go.Box(
+        y=[f"{r} (n={len(s)})"], q1=[s.quantile(0.25)], median=[s.median()], q3=[s.quantile(0.75)],
+        lowerfence=[s.quantile(0.05)], upperfence=[s.quantile(0.95)], orientation="h", name=r,
+        marker_color=PALETTE[0], fillcolor="rgba(69, 123, 157, 0.25)"))
+fig.update_xaxes(title="Estimated annual salary (USD)", tickprefix="$", tickformat=",.0f")
+style(fig, "Salary by Role Family",
+      f"{SCOPE} | {len(sal_df)} salary-disclosed postings | box = middle half, whiskers = 5th to 95th percentile",
+      height=420)
+show(fig)
+```
+
+**Interpretation:** Pay is seen rising at every step of our pathway. Median disclosed salary is `114,750` for Data Analysts postins, `$175,000` for Data/Analytics Engineer, `$204,875` for Data Scientist, and `$220,260` for ML Engineers. Transitioning upward from analyst to scientist is worth up to $90,000 at the median. Also important to note that the top quarter of Data Analyst postings (`$166,000`) pays as much as the bottom quarter of Data Scientist postings, so a strong analyst can reach entry-level scientist pay. While Data Scientist salary varies widely, ML Engineer has the highest floor with 95% of its postings paying above `$153,000`. It's important to include a disclaimer that the Data Analyst box only contains 30 salaries, so its range is the least certain.
+
 ### Top 10 Highest-Paying States
 
 ```{python}
