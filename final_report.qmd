@@ -4,10 +4,6 @@ format:
     reference-doc: report-reference.docx
 ---
 
-<!-- Source of the team's final research paper. Render with:
-     quarto render final_report.qmd --to docx
-     python polish_docx.py _site/final_report.docx -->
-
 ::: {custom-style="Title Page"}
 Boston University Metropolitan College
 
@@ -33,9 +29,14 @@ Final Report
 
  
 
- 
+
+
+
+
+
 
  
+
 
 Submitted by:
 
@@ -44,6 +45,11 @@ Manan Patel, Richard Park, Michael Phillips
 Group 6
 
 October 11, 2026
+
+
+Repository Link:
+
+https://github.com/mpp66-ctrl/ad688-industry-career-product-group6.git
 :::
 
 {{< pagebreak >}}
@@ -216,7 +222,7 @@ Table 3 summarizes the market that students/job seekers on our pathway face.
 | Location           | California/New York (141/113 Postings \| Total 39%)                  | California & New York lead volume and pay.   |
 |                    |                                                                      | Virginia has many postings correlated        |
 |                    | Texas/Virginia/Washington (54/53/36 Postings)                        | largely with federal contractors, at lower   |
-|                    |                                                                      | pay.                                         |
+|                    |                                                                      | pay (Figure 2).                              |
 |                    | Median pay:                                                          |                                              |
 |                    |                                                                      |                                              |
 |                    | California - \$224,500                                               |                                              |
@@ -227,8 +233,8 @@ Table 3 summarizes the market that students/job seekers on our pathway face.
 +--------------------+----------------------------------------------------------------------+----------------------------------------------+
 | Experience         | Stated in 206 postings (27%)                                         | Mid-career market.                           |
 |                    |                                                                      |                                              |
-|                    | Median - 5 years                                                     | Few postings describe a new graduate.        |
-|                    |                                                                      |                                              |
+|                    | Median - 5 years                                                     | Few postings describe a new graduate         |
+|                    |                                                                      | (Figure 3).                                  |
 |                    | 73% request 3-8 years                                                |                                              |
 |                    |                                                                      |                                              |
 |                    | 17% request 2 years or fewer                                         |                                              |
@@ -268,6 +274,29 @@ Figure 1 displays our researched pay ladder that encourages this particular path
 Scientist can be worth about \$90,000 at the median. These posted figures are far above the national median wage for Data Scientists
 (\$120,230) based off the U.S. Bureau of Labor Statistics in 2026, partly because salary disclosure is concentrated in high-pay states.
 
+::: {custom-style="Image Centered"}
+![](report_media/media/image7.png){width="6.5in" height="3.5416666666666665in"}
+:::
+
+::: {custom-style="Caption Centered"}
+Figure 2: Top 10 states by number of postings (653 postings with a U.S. state)
+:::
+
+Figure 2 shows that demand is concentrated in a few states. California and New York hold 39% of postings with a known state. Virginia,
+the District of Columbia, and Maryland together hold 96 postings, more than any single state except California and New York. These are
+largely federal-contractor roles, and Virginia pay runs about \$24,000 below an average posting (Figure 6).
+
+::: {custom-style="Image Centered"}
+![](report_media/media/image8.png){width="6.5in" height="3.1944444444444446in"}
+:::
+
+::: {custom-style="Caption Centered"}
+Figure 3: Minimum years of experience requested (206 postings that state a requirement)
+:::
+
+Figure 3 shows that requirements peak at five years, and only 36 of the 206 postings ask for two years or fewer. A new graduate will
+usually fall below the stated requirement, which is the reason for Recommendation 4.
+
 # Skill-Gap Analysis
 
 **Method**: For our market side, we computed the share of postings whose text contains each of the 17 skills and did so separately for Data
@@ -280,7 +309,7 @@ skills from 1 (Beginner) to 5 (Expert). We will label skills "High demand" if 50
 :::
 
 ::: {custom-style="Caption Centered"}
-Figure 2: Share of postings whose text names each skill. Data Analyst is set against Data Scientist/ML Engineer postings.
+Figure 4: Share of postings whose text names each skill. Data Analyst is set against Data Scientist/ML Engineer postings.
 :::
 
 **What the market looks for:** The two ends of the pathway use different methodologies/skills. Data Scientist & ML Engineer postings name
@@ -295,7 +324,7 @@ we would compare shares across roles rather than reading as exact requirements.
 :::
 
 ::: {custom-style="Caption Centered"}
-Figure 3: Team self-ratings for the six skill areas including DS/ML & DA postings that also name each skill.
+Figure 5: Team self-ratings for the six skill areas including DS/ML & DA postings that also name each skill.
 :::
 
   --------------------------- -------------------------- ------------------ ----------------- ------------------ -------------------------------
@@ -318,7 +347,7 @@ Figure 3: Team self-ratings for the six skill areas including DS/ML & DA posting
 Table 4: Skill-gap scorecard. Market demand against team self-ratings
 :::
 
-**Gaps & priorities:** None of our group members are strongest in every skill (Figure 3, Table 4). Machine Learning has the clearest gap
+**Gaps & priorities:** None of our group members are strongest in every skill (Figure 5, Table 4). Machine Learning has the clearest gap
 while being the most-requested skill in the role our pathway ultimately leads to (two of three members rate it at 3). Statistics follows
 after that with the lowest team average while appearing at both ends of the path. Then there are individual gaps in Python (Richard),
 Cloud/AWS & SQL (Michael), and Data Visualization (Richard).
@@ -385,10 +414,10 @@ Appendix D for full specifications and effect with its range.
 :::
 
 ::: {custom-style="Caption Centered"}
-Figure 4: Ridge regression effects on disclosed pay
+Figure 6: Ridge regression effects on disclosed pay
 :::
 
-The results of this mean that role is our strongest factor (Figure 4). ML Engineer titles are associated with approximately \$31,000 above
+The results of this mean that role is our strongest factor (Figure 6). ML Engineer titles are associated with approximately \$31,000 above
 an average posting, Data Scientist titles are \$21,000 above, and Data Analyst titles with \$51,000 below. This displays a gap of about
 \$72,000 to \$82,000 between the ends of our pathway. We also see that states such as California (+\$25,000) and New York (+\$15,000) pay
 more while Virginia (-\$24,000) is paid less. A senior title adds about \$28,000 over other titles. We also see that work arrangement
@@ -441,11 +470,21 @@ Table 7: Scorecard weightings used to test rankings
 Table 8: Role opportunity scorecard
 :::
 
+::: {custom-style="Image Centered"}
+![](report_media/media/image9.png){width="6.5in" height="3.4166666666666665in"}
+:::
+
+::: {custom-style="Caption Centered"}
+Figure 7: Opportunity score by role, split into weighted pay, accessibility, and fit (base weights)
+:::
+
 These results tell us that ML Engineer and Data Scientist score highest. Students also face a trade-off based on the scores between ML
-Engineer paying the most w/ least accessibility, while Data Analyst pays the least but is more accessible. The fit is similar across roles
-because our rates are fairly even, so pay and accessibility are what is primarily driving the ranking. The roles show steps on one path,
-which is to start as an analyst, and aim for scientist or ML roles. The ranking is the same under all four weightings (Table 16, Appendix
-E), so our conclusions do not depend on the weights we chose.
+Engineer paying the most w/ least accessibility, while Data Analyst pays the least but is more accessible. Figure 7 shows this trade-off:
+from ML Engineer down to Data Analyst, the pay part shrinks and the accessibility part grows. The fit is similar across roles because our
+rates are fairly even, so pay and accessibility are what is primarily driving the ranking. The roles show steps on one path, which is to
+start as an analyst, and aim for scientist or ML roles. The ranking is the same under all four weightings (Table 16, Appendix E), so our
+conclusions do not depend on the weights we chose. ML Engineer and Data Scientist are close enough (0.822 and 0.803) that we treat them as
+roughly tied.
 
 ## Salary Estimator
 
@@ -461,10 +500,10 @@ the page. See Appendix G for reference.
 :::
 
 ::: {custom-style="Caption Centered"}
-Figure 5: Salary estimator output for an entry-level example
+Figure 8: Salary estimator output for an entry-level example
 :::
 
-For the entry-level example in Figure 5, the estimate is \$97,523. The largest gains come from changing roles (+\$54,000 to Data Scientist,
+For the entry-level example in Figure 8, the estimate is \$97,523. The largest gains come from changing roles (+\$54,000 to Data Scientist,
 +\$78,700 to ML Engineer), followed by a senior title (+\$28,000), three more years of experience (+\$16,500), and a California location
 (+\$14,900). Across the model, each year of experience requested adds about \$5,500, and naming Machine Learning adds about \$7,800 even
 after the role is known. Being in NAICS 5182 adds only about \$1,700 compared with an otherwise identical posting in another industry, and
@@ -477,6 +516,19 @@ Science & ML, the highest of any field and about \$50,000 above Software Enginee
 business fields, AI-related postings have a median of \$172,250 against \$97,500 for other postings, representing a 77% raw gap that is far
 larger than the premium of about 8% that research finds for AI-developer skills within the same occupation (Jaumotte et al., 2026), because
 AI-related postings are typically associated more with senior positions.
+
+::: {custom-style="Image Centered"}
+![](report_media/media/image10.png){width="6.5in" height="3.7777777777777777in"}
+:::
+
+::: {custom-style="Caption Centered"}
+Figure 9: Median salary by occupation field, all industries (69,246 postings with a usable salary)
+:::
+
+In Figure 9, the diamonds mark the median of AI-related postings in each field. They sit well above the field median in Software
+Engineering (\$200,000), Cybersecurity (\$180,000), and Product & Project Management (\$182,500), while in Data Science & ML, 91% of
+postings are already AI-related, so the two match. For our pathway, AI-related Data Analytics & BI postings have a median of \$136,250
+against \$117,750 for other analyst postings, though this rests on only 78 postings.
 
 {{< pagebreak >}}
 
@@ -495,13 +547,13 @@ AI-related postings are typically associated more with senior positions.
     68% of engineer postings. A cloud certification and one analysis run on a cloud platform signal fit with these employers, and Data /
     Analytics Engineer roles (median \$175,000) are a second route up the pathway.
 
-4.  Build documented experience early. Only about 17% of postings with a stated requirement ask for two years or fewer, which matches
-    research showing that employment of young workers in AI-exposed jobs has fallen behind their peers (Brynjolfsson et al., 2026). The
-    median posting asks for five years, and each additional year requested is associated with about \$5,500 more. Internships, research, and
-    projects count most when they are documented in a portfolio.
+4.  Build documented experience early. Only about 17% of postings with a stated requirement ask for two years or fewer (Figure 3), which
+    matches research showing that employment of young workers in AI-exposed jobs has fallen behind their peers (Brynjolfsson et al., 2026).
+    The median posting asks for five years, and each additional year requested is associated with about \$5,500 more. Internships, research,
+    and projects count most when they are documented in a portfolio.
 
-5.  Choose locations deliberately. California and New York offer the most postings and the highest disclosed pay; Virginia, the District of
-    Columbia, and Maryland offer federal-contractor roles at lower pay. Only 10% of postings say they are remote.
+5.  Choose locations deliberately. California and New York offer the most postings and the highest disclosed pay (Figure 2); Virginia, the
+    District of Columbia, and Maryland offer federal-contractor roles at lower pay. Only 10% of postings say they are remote.
 
 6.  Apply without the listed graduate degree. Only 11 of 570 postings with text state a Master's as required and 4 a PhD. Lead with skills
     and project evidence.
@@ -924,5 +976,24 @@ Table 18: Website pages
 :::
 
 ::: {custom-style="Caption Centered"}
-Figure 6: Salary estimator inputs on the Predictive Modeling page, set to the example profile.
+Figure 10: Salary estimator inputs on the Predictive Modeling page, set to the example profile.
 :::
+
+{{< pagebreak >}}
+
+# AI Use Disclosure
+
+Our team used variations of Artificial Intelligence support tools during this project in the following ways:
+
+-   **Code assistance:** drafting and debugging Python code for data preparation, the salary models, and the interactive website charts.
+
+-   **Writing support:** suggesting edits for clarity, structure, and length to sections our team drafted.
+
+-   **Sources and formatting:** helping locate recent research, checking that cited sources exist and support our statements, and formatting
+    references in APA.
+
+-   **Review:** flagging inconsistencies in drafts between this report, website, and research studies.
+
+All data come from the course's MET Career Compass job files, and every statistic, table, and figure in this report was produced by code run
+on that data. Team members reviewed all AI-suggested code and text, checked reported numbers against our outputs, and made every decision
+about scope, methods, interpretation, and recommendations. The team takes full responsibility for the content of this report.
