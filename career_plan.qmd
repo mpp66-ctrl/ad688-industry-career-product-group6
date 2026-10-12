@@ -1,0 +1,298 @@
+---
+title: "Career Strategy"
+subtitle: "What Our Findings Mean for a Student Targeting the Data Analyst to Data Scientist Pathway"
+format:
+  html:
+    toc: true
+    code-fold: true
+    code-summary: "Show code"
+execute:
+  echo: true
+  warning: false
+---
+
+## Overview
+
+The earlier pages describe the market, compare it with our team's skills, and model pay. This page turns
+those results into a **plan for a student or early-career job seeker** on the **Data Analyst to Data
+Scientist** pathway in NAICS 5182 (Computing Infrastructure Providers, Data Processing, Web Hosting, and
+Related Services). It answers the last research question of the project: **what should a job seeker learn
+first, and where should they apply?**
+
+Everything here comes from the 765 pathway postings in the MET Career Compass 2026 jobs data (see
+[Data Preparation](data_preparation.qmd)), from the models on the [Predictive
+Modeling](predictive_modeling.qmd) page, and from the team skill comparison on the [Skill Gap
+Analysis](skill_gap_analysis.qmd) page. It also feeds the written final report. The patterns are
+associations in posted jobs, not promises about any one offer; the last section lists the limits.
+
+**The short version:**
+
+1. Enter through the analyst toolkit (SQL, visualization, communication) and show it in a portfolio.
+2. Make Machine Learning and Python the bridge to Data Scientist and ML Engineer roles. This is where the
+   largest pay difference is.
+3. Add cloud and data-pipeline skills, which this industry values, and document your experience early.
+
+```{python}
+#| label: setup
+import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+
+PALETTE = ["#457b9d", "#2a9d8f", "#e9c46a", "#e76f51", "#6d597a", "#f4a261"]
+GRAY = "#b8bec6"
+
+
+def style(fig, title, subtitle, height=450, legend=False):
+    fig.update_layout(
+        title=dict(text=f"<b>{title}</b><br><span style='font-size:12px;color:gray'>{subtitle}</span>",
+                   x=0, xanchor="left"),
+        template="simple_white", height=height, showlegend=legend,
+        font=dict(family="Segoe UI, Helvetica, Arial, sans-serif", size=13),
+        margin=dict(l=10, r=20, t=95, b=50), hoverlabel=dict(bgcolor="white", font_size=13),
+        legend=dict(orientation="h", x=0.5, xanchor="center", y=-0.15, yanchor="top"))
+    fig.update_xaxes(gridcolor="#eceff3")
+    fig.update_yaxes(gridcolor="#eceff3")
+    return fig
+
+
+def show(fig):
+    fig.show(config={"displaylogo": False, "responsive": True, "modeBarButtonsToRemove": ["lasso2d", "select2d"]})
+
+
+mp = pd.read_csv("data/processed/met_text_panel.csv")
+mp["salary_mid"] = (mp["salary_min_annual"] + mp["salary_max_annual"]) / 2
+SENIOR = r"senior|\bsr\b|staff|principal|\blead\b|manager|director|head of|architect"
+mp["level"] = np.where(mp["title"].str.lower().str.contains(SENIOR), "Senior title", "Other title")
+tx = mp[mp["has_text"]].copy()
+skill_cols = [c for c in mp.columns if c.startswith("skill_")]
+
+# the same team ratings used on the Skill Gap Analysis page
+team = pd.DataFrame({
+    "Python": [5, 3, 4], "SQL": [5, 4, 3], "Machine Learning": [3, 3, 5],
+    "Cloud/AWS": [4, 5, 3], "Data Visualization": [4, 3, 5], "Statistics": [2, 4, 3],
+}, index=["Manan Patel", "Richard Park", "Michael Phillips"])
+team_avg = team.mean()
+roles = ["Data Analyst", "Data / Analytics Engineer", "Data Scientist", "ML Engineer"]
+```
+
+## The Four Roles at a Glance
+
+The pathway has four role families. The table puts the main facts for each in one place, using the same
+scoring as the [Role Opportunity Scorecard](predictive_modeling.qmd) (pay 40%, accessibility 30%, fit with
+our team 30%).
+
+```{python}
+#| label: roles-at-a-glance
+rows = []
+for role in roles:
+    g, t = mp[mp["role"] == role], tx[tx["role"] == role]
+    demand = {s: t["skill_" + s].astype(bool).mean() for s in team_avg.index}
+    top = (t[skill_cols].astype(bool).mean().sort_values(ascending=False).head(3))
+    no_grad = 1 - (t["degree_Master"].isin(["required", "preferred"]) | t["degree_PhD"].isin(["required", "preferred"])).mean()
+    rows.append({
+        "Role": role, "Postings": len(g), "With salary": int(g["salary_mid"].notna().sum()),
+        "Median posted pay": g["salary_mid"].median(),
+        "Typical experience asked (years)": g["experience_min_years"].median(),
+        "Not a senior title": (g["level"] == "Other title").mean(),
+        "Most-named skills": ", ".join(s[len("skill_"):] for s in top.index),
+        "pay": g["salary_mid"].median(),
+        "access": ((g["level"] == "Other title").mean() + no_grad) / 2,
+        "fit": sum(demand[s] * team_avg[s] for s in demand) / sum(demand.values()) / 5,
+    })
+glance = pd.DataFrame(rows).set_index("Role")
+glance["Opportunity score"] = 0.4 * glance["pay"] / glance["pay"].max() + 0.3 * glance["access"] + 0.3 * glance["fit"]
+glance = glance.sort_values("Opportunity score", ascending=False)
+out = glance[["Postings", "With salary", "Median posted pay", "Typical experience asked (years)",
+              "Not a senior title", "Most-named skills", "Opportunity score"]].copy()
+out["Median posted pay"] = out["Median posted pay"].map("${:,.0f}".format)
+out["Typical experience asked (years)"] = out["Typical experience asked (years)"].map("{:.0f}".format)
+out["Not a senior title"] = out["Not a senior title"].map("{:.0%}".format)
+out["Opportunity score"] = out["Opportunity score"].map("{:.3f}".format)
+out
+```
+
+**How to read it:** ML Engineer and Data Scientist score highest because they pay the most (median posted pay
+of $220,260 and $204,875). Data Analyst is the lowest-paying role (median $114,750) but the most accessible,
+since 65% of its postings do not use a senior title. That is the trade-off behind the plan below: start where
+the entry is realistic, then move toward the roles that pay more. Pay medians for Data Analyst rest on only 30
+postings with a salary, so treat them as a guide.
+
+## A Three-Step Plan
+
+::: {.callout-note appearance="simple" icon=false}
+### Step 1: Enter through the analyst toolkit
+
+Data Analyst postings most often name communication (35%), SQL (31%), data visualization (21%), Excel (18%),
+and dashboards (16%). **Build one portfolio project** that answers a business question with SQL and presents
+it in a dashboard with a short written summary. Showing that you can communicate results is part of the
+skill, not an extra.
+:::
+
+::: {.callout-note appearance="simple" icon=false}
+### Step 2: Use Machine Learning and Python as the bridge
+
+Data Scientist and ML Engineer postings name Machine Learning in 68% of cases and Python in 54%, compared with
+11% and 20% for Data Analyst postings. Once the role is known, naming Machine Learning adds comparatively little on its own;
+the bigger gain comes from moving into a role that expects it. Moving from a Data Analyst
+title to a Data Scientist or ML Engineer title is associated with **roughly $72,000 to $82,000** more in
+disclosed pay, which is larger than any location choice. **Complete a supervised-learning project in Python**
+that explains how it was evaluated and what its limits are.
+:::
+
+::: {.callout-note appearance="simple" icon=false}
+### Step 3: Add cloud and pipeline skills, and document your experience
+
+Cloud/AWS appears in 28% of Data Scientist and ML postings and 55% of Data / Analytics Engineer postings, and
+ETL in 68% of engineer postings. A cloud certification and one analysis run on a cloud platform signal fit
+with employers in this industry, and Data / Analytics Engineer roles (median posted pay $175,000) are a
+second route up the pathway. Because the market skews mid-career, **document internships, research, and
+projects in a portfolio** early.
+:::
+
+## Which Skills Should You Learn First?
+
+The chart compares how often each skill appears in **Data Analyst** postings with how often it appears in the
+postings for the role you want. Use the dropdown to choose a **target role**. The skills are sorted by the
+**gap**: the skills at the top are the ones the target role asks for much more often than analyst roles do,
+so they are the ones to learn first.
+
+```{python}
+#| label: skill-gap-dropdown
+analyst = tx[tx["role"] == "Data Analyst"]
+a_share = analyst[skill_cols].astype(bool).mean()
+targets = ["Data Scientist", "ML Engineer", "Data / Analytics Engineer"]
+TOP = 8
+
+
+def view(role):
+    t = tx[tx["role"] == role]
+    t_share = t[skill_cols].astype(bool).mean()
+    gap = (t_share - a_share).sort_values(ascending=False).head(TOP)
+    gap = gap[gap > 0.02][::-1]  # only skills the target role names clearly more often
+    names = [c[len("skill_"):] for c in gap.index]
+    return dict(names=names, analyst=a_share[gap.index].values, target=t_share[gap.index].values,
+                gap=gap.values, n=len(t))
+
+
+views = {r: view(r) for r in targets}
+v0 = views[targets[0]]
+
+
+def title_for(role):
+    return (f"<b>Skills to Learn First: Data Analyst to {role}</b><br><span style='font-size:12px;color:gray'>"
+            f"Share of postings naming each skill | up to {TOP} skills with the biggest gap | postings with text "
+            f"(Data Analyst n={len(analyst)}, {role} n={views[role]['n']})</span>")
+
+
+def traces_for(role):
+    v = views[role]
+    return dict(
+        x=[v["analyst"], v["target"]], y=[v["names"], v["names"]],
+        text=[[f"{s:.0%}" for s in v["analyst"]], [f"{s:.0%}" for s in v["target"]]],
+        customdata=[np.round(v["gap"] * 100), np.round(v["gap"] * 100)])
+
+
+init = traces_for(targets[0])
+fig = go.Figure()
+fig.add_trace(go.Bar(name="Data Analyst postings", orientation="h", marker_color=GRAY,
+                     x=init["x"][0], y=init["y"][0], text=init["text"][0], textposition="outside",
+                     customdata=init["customdata"][0],
+                     hovertemplate="<b>%{y}</b><br>Data Analyst postings: %{x:.0%}<br>Gap to target: +%{customdata:.0f} points<extra></extra>"))
+fig.add_trace(go.Bar(name="Target role postings", orientation="h", marker_color=PALETTE[1],
+                     x=init["x"][1], y=init["y"][1], text=init["text"][1], textposition="outside",
+                     customdata=init["customdata"][1],
+                     hovertemplate="<b>%{y}</b><br>Target role postings: %{x:.0%}<br>Gap to analyst postings: +%{customdata:.0f} points<extra></extra>"))
+fig.update_layout(barmode="group", updatemenus=[dict(
+    type="dropdown", direction="down", x=0, xanchor="left", y=1.0, yanchor="bottom", showactive=True,
+    buttons=[dict(label=f"Target role: {r}", method="update",
+                  args=[{k: traces_for(r)[k] for k in ("x", "y", "text", "customdata")},
+                        {"title.text": title_for(r)}]) for r in targets])])
+fig.update_xaxes(title="Share of postings that name the skill", tickformat=".0%", range=[0, 1])
+style(fig, f"Skills to Learn First: Data Analyst to {targets[0]}", "", height=620, legend=True)
+fig.update_layout(title_text=title_for(targets[0]), margin=dict(l=10, r=20, t=175, b=60))
+show(fig)
+```
+
+**Interpretation:** the skills that open the way to a Data Scientist or ML Engineer role are Machine Learning,
+Python, and deep learning, while the Data / Analytics Engineer role leans on cloud, ETL, and data modeling
+skills. The 68% and 54% quoted in Step 2 pool Data Scientist and ML Engineer postings, while this chart
+shows each role separately. Skill shares come from searching the posting text, so they undercount real demand and should be
+compared between roles, not read as exact requirements. Compared with our own team (see [Skill Gap
+Analysis](skill_gap_analysis.qmd)), the clearest group gaps are **Machine Learning** and **Statistics**, which
+is why those come first in our own improvement plan.
+
+## Where to Apply
+
+Demand for this pathway is concentrated. Of the 653 postings with a state we could identify, **California (141)
+and New York (113)** together hold about 39%. They also show the highest posted pay among the states with enough postings to compare.
+
+```{python}
+#| label: where-to-apply
+resolved = mp["state"].notna().sum()
+places = ["California", "New York", "Texas", "Virginia", "Washington", "District of Columbia", "Maryland"]
+rows = []
+for s in places:
+    g = mp[mp["state"] == s]
+    rows.append({"State": s, "Postings": len(g), "Share of postings with a state": len(g) / resolved,
+                 "Postings with salary": int(g["salary_mid"].notna().sum()),
+                 "Median posted pay": g["salary_mid"].median()})
+where = pd.DataFrame(rows).set_index("State")
+where["Share of postings with a state"] = where["Share of postings with a state"].map("{:.0%}".format)
+where["Median posted pay"] = where["Median posted pay"].map(lambda v: f"${v:,.0f}")
+where
+```
+
+**Interpretation:** California and New York lead on both openings and posted pay (median $224,500 and
+$190,000). Virginia, the District of Columbia, and Maryland also have many postings, largely from federal
+contractors, at lower posted pay in Virginia and Maryland. The Texas pay figure rests on only 4 postings with a
+salary and should not be relied on. Salary-disclosure laws in California and New York also push employers
+there to post pay, so those states may look more generous than states where pay is rarely posted. Only about
+10% of postings (78 of 765) say the job is remote, and 77% do not state a work arrangement, so **confirm remote
+or hybrid policy with the employer** before assuming it.
+
+## What to Expect on Experience and Education
+
+```{python}
+#| label: expect
+exp = mp["experience_min_years"].dropna()
+masters = int((tx["degree_Master"] == "required").sum())
+phd = int((tx["degree_PhD"] == "required").sum())
+none_named = (tx[[c for c in tx.columns if c.startswith("degree_")]].eq("none").all(axis=1)).mean()
+summary = pd.DataFrame({
+    "What the postings show": [
+        f"{len(exp)} of {len(mp)} postings state an experience requirement; the median is {exp.median():.0f} years",
+        f"{((exp >= 3) & (exp <= 8)).mean():.0%} of those ask for 3 to 8 years; {(exp <= 2).mean():.0%} ask for 2 years or fewer",
+        f"Of {len(tx)} postings with text, {none_named:.0%} name no degree at all",
+        f"A Master's is required in {masters} postings and a PhD in {phd}"],
+    "What it means for you": [
+        "This is a mid-career market. Few postings describe a new graduate.",
+        "Build 1 to 3 years of documented project, internship, or research work before applying to most roles.",
+        "A graduate degree is rarely a hard requirement; skills and project evidence matter more.",
+        "Apply even if you do not hold the listed graduate degree, if you meet the skills."]})
+summary.style.hide(axis="index")
+```
+
+Each additional year of experience a posting asks for is associated with about $5,500 more in pay in the
+salary estimator, so documented experience matters twice: it opens the door and it moves the estimate up.
+
+## Use the Estimator With This Plan
+
+The [Predictive Modeling](predictive_modeling.qmd) page includes a **salary estimator**. Use it to test the
+plan: start with an entry-level analyst profile, then change one thing at a time (the role, the state, a
+skill such as Machine Learning, or a senior title) and read which changes are associated with higher pay.
+It is a guide to relative differences, not a prediction of what an employer will offer.
+
+## What This Plan Does Not Tell You
+
+- **Associations, not causes.** The pay differences describe patterns in posted jobs. They do not show that
+  learning a skill or moving to a state will produce that raise.
+- **Small samples.** Only 303 postings state a salary, and 30 of them are Data Analyst postings, so close
+  comparisons between roles cannot be separated reliably.
+- **Posted pay is not accepted pay.** Disclosure is concentrated in California and New York, which makes
+  posted pay look higher than the national median.
+- **Text matching.** Skills and degrees are matched from posting text, so the shares are lower bounds.
+- **Our own judgment.** The scorecard weights and the Advanced skill target are team choices, and the team
+  skill ratings are self-reported by three people.
+- **One period.** The data cover January to September 2026, so the plan cannot show trends over time.
+
+See the [Limitations](predictive_modeling.qmd#limitations) on the Predictive Modeling page for the full list.
