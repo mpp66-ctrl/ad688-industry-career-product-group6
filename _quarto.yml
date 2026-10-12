@@ -19,6 +19,8 @@ website:
         text: Skill Gap Analysis
       - href: predictive_modeling.qmd
         text: Predictive Modeling
+      - href: career_plan.qmd
+        text: Career Strategy
 
 format:
   html:
