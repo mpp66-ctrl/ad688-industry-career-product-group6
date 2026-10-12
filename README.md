@@ -17,6 +17,8 @@ A career evaluation product helping analytics/data-science job seekers understan
 - `build_met_text_panel.py` - builds `data/processed/met_text_panel.csv` from the course `Jobs_2026` job files
 - `predictive_modeling.qmd` - salary regression, role opportunity scorecard, and salary estimator
 - `benchmark_analysis.qmd` - AI vs non-AI pay, pay by occupation field, and demand vs pay (all industries)
+- `career_plan.qmd` - Career Strategy: three-step plan, skills to learn first, where to apply, what to expect
+- `final_report.qmd` - the written final report (renders to Word)
 - `build_benchmark_tables.py` - builds the two `data/processed/benchmark_*.csv` summary tables from the `Jobs_2026` files
 - `data/` - raw, interim, and processed datasets (see `data/processed/data_dictionary.md`)
 - `outputs/` - exported tables, CSVs, and other analysis outputs

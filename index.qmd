@@ -9,7 +9,7 @@ This site documents Group 6's career evaluation product for AD688 - Big Data and
 
 ## Product Vision
 
-We are building a career evaluation product for job seekers targeting **Data Analyst** roles, with a growth path toward **Data Scientist** and **Analytics Engineer** positions, within the **Data Processing, Hosting, and Related Services industry (NAICS 5182)**.
+We built a career evaluation product for job seekers targeting **Data Analyst** roles, with a growth path toward **Data Scientist** and **Analytics Engineer** positions, within the **Data Processing, Hosting, and Related Services industry (NAICS 5182)**.
 
 Our product is designed to help a job seeker answer:
 
@@ -30,6 +30,6 @@ This places our project in the **Analytics, Data Science, and ML Career Pathways
 | Step 1 | Product framing, industry scoping, project setup | Complete |
 | Step 2 | Data preparation and market baseline | Complete |
 | Step 3 | Career evaluation logic and skill-gap analysis | Complete |
-| Step 4 | Final analytics, recommendations, and report | Next (Module 5) |
+| Step 4 | Final analytics, career strategy, and report | Complete |
 
-See the [Introduction](introduction.qmd) page for our full project rationale, literature review, and industry scoping documentation.
+See the [Introduction](introduction.qmd) page for our full project rationale, literature review, and industry scoping documentation, and the [Career Strategy](career_plan.qmd) page for what our findings mean for a job seeker.

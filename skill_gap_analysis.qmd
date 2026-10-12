@@ -14,7 +14,7 @@ execute:
 This page compares our team's current skill levels against how often each skill appears in real job
 postings for our pathway, **Data Analyst to Data Scientist**, inside NAICS 5182. It shows where the
 largest gaps are, how the skills of the two roles differ, and then proposes an improvement plan and a
-draft set of recommendations for job seekers.
+set of recommendations for job seekers.
 
 ## Team Skill Levels
 
@@ -249,9 +249,9 @@ skill (Richard rates SQL at 4 and Michael rates Data Visualization at 5). Statis
 lowest average, so within two weeks the team should also complete one worked statistical example and
 peer-review its interpretation.
 
-## Draft Recommendations
+## Recommendations
 
-These draft recommendations for job seekers come from the Exploratory Analysis page and the market
+These recommendations for job seekers come from the Exploratory Analysis page and the market
 comparison above. They describe the Data Analyst to Data Scientist pathway in NAICS 5182.
 
 1. **Learn the analyst toolkit first, then add modeling.** Data Analyst postings most often name SQL (31%)
